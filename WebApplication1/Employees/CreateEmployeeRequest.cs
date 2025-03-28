@@ -24,8 +24,9 @@ public class CreateEmployeeRequestValidator : AbstractValidator<CreateEmployeeRe
         RuleFor(x => x.FirstName)
             .NotEmpty()
             .WithMessage("First name is required.");
+            
         RuleFor(x => x.LastName)
             .NotEmpty()
-            .WithMessage("Last Name is required.");
+            .WithMessage("Last name is required.");
     }   
 }

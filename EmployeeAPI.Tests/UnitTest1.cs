@@ -3,6 +3,8 @@ using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using WebApplication1.Abstractions;
 using WebApplication1.Employees;
 namespace EmployeeAPI.Tests;
 
@@ -13,6 +15,8 @@ public class BasicTests : IClassFixture<WebApplicationFactory<Program>>
     public BasicTests(WebApplicationFactory<Program> factory)
     {
         _factory = factory;
+        var repo = _factory.Services.GetRequiredService<IRepository<Employee>>();
+        repo.Create(new Employee { FirstName = "John", LastName = "Doe" });
     }
 
     [Fact]
@@ -58,11 +62,13 @@ public class BasicTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.Contains("Last name is required.", problemDetails.Errors["LastName"]);
     }
 
+    
     [Fact]
     public async Task UpdateEmployee_ReturnsOkResult()
     {
         var client = _factory.CreateClient();
-        var response = await client.PutAsJsonAsync("/employees/1", new Employee {FirstName = "Linda", LastName = "Schmolz", SocialSecurityNumber = "5131-123"});
+        var response = await client.PutAsJsonAsync("/employees/1", new Employee { FirstName = "John", LastName = "Doe" });
+
         response.EnsureSuccessStatusCode();
     }
 

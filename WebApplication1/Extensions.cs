@@ -1,29 +1,21 @@
 using System;
-using System.ComponentModel.DataAnnotations;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace WebApplication1;
 
 public static class Extensions
     {
-    public static ValidationProblemDetails ToValidationProblemDetails(this List<ValidationResult> validationResults)
-        {
-            var problemDetails = new ValidationProblemDetails();
+    public static ModelStateDictionary ToModelStateDictionary(this ValidationResult validationResult)
+    {
+        var modelState = new ModelStateDictionary();
 
-            foreach (var validationResult in validationResults)
-            {
-                foreach (var memberName in validationResult.MemberNames)
-                {
-                    if (problemDetails.Errors.ContainsKey(memberName))
-                    {
-                        problemDetails.Errors[memberName] = problemDetails.Errors[memberName].Concat([validationResult.ErrorMessage]).ToArray()!;
-                    }
-                    else
-                    {
-                        problemDetails.Errors[memberName] = new List<string> { validationResult.ErrorMessage! }.ToArray();
-                    }
-                }
-            }
-            return problemDetails;
+        foreach (var error in validationResult.Errors)
+        {
+            modelState.AddModelError(error.PropertyName, error.ErrorMessage);
         }
+        
+        return modelState;
+    }
     }
