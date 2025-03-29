@@ -23,6 +23,7 @@ public class BasicTests : IClassFixture<WebApplicationFactory<Program>>
         _employeeIdForAdressTest = repo.GetAll().First().Id;
     }
 
+
     [Fact]
     public async Task GetEmployeeById_ReturnsOkResult()
     {
