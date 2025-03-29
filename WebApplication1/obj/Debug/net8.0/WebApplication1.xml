@@ -24,6 +24,13 @@
             <param name="employeeRequest">The employee data to create.</param>
             <returns></returns>
         </member>
+        <member name="M:WebApplication1.Employees.EmployeesController.GetBenefitsForEmployee(System.Int32)">
+            <summary>
+            Gets the benefits for an employee.
+            </summary>
+            <param name="employeeId">The ID to get the benefits for.</param>
+            <returns>The benefits for that employee.</returns>
+        </member>
         <member name="M:WebApplication1.Employees.EmployeesController.UpdateEmployee(System.Int32,WebApplication1.Employees.UpdateEmployeeRequest)">
             <summary>
             Updates an employee.

@@ -5,9 +5,21 @@ using WebApplication1.Employees;
 using FluentValidation;
 var employees = new List<Employee>
 {
-    new Employee { Id = 1, FirstName = "John", LastName = "Doe" },
+    new Employee { Id = 1, FirstName = "John", LastName = "Doe", 
+                Benefits = new List<EmployeeBenefits>
+                    {
+                        new EmployeeBenefits { BenefitType = BenefitType.Health, Cost = 100 },
+                        new EmployeeBenefits { BenefitType = BenefitType.Dental, Cost = 50 }
+                    } },
     new Employee { Id = 2, FirstName = "Jane", LastName = "Doe" }
 };
+
+var employeeRepository = new EmployeeRepository();
+
+foreach (var e in employees)
+{
+    employeeRepository.Create(e);
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +31,7 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "WebApplication1.xml"));
 });
 
-builder.Services.AddSingleton<IRepository<Employee>, EmployeeRepository>();
+builder.Services.AddSingleton<IRepository<Employee>>(employeeRepository);
 builder.Services.AddProblemDetails();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddHttpContextAccessor();
