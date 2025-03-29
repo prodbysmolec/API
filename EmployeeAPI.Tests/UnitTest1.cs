@@ -13,12 +13,14 @@ public class BasicTests : IClassFixture<WebApplicationFactory<Program>>
     private readonly int _employeeId = 1;
 
     private readonly WebApplicationFactory<Program> _factory;
+    private int _employeeIdForAdressTest;
 
     public BasicTests(WebApplicationFactory<Program> factory)
     {
         _factory = factory;
         var repo = _factory.Services.GetRequiredService<IRepository<Employee>>();
         repo.Create(new Employee { FirstName = "John", LastName = "Doe", Address1 = "Testest" });
+        _employeeIdForAdressTest = repo.GetAll().First().Id;
     }
 
     [Fact]
@@ -69,7 +71,9 @@ public class BasicTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task UpdateEmployee_ReturnsOkResult()
     {
         var client = _factory.CreateClient();
-        var response = await client.PutAsJsonAsync("/employees/1", new Employee { FirstName = "John", LastName = "Doe" });
+        var response = await client.PutAsJsonAsync("/employees/1", new Employee {
+            FirstName = "John", LastName = "Doe", Address1 = "TestAdress" 
+            });
 
         response.EnsureSuccessStatusCode();
     }
@@ -82,7 +86,7 @@ public class BasicTests : IClassFixture<WebApplicationFactory<Program>>
         var invalidEmployee = new UpdateEmployeeRequest(); // Empty object to trigger validation errors
 
         // Act
-        var response = await client.PutAsJsonAsync($"/employees/{_employeeId}", invalidEmployee);
+        var response = await client.PutAsJsonAsync($"/employees/{_employeeIdForAdressTest}", invalidEmployee);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
