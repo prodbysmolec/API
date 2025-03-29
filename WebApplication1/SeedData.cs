@@ -7,11 +7,14 @@ public static class SeedData
 {
     public static void MigrateAndSeed(IServiceProvider serviceProvider)
     {
+        Console.Out.WriteLine("Test1");
+
         var context = serviceProvider.GetRequiredService<AppDbContext>();
         context.Database.Migrate();
 
         if (!context.Employees.Any())
         {
+            Console.Out.WriteLine("Test2");
             context.Employees.AddRange(
                 new Employee
                 {

@@ -26,8 +26,8 @@ public class EmployeesController : BaseController
     /// </summary>
     /// <returns>Returns the employees in a JSON array.</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<GetEmployeeResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IEnumerable<GetEmployeeResponse>), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(IEnumerable<GetEmployeeRequest>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<GetEmployeeRequest>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllEmployees([FromQuery] GetAllEmployeesRequest? request)
     {
         int page = request?.Page ?? 1;
@@ -63,7 +63,7 @@ public class EmployeesController : BaseController
     /// <param name="id">The ID of the employee.</param>
     /// <returns>The single Employee record.</returns>
     [HttpGet("{id:int}")]
-    [ProducesResponseType(typeof(GetEmployeeResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetEmployeeRequest), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetEmployeeById(int id)
@@ -85,7 +85,7 @@ public class EmployeesController : BaseController
     /// <param name="employeeRequest">The employee data to create.</param>
     /// <returns></returns>
     [HttpPost]
-    [ProducesResponseType(typeof(GetEmployeeResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(GetEmployeeRequest), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeRequest employeeRequest)
@@ -116,7 +116,7 @@ public class EmployeesController : BaseController
     /// <param name="employeeRequest">The employee Data to update.</param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(GetEmployeeResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetEmployeeRequest), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -213,9 +213,9 @@ public class EmployeesController : BaseController
         };
     }
 */
-    private GetEmployeeResponse EmployeeToGetEmployeeResponse(Employee employee)
+    private GetEmployeeRequest EmployeeToGetEmployeeResponse(Employee employee)
     {
-        return new GetEmployeeResponse
+        return new GetEmployeeRequest
         {
             FirstName = employee.FirstName,
             LastName = employee.LastName,

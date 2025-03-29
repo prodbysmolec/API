@@ -2,7 +2,7 @@ using System;
 
 namespace WebApplication1.Employees;
 
-public class GetEmployeeResponse
+public class GetEmployeeRequest
 {
     public required string FirstName { get; set; }
     public required string LastName { get; set; }

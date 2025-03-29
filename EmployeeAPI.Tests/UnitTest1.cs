@@ -44,7 +44,7 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
 
         response.EnsureSuccessStatusCode();
 
-        var employees = await response.Content.ReadFromJsonAsync<IEnumerable<GetEmployeeResponse>>();
+        var employees = await response.Content.ReadFromJsonAsync<IEnumerable<GetEmployeeRequest>>();
         Assert.Single(employees);
     }
 
