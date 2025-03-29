@@ -17,6 +17,28 @@
             <param name="id">The ID of the employee.</param>
             <returns>The single Employee record.</returns>
         </member>
+        <member name="M:WebApplication1.Employees.EmployeesController.CreateEmployee(WebApplication1.Employees.CreateEmployeeRequest)">
+            <summary>
+            Creates an employee.
+            </summary>
+            <param name="employeeRequest">The employee data to create.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication1.Employees.EmployeesController.UpdateEmployee(System.Int32,WebApplication1.Employees.UpdateEmployeeRequest)">
+            <summary>
+            Updates an employee.
+            </summary>
+            <param name="id">The ID of the employee to update.</param>
+            <param name="employeeRequest">The employee Data to update.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApplication1.Employees.EmployeesController.DeleteEmployee(System.Int32)">
+            <summary>
+            Deletes an employee.
+            </summary>
+            <param name="id">The ID of the employee to delete.</param>
+            <returns></returns>
+        </member>
         <member name="T:WebApplication1.Migrations.Init">
             <inheritdoc />
         </member>

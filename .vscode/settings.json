@@ -6,7 +6,17 @@
       "server": "localhost",
       "port": 5432,
       "driver": "PostgreSQL",
-      "name": "Test01",
+      "name": "Test Datenbank",
+      "database": "Test01_TestDB",
+      "username": "Admin",
+      "password": ""
+    },
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "Debug Datenbank",
       "database": "Test01",
       "username": "Admin",
       "password": ""

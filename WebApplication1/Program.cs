@@ -23,7 +23,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddDbContext<AppDbContext>(options => {
-    options.UseNpgsql("Host=localhost;Port=5432;Username=Admin;Database=Test01");
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
 builder.Services.AddProblemDetails();
@@ -46,7 +47,6 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     try
     {
-        // Verbindung zur Datenbank testen
         var canConnect = context.Database.CanConnect();
         if (canConnect)
         {

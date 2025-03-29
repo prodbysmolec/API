@@ -2,6 +2,7 @@ using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using WebApplication1;
@@ -12,27 +13,40 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureServices(services => 
+        builder.ConfigureAppConfiguration((context, config) =>
         {
-            var dbContextDescriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                    typeof(DbContextOptions<AppDbContext>));
+            // Lade die appsettings.json des Hauptprogramms
+            config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+        });
 
-            services.Remove(dbContextDescriptor!);
+        builder.ConfigureServices((context, services) =>
+        {
+            // Hole die Configuration aus dem Kontext
+            var configuration = context.Configuration;
+
+            var dbContextDescriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
+
+            if (dbContextDescriptor != null)
+            {
+                services.Remove(dbContextDescriptor);
+            }
 
             var dbConnectionDescriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                    typeof(NpgsqlConnection));
+                d => d.ServiceType == typeof(NpgsqlConnection));
 
-            services.Remove(dbConnectionDescriptor!);
+            if (dbConnectionDescriptor != null)
+            {
+                services.Remove(dbConnectionDescriptor);
+            }
 
-            // Create open SqliteConnection so EF won't automatically close it.
+            // Verbindung aus der Konfigurationsdatei holen
+            var connectionString = configuration.GetConnectionString("TestDBConnection");
+
             services.AddSingleton<NpgsqlConnection>(container =>
             {
-                var connectionString = "Host=localhost;Port=5432;Username=Admin;Database=Test01_TestDB";
                 var connection = new NpgsqlConnection(connectionString);
                 connection.Open();
-
                 return connection;
             });
 
@@ -40,8 +54,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             {
                 var connection = container.GetRequiredService<NpgsqlConnection>();
                 options.UseNpgsql(connection);
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
-
         });
     }
 }
