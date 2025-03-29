@@ -10,13 +10,15 @@ namespace EmployeeAPI.Tests;
 
 public class BasicTests : IClassFixture<WebApplicationFactory<Program>>
 {
+    private readonly int _employeeId = 1;
+
     private readonly WebApplicationFactory<Program> _factory;
 
     public BasicTests(WebApplicationFactory<Program> factory)
     {
         _factory = factory;
         var repo = _factory.Services.GetRequiredService<IRepository<Employee>>();
-        repo.Create(new Employee { FirstName = "John", LastName = "Doe" });
+        repo.Create(new Employee { FirstName = "John", LastName = "Doe", Address1 = "Testest" });
     }
 
     [Fact]
@@ -73,10 +75,20 @@ public class BasicTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Fact]
-    public async Task UpdateEmployee_ReturnsNotFoundForNonExistentEmployee()
+    public async Task UpdateEmployee_ReturnsBadRequestWhenAddress()
     {
+        // Arrange
         var client = _factory.CreateClient();
-        var response = await client.PutAsJsonAsync("/employees/1123123123", new Employee {FirstName = "Linda", LastName = "Schmolz", SocialSecurityNumber = "5131-123"});
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        var invalidEmployee = new UpdateEmployeeRequest(); // Empty object to trigger validation errors
+
+        // Act
+        var response = await client.PutAsJsonAsync($"/employees/{_employeeId}", invalidEmployee);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        Assert.NotNull(problemDetails);
+        Assert.Contains("Address1", problemDetails.Errors.Keys);
     }
 }

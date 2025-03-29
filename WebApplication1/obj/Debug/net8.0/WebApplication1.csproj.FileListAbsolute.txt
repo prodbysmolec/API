@@ -34,3 +34,4 @@
 /Users/lukasschmolz/Repos/API/WebApplication1/bin/Debug/net8.0/FluentValidation.dll
 /Users/lukasschmolz/Repos/API/WebApplication1/bin/Debug/net8.0/FluentValidation.DependencyInjectionExtensions.dll
 /Users/lukasschmolz/Repos/API/WebApplication1/obj/Debug/net8.0/WebApplication1.sourcelink.json
+/Users/lukasschmolz/Repos/API/WebApplication1/bin/Debug/net8.0/FluentValidation.AspNetCore.dll

@@ -439,3 +439,4 @@
 /Users/lukasschmolz/Repos/API/EmployeeAPI.Tests/bin/Debug/net8.0/FluentValidation.dll
 /Users/lukasschmolz/Repos/API/EmployeeAPI.Tests/bin/Debug/net8.0/FluentValidation.DependencyInjectionExtensions.dll
 /Users/lukasschmolz/Repos/API/EmployeeAPI.Tests/obj/Debug/net8.0/EmployeeAPI.Tests.sourcelink.json
+/Users/lukasschmolz/Repos/API/EmployeeAPI.Tests/bin/Debug/net8.0/FluentValidation.AspNetCore.dll
