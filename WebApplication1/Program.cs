@@ -1,7 +1,4 @@
-using System.ComponentModel.DataAnnotations;
 using WebApplication1;
-using WebApplication1.Abstractions;
-using WebApplication1.Employees;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 var employees = new List<Employee>
@@ -15,13 +12,6 @@ var employees = new List<Employee>
     new Employee { Id = 2, FirstName = "Jane", LastName = "Doe" }
 };
 
-var employeeRepository = new EmployeeRepository();
-
-foreach (var e in employees)
-{
-    employeeRepository.Create(e);
-}
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -33,12 +23,9 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddDbContext<AppDbContext>(options => {
-    options.UseNpgsql("Host=localhost;Port=5432;Username=lukasschmolz;Password=dein_passwort;Database=Test01");
-
+    options.UseNpgsql("Host=localhost;Port=5432;Username=Admin;Database=Test01");
 });
 
-
-builder.Services.AddSingleton<IRepository<Employee>>(employeeRepository);
 builder.Services.AddProblemDetails();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddHttpContextAccessor();
@@ -51,7 +38,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    SeedData.Seed(services); 
+    SeedData.MigrateAndSeed(services); 
 }
 
 using (var scope = app.Services.CreateScope())

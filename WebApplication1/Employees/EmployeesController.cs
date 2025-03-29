@@ -2,21 +2,23 @@ using System;
 using System.Runtime.CompilerServices;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Abstractions;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.Employees;
 
 public class EmployeesController : BaseController
 {
-    private readonly IRepository<Employee> _repository;
-    private readonly ILogger<EmployeesController> _logger;
 
-    public EmployeesController(IRepository<Employee> repository,
-    ILogger<EmployeesController> logger
+    private readonly ILogger<EmployeesController> _logger;
+    private readonly AppDbContext _dbContext;
+
+    public EmployeesController(
+        ILogger<EmployeesController> logger,
+        AppDbContext dbContext
     )
     {
-        _repository = repository;
-        this._logger = logger;
+        _logger = logger;
+        _dbContext = dbContext;
     }
 
     /// <summary>
@@ -26,11 +28,33 @@ public class EmployeesController : BaseController
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<GetEmployeeResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(IEnumerable<GetEmployeeResponse>), StatusCodes.Status500InternalServerError)]
-    public IActionResult GetAllEmployees()
+    public async Task<IActionResult> GetAllEmployees([FromQuery] GetAllEmployeesRequest? request)
     {
-        var employees = _repository.GetAll().Select(EmployeeToGetEmployeeResponse);
+        int page = request?.Page ?? 1;
+        int recordsPerPage = request?.RecordsPerPage ?? 100;
 
-        return Ok(employees);
+
+        IQueryable<Employee> query = _dbContext.Employees
+            .Include(e => e.Benefits)
+            .Skip((page - 1) * recordsPerPage)
+            .Take(recordsPerPage);
+
+        if(request != null)
+        {
+            if (!string.IsNullOrWhiteSpace(request.FirstNameContains))
+            {
+                query = query.Where(e => e.FirstName.Contains(request.FirstNameContains));
+            }
+            
+            if (!string.IsNullOrWhiteSpace(request.LastNameContains))
+            {
+                query = query.Where(e => e.LastName.Contains(request.LastNameContains));
+            }
+        }
+
+        var employees = await query.ToArrayAsync();
+
+        return Ok(employees.Select(EmployeeToGetEmployeeResponse));
     }
 
     /// <summary>
@@ -42,9 +66,9 @@ public class EmployeesController : BaseController
     [ProducesResponseType(typeof(GetEmployeeResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult GetEmployeeById(int id)
+    public async Task<IActionResult> GetEmployeeById(int id)
     {
-        var employee = _repository.GetById(id);
+        var employee = await _dbContext.Employees.SingleOrDefaultAsync(e => e.Id == id);
         if (employee == null)
         {
             return NotFound();
@@ -55,6 +79,7 @@ public class EmployeesController : BaseController
         return Ok(employeeResponse);
     }
 
+    /*
     /// <summary>
     /// Creates an employee.
     /// </summary>
@@ -158,7 +183,7 @@ public class EmployeesController : BaseController
             return StatusCode(500, "An error occurred while updating the employee");
         }
     }
-
+*/
     private GetEmployeeResponse EmployeeToGetEmployeeResponse(Employee employee)
     {
         return new GetEmployeeResponse

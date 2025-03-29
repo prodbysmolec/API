@@ -30,3 +30,4 @@ public class CreateEmployeeRequestValidator : AbstractValidator<CreateEmployeeRe
             .WithMessage("Last name is required.");
     }   
 }
+
