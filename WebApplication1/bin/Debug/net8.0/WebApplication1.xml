@@ -39,6 +39,13 @@
             <param name="id">The ID of the employee to delete.</param>
             <returns></returns>
         </member>
+        <member name="M:WebApplication1.Employees.EmployeesController.GetBenefitsForEmployee(System.Int32)">
+            <summary>
+            Gets the benefits for an employee.
+            </summary>
+            <param name="employeeId">The ID to get the benefits for.</param>
+            <returns>The benefits for that employee.</returns>
+        </member>
         <member name="T:WebApplication1.Migrations.Init">
             <inheritdoc />
         </member>
@@ -61,6 +68,42 @@
             <inheritdoc />
         </member>
         <member name="M:WebApplication1.Migrations.Reset.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebApplication1.Migrations.RemoveOldBenefitsTable">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.RemoveOldBenefitsTable.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.RemoveOldBenefitsTable.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.RemoveOldBenefitsTable.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebApplication1.Migrations.AddBenefitsAndEmployeeBenefits">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddBenefitsAndEmployeeBenefits.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddBenefitsAndEmployeeBenefits.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddBenefitsAndEmployeeBenefits.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:WebApplication1.Migrations.AddTestBenefitsMigration">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddTestBenefitsMigration.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddTestBenefitsMigration.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebApplication1.Migrations.AddTestBenefitsMigration.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>

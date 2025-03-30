@@ -26,8 +26,8 @@ public class EmployeesController : BaseController
     /// </summary>
     /// <returns>Returns the employees in a JSON array.</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<GetEmployeeRequest>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IEnumerable<GetEmployeeRequest>), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(IEnumerable<GetEmployeeResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<GetEmployeeResponse>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllEmployees([FromQuery] GetAllEmployeesRequest? request)
     {
         int page = request?.Page ?? 1;
@@ -35,7 +35,6 @@ public class EmployeesController : BaseController
 
 
         IQueryable<Employee> query = _dbContext.Employees
-            .Include(e => e.Benefits)
             .Skip((page - 1) * recordsPerPage)
             .Take(recordsPerPage);
 
@@ -63,7 +62,7 @@ public class EmployeesController : BaseController
     /// <param name="id">The ID of the employee.</param>
     /// <returns>The single Employee record.</returns>
     [HttpGet("{id:int}")]
-    [ProducesResponseType(typeof(GetEmployeeRequest), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetEmployeeResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetEmployeeById(int id)
@@ -85,7 +84,7 @@ public class EmployeesController : BaseController
     /// <param name="employeeRequest">The employee data to create.</param>
     /// <returns></returns>
     [HttpPost]
-    [ProducesResponseType(typeof(GetEmployeeRequest), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(GetEmployeeResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeRequest employeeRequest)
@@ -103,7 +102,6 @@ public class EmployeesController : BaseController
             PhoneNumber = employeeRequest.PhoneNumber,
             Email = employeeRequest.Email
         };
-
         _dbContext.Employees.Add(newEmployee);
         await _dbContext.SaveChangesAsync();
         return CreatedAtAction(nameof(GetEmployeeById), new { id = newEmployee.Id }, newEmployee);
@@ -116,7 +114,7 @@ public class EmployeesController : BaseController
     /// <param name="employeeRequest">The employee Data to update.</param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(GetEmployeeRequest), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetEmployeeResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -181,8 +179,6 @@ public class EmployeesController : BaseController
         return NoContent();
     }
 
-    /*
-
     /// <summary>
     /// Gets the benefits for an employee.
     /// </summary>
@@ -192,30 +188,32 @@ public class EmployeesController : BaseController
     [ProducesResponseType(typeof(IEnumerable<GetEmployeeResponseEmployeeBenefit>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult GetBenefitsForEmployee(int employeeId)
+    public async Task<IActionResult> GetBenefitsForEmployee(int employeeId)
     {
-        var employee = _repository.GetById(employeeId);
+        var employee = await _dbContext.Employees
+            .Include(e => e.Benefits)
+            .ThenInclude(e => e.Benefit)
+            .SingleOrDefaultAsync(e => e.Id == employeeId);
+
         if (employee == null)
         {
             return NotFound();
         }
-        return Ok(employee.Benefits.Select(BenefitToBenefitResponse));
+
+        var benefits = employee.Benefits.Select(b => new GetEmployeeResponseEmployeeBenefit
+        {
+            Id = b.Id,
+            Name = b.Benefit.Name,
+            Description = b.Benefit.Description,
+            Cost = b.CostToEmployee ?? b.Benefit.BaseCost
+        });
+
+        return Ok(benefits);
     }
 
-    private static GetEmployeeResponseEmployeeBenefit BenefitToBenefitResponse(EmployeeBenefits benefit)
+    private static GetEmployeeResponse EmployeeToGetEmployeeResponse(Employee employee)
     {
-        return new GetEmployeeResponseEmployeeBenefit
-        {
-            Id = benefit.Id,
-            EmployeeId = benefit.EmployeeId,
-            BenefitType = benefit.BenefitType,
-            Cost = benefit.Cost
-        };
-    }
-*/
-    private GetEmployeeRequest EmployeeToGetEmployeeResponse(Employee employee)
-    {
-        return new GetEmployeeRequest
+        return new GetEmployeeResponse
         {
             FirstName = employee.FirstName,
             LastName = employee.LastName,
@@ -225,16 +223,7 @@ public class EmployeesController : BaseController
             State = employee.State,
             ZipCode = employee.ZipCode,
             PhoneNumber = employee.PhoneNumber,
-            Email = employee.Email,
-            Benefits = employee.Benefits.Select(benefit => new GetEmployeeResponseEmployeeBenefit
-            {
-                Id = benefit.Id,
-                EmployeeId = benefit.EmployeeId,
-                BenefitType = benefit.BenefitType,
-                Cost = benefit.Cost
-            }).ToList()
+            Email = employee.Email
         };
     }
-
 }
-    

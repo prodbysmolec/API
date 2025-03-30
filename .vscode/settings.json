@@ -20,6 +20,16 @@
       "database": "Test01",
       "username": "Admin",
       "password": ""
+    },
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "Test03",
+      "database": "Test03",
+      "username": "Admin",
+      "password": ""
     }
   ]
 }

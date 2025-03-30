@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApplication1;
@@ -11,9 +12,11 @@ using WebApplication1;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250329205554_AddBenefitsAndEmployeeBenefits")]
+    partial class AddBenefitsAndEmployeeBenefits
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,8 +96,11 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("EmployeeBenefit", b =>
                 {
-                    b.Property<int>("EmployeeId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BenefitId")
                         .HasColumnType("integer");
@@ -102,11 +108,10 @@ namespace WebApplication1.Migrations
                     b.Property<decimal?>("CostToEmployee")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("EmployeeId")
                         .HasColumnType("integer");
 
-                    b.HasKey("EmployeeId", "BenefitId")
-                        .HasName("PK_EmployeeBenefit");
+                    b.HasKey("Id");
 
                     b.HasIndex("BenefitId");
 
@@ -125,7 +130,7 @@ namespace WebApplication1.Migrations
                         .IsRequired();
 
                     b.HasOne("Employee", "Employee")
-                        .WithMany("Benefits")
+                        .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -133,11 +138,6 @@ namespace WebApplication1.Migrations
                     b.Navigation("Benefit");
 
                     b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("Employee", b =>
-                {
-                    b.Navigation("Benefits");
                 });
 #pragma warning restore 612, 618
         }

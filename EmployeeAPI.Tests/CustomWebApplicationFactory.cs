@@ -11,6 +11,9 @@ namespace EmployeeAPI.Tests;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
+    private static readonly object _lock = new object();
+    private static bool _databaseInitialized;
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureAppConfiguration((context, config) =>
@@ -56,6 +59,92 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 options.UseNpgsql(connection);
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
+
+            // Datenbank initialisieren - einmalig beim Start der Tests
+            lock (_lock)
+            {
+                if (!_databaseInitialized)
+                {
+                    // Baue Verbindung zur Master-Datenbank auf, um DB zu löschen/erstellen
+                    using var masterConnection = new NpgsqlConnection(GetMasterConnectionString(connectionString));
+                    masterConnection.Open();
+
+                    // Datenbanknamen aus Connection String extrahieren
+                    var databaseName = GetDatabaseName(connectionString);
+
+                    // Drop Database wenn vorhanden
+                    DropDatabase(masterConnection, databaseName);
+
+                    // Datenbank neu erstellen
+                    CreateDatabase(masterConnection, databaseName);
+                    
+                    masterConnection.Close();
+
+                    // Migrationen anwenden und Seed-Daten einfügen
+                    using var scope = services.BuildServiceProvider().CreateScope();
+                    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    dbContext.Database.Migrate();
+                    
+                    // Optional: Hier könntest du TestSeedData.Initialize(dbContext) aufrufen 
+                    // für spezifische Test-Seed-Daten
+                    
+                    _databaseInitialized = true;
+                }
+            }
         });
+    }
+
+    // Hilfsmethode für Connection String zur Master-DB
+    private string GetMasterConnectionString(string connectionString)
+    {
+        var builder = new NpgsqlConnectionStringBuilder(connectionString)
+        {
+            Database = "postgres" // Verbinde zur Standard-Datenbank in PostgreSQL
+        };
+        return builder.ConnectionString;
+    }
+
+    // Hilfsmethode zum Extrahieren des Datenbanknamens
+    private string GetDatabaseName(string connectionString)
+    {
+        var builder = new NpgsqlConnectionStringBuilder(connectionString);
+        return builder.Database;
+    }
+
+    // Hilfsmethode zum Löschen der Datenbank
+    private void DropDatabase(NpgsqlConnection connection, string databaseName)
+    {
+        try
+        {
+            var dropCommand = $@"
+                SELECT pg_terminate_backend(pg_stat_activity.pid)
+                FROM pg_stat_activity
+                WHERE pg_stat_activity.datname = '{databaseName}'
+                  AND pid <> pg_backend_pid();
+                
+                DROP DATABASE IF EXISTS ""{databaseName}"";";
+                
+            using var command = new NpgsqlCommand(dropCommand, connection);
+            command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fehler beim Löschen der Datenbank: {ex.Message}");
+        }
+    }
+
+    // Hilfsmethode zum Erstellen der Datenbank
+    private void CreateDatabase(NpgsqlConnection connection, string databaseName)
+    {
+        try
+        {
+            var createCommand = $@"CREATE DATABASE ""{databaseName}""";
+            using var command = new NpgsqlCommand(createCommand, connection);
+            command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fehler beim Erstellen der Datenbank: {ex.Message}");
+        }
     }
 }

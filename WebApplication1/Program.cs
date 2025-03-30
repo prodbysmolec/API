@@ -3,12 +3,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 var employees = new List<Employee>
 {
-    new Employee { Id = 1, FirstName = "John", LastName = "Doe", 
-                Benefits = new List<EmployeeBenefits>
-                    {
-                        new EmployeeBenefits { BenefitType = BenefitType.Health, Cost = 100 },
-                        new EmployeeBenefits { BenefitType = BenefitType.Dental, Cost = 50 }
-                    } },
+    new Employee { Id = 1, FirstName = "John", LastName = "Doe" },
     new Employee { Id = 2, FirstName = "Jane", LastName = "Doe" }
 };
 

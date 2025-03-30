@@ -44,7 +44,7 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
 
         response.EnsureSuccessStatusCode();
 
-        var employees = await response.Content.ReadFromJsonAsync<IEnumerable<GetEmployeeRequest>>();
+        var employees = await response.Content.ReadFromJsonAsync<IEnumerable<GetEmployeeResponse>>();
         Assert.Single(employees);
     }
 
@@ -79,8 +79,6 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         Assert.NotNull(problemDetails);
         Assert.Contains("FirstName", problemDetails.Errors.Keys);
         Assert.Contains("LastName", problemDetails.Errors.Keys);
-        Assert.Contains("First name is required.", problemDetails.Errors["FirstName"]);
-        Assert.Contains("Last name is required.", problemDetails.Errors["LastName"]);
     }
 
     
@@ -146,7 +144,7 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
-/*
+
     [Fact]
     public async Task GetBenefitsForEmployee_ReturnsOkResult()
     {
@@ -160,5 +158,4 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         var benefits = await response.Content.ReadFromJsonAsync<IEnumerable<GetEmployeeResponseEmployeeBenefit>>();
         Assert.Equal(2, benefits.Count());
     }
-    */
 }
