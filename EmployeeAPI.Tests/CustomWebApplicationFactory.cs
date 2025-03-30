@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Internal;
 using Npgsql;
 using WebApplication1;
 
@@ -13,6 +14,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     private static readonly object _lock = new object();
     private static bool _databaseInitialized;
+    public static TestSystemClock SystemClock { get; } = new TestSystemClock();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -60,17 +62,21 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
+            var systemClockDescriptor = services.Single(d => d.ServiceType == typeof(ISystemClock));
+            services.Remove(systemClockDescriptor);
+            services.AddSingleton<ISystemClock>(SystemClock);
+
             // Datenbank initialisieren - einmalig beim Start der Tests
             lock (_lock)
             {
                 if (!_databaseInitialized)
                 {
                     // Baue Verbindung zur Master-Datenbank auf, um DB zu löschen/erstellen
-                    using var masterConnection = new NpgsqlConnection(GetMasterConnectionString(connectionString));
+                    using var masterConnection = new NpgsqlConnection(GetMasterConnectionString(connectionString!));
                     masterConnection.Open();
 
                     // Datenbanknamen aus Connection String extrahieren
-                    var databaseName = GetDatabaseName(connectionString);
+                    var databaseName = GetDatabaseName(connectionString!);
 
                     // Drop Database wenn vorhanden
                     DropDatabase(masterConnection, databaseName);
@@ -108,7 +114,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     private string GetDatabaseName(string connectionString)
     {
         var builder = new NpgsqlConnectionStringBuilder(connectionString);
-        return builder.Database;
+        return builder.Database!;
     }
 
     // Hilfsmethode zum Löschen der Datenbank
@@ -146,5 +152,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         {
             Console.WriteLine($"Fehler beim Erstellen der Datenbank: {ex.Message}");
         }
+    }
+
+    public class TestSystemClock : ISystemClock
+    {
+        public DateTimeOffset UtcNow { get; } = DateTimeOffset.Parse("2022-01-01T00:00:00Z");
     }
 }

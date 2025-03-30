@@ -1,4 +1,6 @@
-public class Employee 
+using WebApplication1.Models;
+
+public class Employee : AuditableEntity
 {
     public int Id { get; set; }
     public required string FirstName { get; set; }

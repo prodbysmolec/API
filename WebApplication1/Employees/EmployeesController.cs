@@ -140,9 +140,15 @@ public class EmployeesController : BaseController
         existingEmployee.PhoneNumber = employeeRequest.PhoneNumber;
         existingEmployee.Email = employeeRequest.Email;
 
+        var hasChanged = _dbContext.ChangeTracker.HasChanges();
         try
         {
-            //_dbContext.Entry(existingEmployee).State = EntityState.Modified;
+            if(!hasChanged)
+            {
+                _logger.LogInformation("No changes detected for employee with ID: {EmployeeId}", id);
+                return BadRequest("No changes detected for employee update.");
+            }
+            _dbContext.Entry(existingEmployee).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
             
             _logger.LogInformation("Employee with ID: {EmployeeId} successfully updated", id);

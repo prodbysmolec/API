@@ -1,6 +1,7 @@
 using WebApplication1;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Internal;
 var employees = new List<Employee>
 {
     new Employee { Id = 1, FirstName = "John", LastName = "Doe" },
@@ -28,6 +29,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers(options => {
     options.Filters.Add<FluentValidationFilter>();
 });
+builder.Services.AddSingleton<ISystemClock, SystemClock>();
 
 var app = builder.Build();
 
