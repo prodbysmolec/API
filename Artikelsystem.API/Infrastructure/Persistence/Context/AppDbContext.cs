@@ -1,11 +1,11 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Internal;
-using Artikelsystem.Api.Migrations;
 using Artikelsystem.Api.Models;
+using Artikelsystem.Api.Features.Employees.Models.Entitys;
 
-namespace Artikelsystem.Api;
 
+namespace Artikelsystem.Api.Infrastructure.Persistence.Context;
 public class AppDbContext : DbContext
 {
     private readonly ISystemClock _systemClock;

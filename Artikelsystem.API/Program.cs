@@ -1,7 +1,11 @@
-using Artikelsystem.Api;
+using Artikelsystem.Api.Features.Employees.Models.Entitys;
+using Artikelsystem.Api.Infrastructure.Persistence.Context;
+using Artikelsystem.Api.Infrastructure.Persistence.Seeding;
+using Artikelsystem.Api.Shared.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Internal;
+
 var employees = new List<Employee>
 {
     new Employee { Id = 1, FirstName = "John", LastName = "Doe" },

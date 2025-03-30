@@ -1,5 +1,7 @@
 using Artikelsystem.Api.Models;
 
+namespace Artikelsystem.Api.Features.Employees.Models.Entitys;
+
 public class Employee : AuditableEntity
 {
     public int Id { get; set; }

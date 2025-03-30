@@ -1,7 +1,9 @@
 using System;
+using Artikelsystem.Api.Features.Employees.Models.Entitys;
+using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Artikelsystem.Api;
+namespace Artikelsystem.Api.Infrastructure.Persistence.Seeding;
 
 public static class SeedData
 {

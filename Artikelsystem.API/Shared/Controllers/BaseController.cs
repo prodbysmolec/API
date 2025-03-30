@@ -3,7 +3,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Artikelsystem.Api;
+namespace Artikelsystem.API.Shared.Controllers;
 
 [ApiController]
 [Route("/[controller]")]

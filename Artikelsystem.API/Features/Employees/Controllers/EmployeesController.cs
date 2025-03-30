@@ -1,10 +1,14 @@
 using System;
 using System.Runtime.CompilerServices;
+using Artikelsystem.Api.Features.Employees.Models.DTOs;
+using Artikelsystem.Api.Features.Employees.Models.Entitys;
+using Artikelsystem.Api.Infrastructure.Persistence.Context;
+using Artikelsystem.API.Shared.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Artikelsystem.Api.Employees;
+namespace Artikelsystem.Api.Employees.Controllers;
 
 public class EmployeesController : BaseController
 {

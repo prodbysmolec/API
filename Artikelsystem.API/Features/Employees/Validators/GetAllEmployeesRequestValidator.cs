@@ -1,15 +1,8 @@
+using System;
+using Artikelsystem.Api.Features.Employees.Models.DTOs;
 using FluentValidation;
 
-namespace Artikelsystem.Api.Employees;
-
-public class GetAllEmployeesRequest
-{
-    public int? Page { get; set; }
-    public int? RecordsPerPage { get; set; }
-    
-    public string? FirstNameContains { get; set; }
-    public string? LastNameContains { get; set; }
-}
+namespace Artikelsystem.Api.Features.Employees.Validators;
 
 public class GetAllEmployeesRequestValidator : AbstractValidator<GetAllEmployeesRequest>
 {

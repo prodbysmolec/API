@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Artikelsystem.Api;
 using Artikelsystem.Api.Employees;
+using Artikelsystem.Api.Features.Employees.Models.DTOs;
+using Artikelsystem.Api.Features.Employees.Models.Entitys;
+using Artikelsystem.Api.Infrastructure.Persistence.Context;
 namespace Artikelsystem.API.Tests;
 
 public class BasicTests : IClassFixture<CustomWebApplicationFactory>

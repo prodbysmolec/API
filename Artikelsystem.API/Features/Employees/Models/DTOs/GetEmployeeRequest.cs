@@ -1,6 +1,7 @@
 using System;
 
-namespace Artikelsystem.Api.Employees;
+namespace Artikelsystem.Api.Features.Employees.Models.DTOs;
+
 
 public class GetEmployeeResponse
 {
@@ -15,13 +16,4 @@ public class GetEmployeeResponse
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
 
-}
-
-
-public class GetEmployeeResponseEmployeeBenefit
-{
-    public int Id { get; set; }
-    public required string Name { get; set; }
-    public required string Description { get; set; }
-    public decimal Cost { get; set; }
 }

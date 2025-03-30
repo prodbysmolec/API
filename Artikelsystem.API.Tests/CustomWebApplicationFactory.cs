@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Internal;
 using Npgsql;
 using Artikelsystem.Api;
+using Artikelsystem.Api.Infrastructure.Persistence.Context;
 
 namespace Artikelsystem.API.Tests;
 
@@ -90,7 +91,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                     using var scope = services.BuildServiceProvider().CreateScope();
                     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                     dbContext.Database.Migrate();
-                    
+
                     // Optional: Hier könntest du TestSeedData.Initialize(dbContext) aufrufen 
                     // für spezifische Test-Seed-Daten
                     
