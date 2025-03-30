@@ -1,4 +1,3 @@
-using Artikelsystem.Api.Features.Artikel.Repositories;
 using Artikelsystem.Api.Features.Lieferant.Repositories;
 using Artikelsystem.Api.Features.Wareneingang.Repositories;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
@@ -11,24 +10,17 @@ public class UnitOfWork : IUnitOfWork
     private readonly AppDbContext _dbContext;
     private IDbContextTransaction? _transaction;
     private bool _disposed = false;
-
-    public IArtikelRepository ArtikelRepository { get; }
-    public IArtikelStatistikRepository ArtikelStatistikRepository { get; }
     public ILieferantRepository LieferantRepository { get; }
     public IWareneingangRepository WareneingangRepository { get; }
     public IWareneingangArtikelRepository WareneingangArtikelRepository { get; }
 
     public UnitOfWork(
         AppDbContext dbContext,
-        IArtikelRepository artikelRepository,
-        IArtikelStatistikRepository artikelStatistikRepository,
         ILieferantRepository lieferantRepository,
         IWareneingangRepository wareneingangRepository,
         IWareneingangArtikelRepository wareneingangArtikelRepository)
     {
         _dbContext = dbContext;
-        ArtikelRepository = artikelRepository;
-        ArtikelStatistikRepository = artikelStatistikRepository;
         LieferantRepository = lieferantRepository;
         WareneingangRepository = wareneingangRepository;
         WareneingangArtikelRepository = wareneingangArtikelRepository;

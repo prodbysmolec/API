@@ -1,5 +1,4 @@
 
-using Artikelsystem.Api.Features.Artikel.Services;
 using Artikelsystem.Api.Features.Lieferant.Models.DTOs;
 using Artikelsystem.Api.Features.Lieferant.Models.Entitys;
 using Artikelsystem.Api.Features.Lieferant.Services;

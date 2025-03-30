@@ -72,7 +72,6 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         // Arrange 
         var client = _factory.CreateClient();
         var invalidEmployee = new CreateEmployeeRequest(); // Leeres Objekt
-
         // Act
         var response = await client.PostAsJsonAsync("/employees", invalidEmployee);
 
@@ -130,8 +129,8 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var employee = await db.Employees.FindAsync(1);
         Assert.Equal("123 Main Smoot", employee?.Address1);
-        Assert.Equal(CustomWebApplicationFactory.SystemClock.UtcNow.UtcDateTime, employee.LastModifiedOn);
-        Assert.Equal("TheUpdateUser", employee.LastModifiedBy);
+        Assert.Equal(CustomWebApplicationFactory.SystemClock.UtcNow.UtcDateTime, employee?.LastModifiedOn);
+        Assert.Equal("TheUpdateUser", employee?.LastModifiedBy);
     }
 
     [Fact]
