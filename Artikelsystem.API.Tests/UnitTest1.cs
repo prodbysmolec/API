@@ -178,7 +178,6 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
-
     [Fact]
     public async Task GetBenefitsForEmployee_ReturnsOkResult()
     {
