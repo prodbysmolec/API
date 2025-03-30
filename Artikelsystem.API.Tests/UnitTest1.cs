@@ -91,7 +91,31 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
     {
         var client = _factory.CreateClient();
         var response = await client.PutAsJsonAsync("/employees/1", new Employee { 
-            FirstName = "Johnn", 
+            FirstName = "Johnne", 
+            LastName = "Doe", 
+            Address1 = "123 Main Smoott" 
+        });
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Fail($"Failed to update employee: {content}");
+        }
+
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var employee = await db.Employees.FindAsync(1);
+        Assert.NotNull(employee);
+        Assert.Equal("123 Main Smoott", employee.Address1);
+        Assert.Equal(CustomWebApplicationFactory.SystemClock.UtcNow.UtcDateTime, employee.LastModifiedOn);
+    }
+
+    [Fact]
+    public async Task UpdateEmployee_ReturnsOkResult2()
+    {
+        var client = _factory.CreateClient();
+        var response = await client.PutAsJsonAsync("/employees/1", new Employee { 
+            FirstName = "John", 
             LastName = "Doe", 
             Address1 = "123 Main Smoot" 
         });
@@ -105,9 +129,9 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         using var scope = _factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var employee = await db.Employees.FindAsync(1);
-        Assert.NotNull(employee);
-        Assert.Equal("123 Main Smoot", employee.Address1);
+        Assert.Equal("123 Main Smoot", employee?.Address1);
         Assert.Equal(CustomWebApplicationFactory.SystemClock.UtcNow.UtcDateTime, employee.LastModifiedOn);
+        Assert.Equal("TheUpdateUser", employee.LastModifiedBy);
     }
 
     [Fact]
