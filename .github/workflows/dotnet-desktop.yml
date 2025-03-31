@@ -1,0 +1,65 @@
+name: Test and Notify
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Ermöglicht manuelles Auslösen der Pipeline
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'  # Basierend auf den Infos aus den Ordnerstrukturen - du nutzt .NET 9
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --no-restore
+    
+    - name: Test
+      run: dotnet test --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: success() || failure()    # Wird auch bei fehlgeschlagenen Tests ausgeführt
+      with:
+        name: Test Results
+        path: '**/*.trx'           # Pfad zu den Testergebnissen
+        reporter: dotnet-trx
+        fail-on-error: false
+
+    - name: Send email
+      uses: dawidd6/action-send-mail@v3
+      if: always()                 # Email immer senden, egal ob Tests erfolgreich oder nicht
+      with:
+        server_address: ${{ secrets.MAIL_SERVER }}
+        server_port: ${{ secrets.MAIL_PORT }}
+        username: ${{ secrets.MAIL_USERNAME }}
+        password: ${{ secrets.MAIL_PASSWORD }}
+        subject: GitHub Actions Test Results - ${{ github.repository }}
+        body: |
+          Hallo,
+          
+          Die Tests für ${{ github.repository }} wurden ausgeführt.
+          
+          Status: ${{ job.status }}
+          
+          Branch: ${{ github.ref }}
+          Commit: ${{ github.sha }}
+          
+          Weitere Details findest du hier:
+          ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          
+          Mit freundlichen Grüßen,
+          GitHub Actions
+        to: lukasschmolz@prodbysmolec.de
+        from: GitHub Actions
