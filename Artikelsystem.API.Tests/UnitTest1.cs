@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Artikelsystem.Api;
 using Artikelsystem.Api.Employees;
+using Artikelsystem.Api.Features.Employees.Models.DTOs;
+using Artikelsystem.Api.Features.Employees.Models.Entitys;
+using Artikelsystem.Api.Infrastructure.Persistence.Context;
 namespace Artikelsystem.API.Tests;
 
 public class BasicTests : IClassFixture<CustomWebApplicationFactory>
@@ -69,7 +72,6 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         // Arrange 
         var client = _factory.CreateClient();
         var invalidEmployee = new CreateEmployeeRequest(); // Leeres Objekt
-
         // Act
         var response = await client.PostAsJsonAsync("/employees", invalidEmployee);
 
@@ -88,7 +90,31 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
     {
         var client = _factory.CreateClient();
         var response = await client.PutAsJsonAsync("/employees/1", new Employee { 
-            FirstName = "Johnn", 
+            FirstName = "Johnne", 
+            LastName = "Doe", 
+            Address1 = "123 Main Smoott" 
+        });
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Fail($"Failed to update employee: {content}");
+        }
+
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var employee = await db.Employees.FindAsync(1);
+        Assert.NotNull(employee);
+        Assert.Equal("123 Main Smoott", employee.Address1);
+        Assert.Equal(CustomWebApplicationFactory.SystemClock.UtcNow.UtcDateTime, employee.LastModifiedOn);
+    }
+
+    [Fact]
+    public async Task UpdateEmployee_ReturnsOkResult2()
+    {
+        var client = _factory.CreateClient();
+        var response = await client.PutAsJsonAsync("/employees/1", new Employee { 
+            FirstName = "John", 
             LastName = "Doe", 
             Address1 = "123 Main Smoot" 
         });
@@ -102,9 +128,9 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         using var scope = _factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var employee = await db.Employees.FindAsync(1);
-        Assert.NotNull(employee);
-        Assert.Equal("123 Main Smoot", employee.Address1);
-        Assert.Equal(CustomWebApplicationFactory.SystemClock.UtcNow.UtcDateTime, employee.LastModifiedOn);
+        Assert.Equal("123 Main Smoot", employee?.Address1);
+        Assert.Equal(CustomWebApplicationFactory.SystemClock.UtcNow.UtcDateTime, employee?.LastModifiedOn);
+        Assert.Equal("TheUpdateUser", employee?.LastModifiedBy);
     }
 
     [Fact]
@@ -150,7 +176,6 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
-
 
     [Fact]
     public async Task GetBenefitsForEmployee_ReturnsOkResult()

@@ -9,7 +9,6 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
-
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.0.0-preview1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
@@ -20,6 +19,14 @@
     <PackageReference Include="Npgsql" Version="8.0.7" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features/Artikel/Validators/" />
+    <Folder Include="Features/Lieferant/Controllers/" />
+    <Folder Include="Features/Lieferant/Validators/" />
+    <Folder Include="Features/Veranstaltung/" />
+    <Folder Include="Features/Warenausgang/Controllers/" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,13 @@
-using Artikelsystem.Api;
+using Artikelsystem.Api.Features.Employees.Models.Entitys;
+using Artikelsystem.Api.Features.Lieferant.Repositories;
+using Artikelsystem.Api.Infrastructure.Persistence.Context;
+using Artikelsystem.Api.Infrastructure.Persistence.Repositories;
+using Artikelsystem.Api.Infrastructure.Persistence.Seeding;
+using Artikelsystem.Api.Shared.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Internal;
+
 var employees = new List<Employee>
 {
     new Employee { Id = 1, FirstName = "John", LastName = "Doe" },
@@ -22,7 +28,8 @@ builder.Services.AddDbContext<AppDbContext>(options => {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
-
+builder.Services.AddScoped<ILieferantRepository, LieferantRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddProblemDetails();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddHttpContextAccessor();
