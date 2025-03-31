@@ -5,6 +5,7 @@ using Artikelsystem.Api.Features.Employees.Models.Entitys;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Artikelsystem.API.Shared.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.EntityFrameworkCore;
 
 namespace Artikelsystem.Api.Features.Artikel.Controllers;
@@ -89,7 +90,7 @@ public class ArtikelController : BaseController
             {
                 query = query.Where(a => a.Menge > a.Maximalbestand);
             }
-
+            
             // Filter by statistics
             if (request.MinDurchschnittlicherEinzelpreis.HasValue)
             {
@@ -146,6 +147,121 @@ public class ArtikelController : BaseController
 
         return Ok(artikel.Select(ArtikelToGetArtikelResponse));
     }
+
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(GetArtikelResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetArtikelById(int id, [FromQuery] GetArtikelByIdRequest? request = null)
+    {
+        request ??= new GetArtikelByIdRequest();        
+
+        // Start with base query
+        IQueryable<Models.Entitys.Artikel> query = _dbContext.Artikel;
+        
+        // Conditionally include related data based on request
+        if (request.IncludeArtikelStatistik)
+        {
+            query = query.Include(a => a.ArtikelStatistik);
+        }
+        
+        // if (request.IncludeLieferanten)
+        // {
+        //     query = query.Include(a => a.Wareneingaenge);
+        // }
+        
+        if (request.IncludeWareneingänge)
+        {
+            query = query.Include(a => a.Wareneingaenge)
+                        .ThenInclude(a => a.Wareneingang);
+        }
+        // Filter by ID
+        var artikel = await query.SingleOrDefaultAsync(a => a.Id == id);
+        
+        if(artikel == null) return NotFound();
+
+        // Use your existing mapper method
+        var artikelResponse = ArtikelToGetArtikelResponse(artikel);
+
+        return Ok(artikelResponse);  // Return artikelResponse instead of artikel
+
+
+        // var employee = await _dbContext.Artikel.SingleOrDefaultAsync(e => e.Id == id);
+        // if (employee == null)
+        // {
+        //     return NotFound();
+        // }
+
+        // var employeeResponse = ArtikelToGetArtikelResponse(employee);
+    }
+
+
+    // /// <summary>
+    // /// Holt einen Artikel anhand der ID mit Optionen zum Filtern der zurückgegebenen Daten.
+    // /// </summary>
+    // /// <param name="id">Die ID des Artikels.</param>
+    // /// <returns>Der Artikel Record mit den angeforderten Daten.</returns>
+    // [HttpGet("{id:int}")]
+    // [ProducesResponseType(typeof(GetArtikelResponse), StatusCodes.Status200OK)]
+    // [ProducesResponseType(StatusCodes.Status404NotFound)]
+    // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    // public async Task<IActionResult> GetArtikelById(int id)
+    // {
+    //     _logger.LogInformation("Hole Artikel mit ID: {ArtikelId}", id);
+    //     var employee = await _dbContext.Artikel.SingleOrDefaultAsync(e => e.Id == id);
+    //     if (employee == null)
+    //     {
+    //         return NotFound();
+    //     }
+
+    //     var employeeResponse = ArtikelToGetArtikelResponse(employee);
+
+    //     return Ok(employeeResponse);
+    //     //     request ??= new GetArtikelByIdRequest();
+
+    //     //     // Starte die Query
+    //     //     IQueryable<Models.Entitys.Artikel> query = _dbContext.Artikel;
+
+    //     //     // Bedingtes einbinden der Anfrage basierend auf request
+    //     //     if(request.IncludeArtikelStatistik)
+    //     //     {
+    //     //         query = query.Include(a => a.ArtikelStatistik);
+    //     //     }
+
+    //     //     // if(request.IncludeLieferanten)
+    //     //     // {
+    //     //     //     query = query.Include(a => a.Lieferant);
+    //     //     // }
+
+    //     //     // kommt später
+    //     //     // if(request.IncludeArtikelGruppen)
+    //     //     // {
+    //     //     //     query = query.Include(a => a.ArtikelGruppen);
+    //     //     // }
+
+    //     //     if(request.IncludeWareneingänge)
+    //     //     {
+    //     //         query = query.Include(a => a.Wareneingaenge);
+    //     //     }
+
+    //     //     // if(request.IncludeArtikelZusatzwerte)
+    //     //     // {
+    //     //     //     query = query
+    //     //     //         .Include(a => a.ArtikelZusatzWerte)
+    //     //     //         .ThenInclude(az => az.Zusatzwert)
+    //     //     //         .ThenInclude(z => z.Zusatzwert);
+    //     //     // }
+
+    //     //     // Filter basierend auf ID 
+    //     //     var artikel = await query.SingleOrDefaultAsync(a => a.Id == id);
+
+    //     //     if(artikel == null) return NotFound(); 
+
+    //     //     var artikelResponse = ArtikelToGetArtikelResponse(artikel);
+
+    //     //     return Ok(artikelResponse);
+    //     // }
+    // }
 
     private static GetArtikelResponse ArtikelToGetArtikelResponse(Models.Entitys.Artikel artikel)
     {

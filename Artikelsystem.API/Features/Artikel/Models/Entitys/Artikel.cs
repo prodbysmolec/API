@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Artikelsystem.Api.Features.Employees.Enums;
 using Artikelsystem.Api.Features.Wareneingang.Models.Entitys;
 using Artikelsystem.Api.Models;
-
+using Artikelsystem.Api.Features.Lieferant.Models.Entitys;
 namespace Artikelsystem.Api.Features.Artikel.Models.Entitys;
     public class Artikel : AuditableEntity
     {
@@ -16,4 +16,5 @@ namespace Artikelsystem.Api.Features.Artikel.Models.Entitys;
         public byte[] Bild { get; set; } = new byte[0];
         public virtual ICollection<WareneingangArtikel> Wareneingaenge { get; set; } = new List<WareneingangArtikel>();
         public virtual ArtikelStatistik? ArtikelStatistik { get; set; }
+
     }

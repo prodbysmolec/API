@@ -17,7 +17,7 @@ public class WareneingangArtikel
         get { return _GesamtPreis; }
         set { _GesamtPreis = value; }
     }
-
+    
     // Navigation properties
     public virtual Artikel? Artikel { get; set; }  // Verwende den Alias hier
     public virtual Wareneingang? Wareneingang { get; set; }

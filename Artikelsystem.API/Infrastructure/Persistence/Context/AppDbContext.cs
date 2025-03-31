@@ -6,6 +6,7 @@ using Artikelsystem.Api.Features.Employees.Models.Entitys;
 using Artikelsystem.Api.Features.Artikel.Models.Entitys;
 using Artikelsystem.Api.Features.Lieferant.Models.Entitys;
 using Artikelsystem.Api.Features.Wareneingang.Models.Entitys;
+using Artikelsystem.Api.Features.Wareneingang.Configurations;
 
 
 namespace Artikelsystem.Api.Infrastructure.Persistence.Context;
@@ -35,39 +36,18 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<EmployeeBenefit>()
             .HasIndex(eb => new { eb.EmployeeId, eb.BenefitId })
             .IsUnique();
-
-        // Artikel - ArtikelStatistik (1:1)
-        modelBuilder.Entity<Artikel>()
-            .HasOne(a => a.ArtikelStatistik)
-            .WithOne(s => s.Artikel)
-            .HasForeignKey<ArtikelStatistik>(s => s.ArtikelId);
-        
         // Wareneingang - Lieferant (N:1)
         modelBuilder.Entity<Wareneingang>()
             .HasOne(w => w.Lieferant)
             .WithMany(l => l.Wareneingaenge)
             .HasForeignKey(w => w.LieferantId);
             
-        // WareneingangArtikel als Verbindungstabelle
-        modelBuilder.Entity<WareneingangArtikel>()
-            .HasOne(wa => wa.Artikel)
-            .WithMany(a => a.Wareneingaenge)
-            .HasForeignKey(wa => wa.ArtikelId);
-            
-        modelBuilder.Entity<WareneingangArtikel>()
-            .HasOne(wa => wa.Wareneingang)
-            .WithMany(w => w.ArtikelPositionen)
-            .HasForeignKey(wa => wa.WareneingangId);
-            
-        // Berechnete Spalten für Gesamtpreis etc.
-        modelBuilder.Entity<WareneingangArtikel>()
-            .Property(wa => wa.Gesamtpreis)
-            .HasComputedColumnSql("\"Menge\" * \"Einzelpreis\"", stored: true);
-            
+        modelBuilder.ApplyConfiguration(new WareneingangArtikelConfiguration());
+
         modelBuilder.Entity<ArtikelStatistik>()
             .Property(s => s.Lagerwert)
             .HasComputedColumnSql("\"Gesamtmenge\" * \"DurchschnittlicherEinzelpreis\"", stored: true);
-            
+
         modelBuilder.Entity<ArtikelStatistik>()
             .Property(s => s.GesamtVerkaufswert)
             .HasComputedColumnSql("\"VerkaufsMenge\" * \"DurchschnittlicherVerkaufspreis\"", stored: true);
