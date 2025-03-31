@@ -14,7 +14,6 @@ namespace Artikelsystem.Api.Features.Artikel.Models.Entitys;
         public int Menge { get; set; }
         public ArtikelStatus Status { get; set; } = ArtikelStatus.Verfügbar;    
         public byte[] Bild { get; set; } = new byte[0];
-        public virtual ICollection<WareneingangArtikel> Wareneingaenge { get; set; } = new List<WareneingangArtikel>();
+        public virtual ICollection<WareneingangArtikelPositionen> Wareneingaenge { get; set; } = new List<WareneingangArtikelPositionen>();
         public virtual ArtikelStatistik? ArtikelStatistik { get; set; }
-
     }

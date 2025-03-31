@@ -25,6 +25,8 @@
     <Folder Include="Features/Artikel/Validators/" />
     <Folder Include="Features/Lieferant/Controllers/" />
     <Folder Include="Features/Lieferant/Validators/" />
+    <Folder Include="Features/Veranstaltung/" />
+    <Folder Include="Features/Warenausgang/Controllers/" />
   </ItemGroup>
 
 </Project>

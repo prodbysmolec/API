@@ -29,17 +29,16 @@ public class AppDbContext : DbContext
     public DbSet<Artikel> Artikel { get; set; }
     public DbSet<ArtikelStatistik> ArtikelStatistiken { get; set; }
     public DbSet<Lieferant> Lieferanten { get; set; }
-    public DbSet<Wareneingang> Wareneingaenge { get; set; }
-    public DbSet<WareneingangArtikel> WareneingangArtikel { get; set; }
-    
-    
+    public DbSet<Wareneingaenge> Wareneingaenge { get; set; }
+    public DbSet<WareneingangArtikelPositionen> WareneingangArtikel { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new EmployeeBenefitConfiguration());
 
         // Wareneingang - Lieferant (N:1)
-        modelBuilder.ApplyConfiguration(new WareneingangConfiguration());            
-        modelBuilder.ApplyConfiguration(new WareneingangArtikelConfiguration());
+        modelBuilder.ApplyConfiguration(new WareneingaengeConfiguration());            
+        modelBuilder.ApplyConfiguration(new WareneingangArtikelPositionenConfiguration());
 
         // definiere berechnete Felder auf DB in ArtikelStatistiken
         modelBuilder.ApplyConfiguration(new ArtikelStatistikConfiguration());

@@ -1,11 +1,8 @@
 using Artikelsystem.Api.Features.Employees.Models.Entitys;
 using Artikelsystem.Api.Features.Lieferant.Repositories;
-using Artikelsystem.Api.Features.Lieferant.Services;
-using Artikelsystem.Api.Features.Wareneingang.Repositories;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Artikelsystem.Api.Infrastructure.Persistence.Repositories;
 using Artikelsystem.Api.Infrastructure.Persistence.Seeding;
-using Artikelsystem.Api.Infrastructure.Persistence.UnitOfWork;
 using Artikelsystem.Api.Shared.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -31,14 +28,8 @@ builder.Services.AddDbContext<AppDbContext>(options => {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IWareneingangArtikelRepository, WareneingangArtikelRepository>();
-builder.Services.AddScoped<IWareneingangRepository, WareneingangRepository>();
 builder.Services.AddScoped<ILieferantRepository, LieferantRepository>();
-builder.Services.AddScoped<ILieferantService, LieferantService>();
-
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
 builder.Services.AddProblemDetails();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddHttpContextAccessor();

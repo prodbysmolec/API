@@ -14,7 +14,6 @@ public class LieferantRepository : Repository<Models.Entitys.Lieferant>, ILiefer
     public async Task<Models.Entitys.Lieferant?> GetLieferantMitWareneingaengenAsync(int id)
     {
         return await _dbContext.Lieferanten
-            .Include(l => l.Wareneingaenge)
             .FirstOrDefaultAsync(l => l.Id == id);
     }
 }

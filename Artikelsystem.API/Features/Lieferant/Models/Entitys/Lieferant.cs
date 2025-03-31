@@ -16,7 +16,4 @@ public class Lieferant
     public required string Ort { get; set; }
     public required string Telefonnummer { get; set; }
     public string? Notizen { get; set; }
-
-    public virtual ICollection<Wareneingang.Models.Entitys.Wareneingang> Wareneingaenge { get; set; } = new List<Wareneingang.Models.Entitys.Wareneingang>();
-
 }

@@ -1,12 +1,14 @@
 namespace Artikelsystem.Api.Features.Wareneingang.Models.Entitys;
 using Artikel.Models.Entitys;
 
-public class WareneingangArtikel
+public class WareneingangArtikelPositionen
 {
     public int Id { get; set; }
     public int ArtikelId { get; set; }
     public int WareneingangId { get; set; }
     public int Menge { get; set; }
+
+    
     public decimal Einzelpreis { get; set; }
     
     // Berechnete Eigenschaften
@@ -20,5 +22,5 @@ public class WareneingangArtikel
     
     // Navigation properties
     public virtual Artikel? Artikel { get; set; }  // Verwende den Alias hier
-    public virtual Wareneingang? Wareneingang { get; set; }
+    public virtual Wareneingaenge? Wareneingang { get; set; }
 }
