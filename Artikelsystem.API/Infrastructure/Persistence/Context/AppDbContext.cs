@@ -7,6 +7,8 @@ using Artikelsystem.Api.Features.Artikel.Models.Entitys;
 using Artikelsystem.Api.Features.Lieferant.Models.Entitys;
 using Artikelsystem.Api.Features.Wareneingang.Models.Entitys;
 using Artikelsystem.Api.Features.Wareneingang.Configurations;
+using Artikelsystem.Api.Features.Employees.Configurations;
+using Artikelsystem.Api.Features.Artikel.Configurations;
 
 
 namespace Artikelsystem.Api.Infrastructure.Persistence.Context;
@@ -33,25 +35,14 @@ public class AppDbContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<EmployeeBenefit>()
-            .HasIndex(eb => new { eb.EmployeeId, eb.BenefitId })
-            .IsUnique();
+        modelBuilder.ApplyConfiguration(new EmployeeBenefitConfiguration());
+
         // Wareneingang - Lieferant (N:1)
-        modelBuilder.Entity<Wareneingang>()
-            .HasOne(w => w.Lieferant)
-            .WithMany(l => l.Wareneingaenge)
-            .HasForeignKey(w => w.LieferantId);
-            
+        modelBuilder.ApplyConfiguration(new WareneingangConfiguration());            
         modelBuilder.ApplyConfiguration(new WareneingangArtikelConfiguration());
 
-        modelBuilder.Entity<ArtikelStatistik>()
-            .Property(s => s.Lagerwert)
-            .HasComputedColumnSql("\"Gesamtmenge\" * \"DurchschnittlicherEinzelpreis\"", stored: true);
-
-        modelBuilder.Entity<ArtikelStatistik>()
-            .Property(s => s.GesamtVerkaufswert)
-            .HasComputedColumnSql("\"VerkaufsMenge\" * \"DurchschnittlicherVerkaufspreis\"", stored: true);
-
+        // definiere berechnete Felder auf DB in ArtikelStatistiken
+        modelBuilder.ApplyConfiguration(new ArtikelStatistikConfiguration());
     }
 
     public override int SaveChanges()
