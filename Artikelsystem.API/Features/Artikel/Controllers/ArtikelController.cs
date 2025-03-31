@@ -2,6 +2,8 @@ using Artikelsystem.Api.Features.Artikel.Models.DTOs;
 using Artikelsystem.Api.Features.Employees.Enums;
 using Artikelsystem.Api.Features.Employees.Models.DTOs;
 using Artikelsystem.Api.Features.Employees.Models.Entitys;
+using Artikelsystem.Api.Features.Warenausgang.Models.DTOs.Responses;
+using Artikelsystem.Api.Features.Wareneingang.Models.DTOs.Requests;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Artikelsystem.API.Shared.Controllers;
 using Microsoft.AspNetCore.Mvc;
@@ -170,12 +172,18 @@ public class ArtikelController : BaseController
         //     query = query.Include(a => a.Wareneingaenge);
         // }
         
-        if (request.IncludeWareneingänge)
+        if (request.IncludeWareneingaenge)
         {
             query = query.Include(a => a.Wareneingaenge)
                         .ThenInclude(a => a.Wareneingang);
         }
-        // Filter by ID
+        // ToDo: Fix die abfrage, gibt 500 error.
+        if(request.IncludeWarenausgaenge)
+        {
+            query = query.Include(a => a.Warenausgaenge)
+                .ThenInclude(a => a.Warenausgang);
+        }
+
         var artikel = await query.SingleOrDefaultAsync(a => a.Id == id);
         
         if(artikel == null) return NotFound();
@@ -290,6 +298,39 @@ public class ArtikelController : BaseController
             };
         }
 
+
+        if (artikel.Warenausgaenge != null)
+        {
+            response.WarenausgangArtikelPosition = artikel.Warenausgaenge
+                .Select(w => new WarenausgangArtikelPositionDto
+                {
+                    Id = w.Id,
+                    WarenausgangId = w.WarenausgangId,
+                    ArtikelId = w.ArtikelId,
+                    ArtikelName = w.Artikel?.Name ?? "",
+                    Zweck = w.Zweck,
+                    ZweckBezeichnung = w.Zweck.ToString(),
+                    Menge = w.Menge,
+                    Bemerkung = w.Bemerkung ?? "",
+                    Verkaufspreis = w.Verkaufspreis,
+                    Rechnungsnummer = w.Rechnungsnummer ?? "",
+                    Gesamtpreis = w.Gesamtpreis
+                }).ToList();
+        }
+
+        if (artikel.Wareneingaenge != null)
+        {
+            response.WareneingangArtikelPosition = artikel.Wareneingaenge
+                .Select(e => new WareneingangArtikelPositionenDto
+                {
+                    Id = e.Id,
+                    ArtikelId = e.ArtikelId,
+                    WareneingangId = e.WareneingangId,
+                    Menge = e.Menge,
+                    Einzelpreis = e.Einzelpreis,
+                    Gesamtpreis = e.Gesamtpreis
+                }).ToList();
+        }
         return response;
     }
 

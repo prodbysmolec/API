@@ -1,5 +1,8 @@
 using System;
 using Artikelsystem.Api.Features.Employees.Enums;
+using Artikelsystem.Api.Features.Warenausgang.Models.DTOs.Responses;
+using Artikelsystem.Api.Features.Wareneingang.Models.DTOs.Requests;
+using Artikelsystem.Api.Features.Wareneingang.Models.Entitys;
 
 namespace Artikelsystem.Api.Features.Artikel.Models.DTOs;
 
@@ -31,6 +34,11 @@ public class GetArtikelResponse
     
     // Optional: Statistik-Informationen
     public ArtikelStatistikDto? Statistik { get; set; }
+
+    public List<WarenausgangArtikelPositionDto>? WarenausgangArtikelPosition { get; set; }
+    public List<WareneingangArtikelPositionenDto>? WareneingangArtikelPosition { get; set;}
+
+
     
     public class ArtikelStatistikDto
     {

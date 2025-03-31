@@ -9,6 +9,8 @@ using Artikelsystem.Api.Features.Wareneingang.Models.Entitys;
 using Artikelsystem.Api.Features.Wareneingang.Configurations;
 using Artikelsystem.Api.Features.Employees.Configurations;
 using Artikelsystem.Api.Features.Artikel.Configurations;
+using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
+using Artikelsystem.Api.Features.Warenausgang.Configurations;
 
 
 namespace Artikelsystem.Api.Infrastructure.Persistence.Context;
@@ -31,6 +33,8 @@ public class AppDbContext : DbContext
     public DbSet<Lieferant> Lieferanten { get; set; }
     public DbSet<Wareneingaenge> Wareneingaenge { get; set; }
     public DbSet<WareneingangArtikelPositionen> WareneingangArtikel { get; set; }
+    public DbSet<Warenausgaenge> Warenausgaenge { get; set; }
+    public DbSet<WarenausgangArtikelPositionen> WarenausgangArtikelPosition { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -39,6 +43,10 @@ public class AppDbContext : DbContext
         // Wareneingang - Lieferant (N:1)
         modelBuilder.ApplyConfiguration(new WareneingaengeConfiguration());            
         modelBuilder.ApplyConfiguration(new WareneingangArtikelPositionenConfiguration());
+
+        modelBuilder.ApplyConfiguration(new WarenausgaengeConfiguration());
+        modelBuilder.ApplyConfiguration(new WarenausgangArtikelConfiguration());
+
 
         // definiere berechnete Felder auf DB in ArtikelStatistiken
         modelBuilder.ApplyConfiguration(new ArtikelStatistikConfiguration());

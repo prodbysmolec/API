@@ -7,7 +7,6 @@ public class WareneingangArtikelPositionen
     public int ArtikelId { get; set; }
     public int WareneingangId { get; set; }
     public int Menge { get; set; }
-
     
     public decimal Einzelpreis { get; set; }
     
