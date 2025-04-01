@@ -21,7 +21,7 @@ public static class SeedData
 
         // Aktuelle Zeit und Benutzer
         var currentDateTime = DateTime.SpecifyKind(
-            DateTime.Parse("2025-03-31 20:11:59"), 
+            DateTime.Parse("2025-04-01 22:35:48"), 
             DateTimeKind.Utc
         );
         
@@ -111,15 +111,237 @@ public static class SeedData
             context.SaveChanges();
         }
 
+        // Seed Produktkategorien
+        if (!context.Set<Produktkategorie>().Any())
+        {
+            var kategorien = new List<Produktkategorie>
+            {
+                new Produktkategorie 
+                { 
+                    Name = "Elektronik", 
+                    Beschreibung = "Elektronische Geräte und Zubehör"
+                },
+                new Produktkategorie 
+                { 
+                    Name = "Bekleidung", 
+                    Beschreibung = "Kleidung und Accessoires"
+                },
+                new Produktkategorie 
+                { 
+                    Name = "Bürobedarf", 
+                    Beschreibung = "Material für den Büroalltag"
+                }
+            };
+            
+            context.Set<Produktkategorie>().AddRange(kategorien);
+            context.SaveChanges();
+        }
+
+        // Seed Artikelgruppen
+        if (!context.Set<Artikelgruppe>().Any())
+        {
+            var elektronikId = context.Set<Produktkategorie>().Single(p => p.Name == "Elektronik").Id;
+            var bekleidungId = context.Set<Produktkategorie>().Single(p => p.Name == "Bekleidung").Id;
+            var bueroId = context.Set<Produktkategorie>().Single(p => p.Name == "Bürobedarf").Id;
+            
+            var artikelgruppen = new List<Artikelgruppe>
+            {
+                new Artikelgruppe 
+                { 
+                    Name = "Computer", 
+                    ProduktkategorieId = elektronikId
+                },
+                new Artikelgruppe 
+                { 
+                    Name = "Peripheriegeräte", 
+                    ProduktkategorieId = elektronikId 
+                },
+                new Artikelgruppe 
+                { 
+                    Name = "T-Shirts", 
+                    ProduktkategorieId = bekleidungId 
+                },
+                new Artikelgruppe 
+                { 
+                    Name = "Schreibwaren", 
+                    ProduktkategorieId = bueroId 
+                }
+            };
+            
+            context.Set<Artikelgruppe>().AddRange(artikelgruppen);
+            context.SaveChanges();
+        }
+
+        // Seed Zusatzfelder
+        if (!context.Set<Zusatzfeld>().Any())
+        {
+            var zusatzfelder = new List<Zusatzfeld>
+            {
+                new Zusatzfeld { Name = "Farbe" },
+                new Zusatzfeld { Name = "Größe" },
+                new Zusatzfeld { Name = "Material" },
+                new Zusatzfeld { Name = "Prozessortyp" },
+                new Zusatzfeld { Name = "Arbeitsspeicher" },
+                new Zusatzfeld { Name = "Festplattentyp" },
+                new Zusatzfeld { Name = "Anschlusstyp" },
+                new Zusatzfeld { Name = "Schnittstelle" }
+            };
+            
+            context.Set<Zusatzfeld>().AddRange(zusatzfelder);
+            context.SaveChanges();
+        }
+
+        // Seed Zusatzwerte
+        if (!context.Set<Zusatzwert>().Any())
+        {
+            // Farben
+            var farbeId = context.Set<Zusatzfeld>().Single(z => z.Name == "Farbe").ZusatzfeldID;
+            var farben = new List<Zusatzwert>
+            {
+                new Zusatzwert { ZusatzFeldID = farbeId, Wert = "Schwarz" },
+                new Zusatzwert { ZusatzFeldID = farbeId, Wert = "Weiß" },
+                new Zusatzwert { ZusatzFeldID = farbeId, Wert = "Blau" },
+                new Zusatzwert { ZusatzFeldID = farbeId, Wert = "Rot" },
+                new Zusatzwert { ZusatzFeldID = farbeId, Wert = "Grün" }
+            };
+            
+            // Größen
+            var größeId = context.Set<Zusatzfeld>().Single(z => z.Name == "Größe").ZusatzfeldID;
+            var größen = new List<Zusatzwert>
+            {
+                new Zusatzwert { ZusatzFeldID = größeId, Wert = "S" },
+                new Zusatzwert { ZusatzFeldID = größeId, Wert = "M" },
+                new Zusatzwert { ZusatzFeldID = größeId, Wert = "L" },
+                new Zusatzwert { ZusatzFeldID = größeId, Wert = "XL" },
+                new Zusatzwert { ZusatzFeldID = größeId, Wert = "XXL" }
+            };
+            
+            // Material
+            var materialId = context.Set<Zusatzfeld>().Single(z => z.Name == "Material").ZusatzfeldID;
+            var materialien = new List<Zusatzwert>
+            {
+                new Zusatzwert { ZusatzFeldID = materialId, Wert = "Baumwolle" },
+                new Zusatzwert { ZusatzFeldID = materialId, Wert = "Kunststoff" },
+                new Zusatzwert { ZusatzFeldID = materialId, Wert = "Aluminium" },
+                new Zusatzwert { ZusatzFeldID = materialId, Wert = "Edelstahl" }
+            };
+            
+            // Prozessortyp
+            var prozessorId = context.Set<Zusatzfeld>().Single(z => z.Name == "Prozessortyp").ZusatzfeldID;
+            var prozessoren = new List<Zusatzwert>
+            {
+                new Zusatzwert { ZusatzFeldID = prozessorId, Wert = "Intel i5" },
+                new Zusatzwert { ZusatzFeldID = prozessorId, Wert = "Intel i7" },
+                new Zusatzwert { ZusatzFeldID = prozessorId, Wert = "Intel i9" },
+                new Zusatzwert { ZusatzFeldID = prozessorId, Wert = "AMD Ryzen 5" },
+                new Zusatzwert { ZusatzFeldID = prozessorId, Wert = "AMD Ryzen 7" }
+            };
+            
+            // Arbeitsspeicher
+            var ramId = context.Set<Zusatzfeld>().Single(z => z.Name == "Arbeitsspeicher").ZusatzfeldID;
+            var ram = new List<Zusatzwert>
+            {
+                new Zusatzwert { ZusatzFeldID = ramId, Wert = "8 GB" },
+                new Zusatzwert { ZusatzFeldID = ramId, Wert = "16 GB" },
+                new Zusatzwert { ZusatzFeldID = ramId, Wert = "32 GB" },
+                new Zusatzwert { ZusatzFeldID = ramId, Wert = "64 GB" }
+            };
+            
+            // Festplattentyp
+            var festplatteId = context.Set<Zusatzfeld>().Single(z => z.Name == "Festplattentyp").ZusatzfeldID;
+            var festplatten = new List<Zusatzwert>
+            {
+                new Zusatzwert { ZusatzFeldID = festplatteId, Wert = "SSD 256 GB" },
+                new Zusatzwert { ZusatzFeldID = festplatteId, Wert = "SSD 512 GB" },
+                new Zusatzwert { ZusatzFeldID = festplatteId, Wert = "SSD 1 TB" },
+                new Zusatzwert { ZusatzFeldID = festplatteId, Wert = "HDD 1 TB" }
+            };
+            
+            // Anschlusstyp
+            var anschlussId = context.Set<Zusatzfeld>().Single(z => z.Name == "Anschlusstyp").ZusatzfeldID;
+            var anschlüsse = new List<Zusatzwert>
+            {
+                new Zusatzwert { ZusatzFeldID = anschlussId, Wert = "USB" },
+                new Zusatzwert { ZusatzFeldID = anschlussId, Wert = "USB-C" },
+                new Zusatzwert { ZusatzFeldID = anschlussId, Wert = "Bluetooth" },
+                new Zusatzwert { ZusatzFeldID = anschlussId, Wert = "Kabelgebunden" }
+            };
+            
+            // Schnittstellen
+            var schnittstelleId = context.Set<Zusatzfeld>().Single(z => z.Name == "Schnittstelle").ZusatzfeldID;
+            var schnittstellen = new List<Zusatzwert>
+            {
+                new Zusatzwert { ZusatzFeldID = schnittstelleId, Wert = "HDMI" },
+                new Zusatzwert { ZusatzFeldID = schnittstelleId, Wert = "DisplayPort" },
+                new Zusatzwert { ZusatzFeldID = schnittstelleId, Wert = "VGA" },
+                new Zusatzwert { ZusatzFeldID = schnittstelleId, Wert = "USB 3.0" }
+            };
+            
+            context.Set<Zusatzwert>().AddRange(farben);
+            context.Set<Zusatzwert>().AddRange(größen);
+            context.Set<Zusatzwert>().AddRange(materialien);
+            context.Set<Zusatzwert>().AddRange(prozessoren);
+            context.Set<Zusatzwert>().AddRange(ram);
+            context.Set<Zusatzwert>().AddRange(festplatten);
+            context.Set<Zusatzwert>().AddRange(anschlüsse);
+            context.Set<Zusatzwert>().AddRange(schnittstellen);
+            context.SaveChanges();
+        }
+
+        // Verknüpfe Artikelgruppen mit Zusatzfeldern
+        if (!context.Set<ArtikelgruppeZusatzfelder>().Any())
+        {
+            var computerGruppe = context.Set<Artikelgruppe>().Single(a => a.Name == "Computer");
+            var peripherieGruppe = context.Set<Artikelgruppe>().Single(a => a.Name == "Peripheriegeräte");
+            var tshirtGruppe = context.Set<Artikelgruppe>().Single(a => a.Name == "T-Shirts");
+            
+            var farbeId = context.Set<Zusatzfeld>().Single(z => z.Name == "Farbe").ZusatzfeldID;
+            var größeId = context.Set<Zusatzfeld>().Single(z => z.Name == "Größe").ZusatzfeldID;
+            var materialId = context.Set<Zusatzfeld>().Single(z => z.Name == "Material").ZusatzfeldID;
+            var prozessorId = context.Set<Zusatzfeld>().Single(z => z.Name == "Prozessortyp").ZusatzfeldID;
+            var ramId = context.Set<Zusatzfeld>().Single(z => z.Name == "Arbeitsspeicher").ZusatzfeldID;
+            var festplatteId = context.Set<Zusatzfeld>().Single(z => z.Name == "Festplattentyp").ZusatzfeldID;
+            var anschlussId = context.Set<Zusatzfeld>().Single(z => z.Name == "Anschlusstyp").ZusatzfeldID;
+            var schnittstelleId = context.Set<Zusatzfeld>().Single(z => z.Name == "Schnittstelle").ZusatzfeldID;
+            
+            var verknüpfungen = new List<ArtikelgruppeZusatzfelder>
+            {
+                // Computer-Gruppe
+                new ArtikelgruppeZusatzfelder { ArtikelgruppeID = computerGruppe.Id, ZusatzfelderID = farbeId },
+                new ArtikelgruppeZusatzfelder { ArtikelgruppeID = computerGruppe.Id, ZusatzfelderID = prozessorId },
+                new ArtikelgruppeZusatzfelder { ArtikelgruppeID = computerGruppe.Id, ZusatzfelderID = ramId },
+                new ArtikelgruppeZusatzfelder { ArtikelgruppeID = computerGruppe.Id, ZusatzfelderID = festplatteId },
+                
+                // Peripherie-Gruppe
+                new ArtikelgruppeZusatzfelder { ArtikelgruppeID = peripherieGruppe.Id, ZusatzfelderID = farbeId },
+                new ArtikelgruppeZusatzfelder { ArtikelgruppeID = peripherieGruppe.Id, ZusatzfelderID = anschlussId },
+                new ArtikelgruppeZusatzfelder { ArtikelgruppeID = peripherieGruppe.Id, ZusatzfelderID = schnittstelleId },
+                new ArtikelgruppeZusatzfelder { ArtikelgruppeID = peripherieGruppe.Id, ZusatzfelderID = materialId },
+                
+                // T-Shirt-Gruppe
+                new ArtikelgruppeZusatzfelder { ArtikelgruppeID = tshirtGruppe.Id, ZusatzfelderID = farbeId },
+                new ArtikelgruppeZusatzfelder { ArtikelgruppeID = tshirtGruppe.Id, ZusatzfelderID = größeId },
+                new ArtikelgruppeZusatzfelder { ArtikelgruppeID = tshirtGruppe.Id, ZusatzfelderID = materialId }
+            };
+            
+            context.Set<ArtikelgruppeZusatzfelder>().AddRange(verknüpfungen);
+            context.SaveChanges();
+        }
+
         // Seed Artikel data if none exists
         List<Artikel> artikelList = new List<Artikel>();
         if (!context.Artikel.Any())
         {
+            var computerGruppe = context.Set<Artikelgruppe>().Single(a => a.Name == "Computer");
+            var peripherieGruppe = context.Set<Artikelgruppe>().Single(a => a.Name == "Peripheriegeräte");
+            var tshirtGruppe = context.Set<Artikelgruppe>().Single(a => a.Name == "T-Shirts");
+            
             artikelList = new List<Artikel>
             {
+                // Computer
                 new Artikel
                 {
-                    Name = "Laptop",
+                    Name = "Business Laptop Pro",
                     Preis = 999.99m,
                     Mindestbestand = 5,
                     Maximalbestand = 50,
@@ -132,7 +354,22 @@ public static class SeedData
                 },
                 new Artikel
                 {
-                    Name = "Maus",
+                    Name = "Gaming Notebook Ultimate",
+                    Preis = 1499.99m,
+                    Mindestbestand = 3,
+                    Maximalbestand = 30,
+                    Menge = 15,
+                    Status = ArtikelStatus.Verfügbar,
+                    CreatedOn = currentDateTime,
+                    CreatedBy = currentUser,
+                    LastModifiedOn = currentDateTime,
+                    LastModifiedBy = currentUser
+                },
+                
+                // Peripherie
+                new Artikel
+                {
+                    Name = "Ergonomische Maus",
                     Preis = 29.99m,
                     Mindestbestand = 10,
                     Maximalbestand = 100,
@@ -145,7 +382,7 @@ public static class SeedData
                 },
                 new Artikel
                 {
-                    Name = "Tastatur",
+                    Name = "Mechanische Tastatur",
                     Preis = 59.99m,
                     Mindestbestand = 10,
                     Maximalbestand = 80,
@@ -158,7 +395,7 @@ public static class SeedData
                 },
                 new Artikel
                 {
-                    Name = "Monitor",
+                    Name = "4K Monitor 27 Zoll",
                     Preis = 249.99m,
                     Mindestbestand = 3,
                     Maximalbestand = 30,
@@ -171,11 +408,39 @@ public static class SeedData
                 },
                 new Artikel
                 {
-                    Name = "USB-Stick",
+                    Name = "USB-Stick 128GB",
                     Preis = 14.99m,
                     Mindestbestand = 20,
                     Maximalbestand = 200,
                     Menge = 75,
+                    Status = ArtikelStatus.Verfügbar,
+                    CreatedOn = currentDateTime,
+                    CreatedBy = currentUser,
+                    LastModifiedOn = currentDateTime,
+                    LastModifiedBy = currentUser
+                },
+                
+                // T-Shirts
+                new Artikel
+                {
+                    Name = "Firmen T-Shirt Logo",
+                    Preis = 19.99m,
+                    Mindestbestand = 15,
+                    Maximalbestand = 150,
+                    Menge = 100,
+                    Status = ArtikelStatus.Verfügbar,
+                    CreatedOn = currentDateTime,
+                    CreatedBy = currentUser,
+                    LastModifiedOn = currentDateTime,
+                    LastModifiedBy = currentUser
+                },
+                new Artikel
+                {
+                    Name = "Event T-Shirt 2025",
+                    Preis = 24.99m,
+                    Mindestbestand = 10,
+                    Maximalbestand = 100,
+                    Menge = 50,
                     Status = ArtikelStatus.Verfügbar,
                     CreatedOn = currentDateTime,
                     CreatedBy = currentUser,
@@ -209,6 +474,91 @@ public static class SeedData
             }
 
             context.ArtikelStatistiken.AddRange(artikelStatistikList);
+            context.SaveChanges();
+
+            // Zusatzwerte zu Artikeln hinzufügen
+            var schwarzId = context.Set<Zusatzwert>().Single(z => z.Wert == "Schwarz").Id;
+            var weißId = context.Set<Zusatzwert>().Single(z => z.Wert == "Weiß").Id;
+            var blauId = context.Set<Zusatzwert>().Single(z => z.Wert == "Blau").Id;
+            var rotId = context.Set<Zusatzwert>().Single(z => z.Wert == "Rot").Id;
+            
+            var sizeS = context.Set<Zusatzwert>().Single(z => z.Wert == "S").Id;
+            var sizeM = context.Set<Zusatzwert>().Single(z => z.Wert == "M").Id;
+            var sizeL = context.Set<Zusatzwert>().Single(z => z.Wert == "L").Id;
+            var sizeXL = context.Set<Zusatzwert>().Single(z => z.Wert == "XL").Id;
+            
+            var baumwolle = context.Set<Zusatzwert>().Single(z => z.Wert == "Baumwolle").Id;
+            var kunststoff = context.Set<Zusatzwert>().Single(z => z.Wert == "Kunststoff").Id;
+            var aluminium = context.Set<Zusatzwert>().Single(z => z.Wert == "Aluminium").Id;
+            
+            var i5 = context.Set<Zusatzwert>().Single(z => z.Wert == "Intel i5").Id;
+            var i7 = context.Set<Zusatzwert>().Single(z => z.Wert == "Intel i7").Id;
+            var ryzen5 = context.Set<Zusatzwert>().Single(z => z.Wert == "AMD Ryzen 5").Id;
+            
+            var ram8 = context.Set<Zusatzwert>().Single(z => z.Wert == "8 GB").Id;
+            var ram16 = context.Set<Zusatzwert>().Single(z => z.Wert == "16 GB").Id;
+            var ram32 = context.Set<Zusatzwert>().Single(z => z.Wert == "32 GB").Id;
+            
+            var ssd256 = context.Set<Zusatzwert>().Single(z => z.Wert == "SSD 256 GB").Id;
+            var ssd512 = context.Set<Zusatzwert>().Single(z => z.Wert == "SSD 512 GB").Id;
+            var ssd1tb = context.Set<Zusatzwert>().Single(z => z.Wert == "SSD 1 TB").Id;
+            
+            var usb = context.Set<Zusatzwert>().Single(z => z.Wert == "USB").Id;
+            var usbc = context.Set<Zusatzwert>().Single(z => z.Wert == "USB-C").Id;
+            var bluetooth = context.Set<Zusatzwert>().Single(z => z.Wert == "Bluetooth").Id;
+            
+            var hdmi = context.Set<Zusatzwert>().Single(z => z.Wert == "HDMI").Id;
+            var displayport = context.Set<Zusatzwert>().Single(z => z.Wert == "DisplayPort").Id;
+            var usb30 = context.Set<Zusatzwert>().Single(z => z.Wert == "USB 3.0").Id;
+
+            var artikelZusatzwerte = new List<ArtikelZusatzWert>
+            {
+                // Business Laptop Pro
+                new ArtikelZusatzWert { ArtikelId = artikelList[0].Id, ZusatzwertId = schwarzId },
+                new ArtikelZusatzWert { ArtikelId = artikelList[0].Id, ZusatzwertId = i5 },
+                new ArtikelZusatzWert { ArtikelId = artikelList[0].Id, ZusatzwertId = ram16 },
+                new ArtikelZusatzWert { ArtikelId = artikelList[0].Id, ZusatzwertId = ssd512 },
+                
+                // Gaming Notebook Ultimate
+                new ArtikelZusatzWert { ArtikelId = artikelList[1].Id, ZusatzwertId = rotId },
+                new ArtikelZusatzWert { ArtikelId = artikelList[1].Id, ZusatzwertId = i7 },
+                new ArtikelZusatzWert { ArtikelId = artikelList[1].Id, ZusatzwertId = ram32 },
+                new ArtikelZusatzWert { ArtikelId = artikelList[1].Id, ZusatzwertId = ssd1tb },
+                
+                // Ergonomische Maus
+                new ArtikelZusatzWert { ArtikelId = artikelList[2].Id, ZusatzwertId = schwarzId },
+                new ArtikelZusatzWert { ArtikelId = artikelList[2].Id, ZusatzwertId = kunststoff },
+                new ArtikelZusatzWert { ArtikelId = artikelList[2].Id, ZusatzwertId = usb },
+                new ArtikelZusatzWert { ArtikelId = artikelList[2].Id, ZusatzwertId = bluetooth },
+                
+                // Mechanische Tastatur
+                new ArtikelZusatzWert { ArtikelId = artikelList[3].Id, ZusatzwertId = schwarzId },
+                new ArtikelZusatzWert { ArtikelId = artikelList[3].Id, ZusatzwertId = aluminium },
+                new ArtikelZusatzWert { ArtikelId = artikelList[3].Id, ZusatzwertId = usb },
+                
+                // 4K Monitor
+                new ArtikelZusatzWert { ArtikelId = artikelList[4].Id, ZusatzwertId = schwarzId },
+                new ArtikelZusatzWert { ArtikelId = artikelList[4].Id, ZusatzwertId = kunststoff },
+                new ArtikelZusatzWert { ArtikelId = artikelList[4].Id, ZusatzwertId = hdmi },
+                new ArtikelZusatzWert { ArtikelId = artikelList[4].Id, ZusatzwertId = displayport },
+                
+                // USB-Stick
+                new ArtikelZusatzWert { ArtikelId = artikelList[5].Id, ZusatzwertId = blauId },
+                new ArtikelZusatzWert { ArtikelId = artikelList[5].Id, ZusatzwertId = kunststoff },
+                new ArtikelZusatzWert { ArtikelId = artikelList[5].Id, ZusatzwertId = usb30 },
+                
+                // Firmen T-Shirt Logo
+                new ArtikelZusatzWert { ArtikelId = artikelList[6].Id, ZusatzwertId = weißId },
+                new ArtikelZusatzWert { ArtikelId = artikelList[6].Id, ZusatzwertId = sizeM },
+                new ArtikelZusatzWert { ArtikelId = artikelList[6].Id, ZusatzwertId = baumwolle },
+                
+                // Event T-Shirt 2025
+                new ArtikelZusatzWert { ArtikelId = artikelList[7].Id, ZusatzwertId = blauId },
+                new ArtikelZusatzWert { ArtikelId = artikelList[7].Id, ZusatzwertId = sizeL },
+                new ArtikelZusatzWert { ArtikelId = artikelList[7].Id, ZusatzwertId = baumwolle }
+            };
+            
+            context.Set<ArtikelZusatzWert>().AddRange(artikelZusatzwerte);
             context.SaveChanges();
         }
         else
@@ -298,7 +648,7 @@ public static class SeedData
                 new WareneingangArtikelPositionen
                 {
                     WareneingangId = wareneingang1.Id,
-                    ArtikelId = artikelList[0].Id, // Laptop
+                    ArtikelId = artikelList[0].Id, // Business Laptop
                     Menge = 5,
                     Einzelpreis = 700.0m,
                     Gesamtpreis = 3500.0m
@@ -306,7 +656,7 @@ public static class SeedData
                 new WareneingangArtikelPositionen
                 {
                     WareneingangId = wareneingang1.Id,
-                    ArtikelId = artikelList[1].Id, // Maus
+                    ArtikelId = artikelList[2].Id, // Maus
                     Menge = 10,
                     Einzelpreis = 20.0m,
                     Gesamtpreis = 200.0m
@@ -319,7 +669,7 @@ public static class SeedData
                 new WareneingangArtikelPositionen
                 {
                     WareneingangId = wareneingang2.Id,
-                    ArtikelId = artikelList[3].Id, // Monitor
+                    ArtikelId = artikelList[4].Id, // Monitor
                     Menge = 3,
                     Einzelpreis = 180.0m,
                     Gesamtpreis = 540.0m
@@ -327,7 +677,7 @@ public static class SeedData
                 new WareneingangArtikelPositionen
                 {
                     WareneingangId = wareneingang2.Id,
-                    ArtikelId = artikelList[2].Id, // Tastatur
+                    ArtikelId = artikelList[3].Id, // Tastatur
                     Menge = 8,
                     Einzelpreis = 42.0m,
                     Gesamtpreis = 336.0m
@@ -335,7 +685,7 @@ public static class SeedData
                 new WareneingangArtikelPositionen
                 {
                     WareneingangId = wareneingang2.Id,
-                    ArtikelId = artikelList[4].Id, // USB-Stick
+                    ArtikelId = artikelList[5].Id, // USB-Stick
                     Menge = 25,
                     Einzelpreis = 10.0m,
                     Gesamtpreis = 250.0m
@@ -380,7 +730,7 @@ public static class SeedData
                 new WarenausgangArtikelPositionen
                 {
                     WarenausgangId = warenausgang1.Id,
-                    ArtikelId = artikelList[0].Id, // Laptop
+                    ArtikelId = artikelList[0].Id, // Business Laptop
                     Artikel = artikelList[0], // Artikel korrekt zuweisen
                     Zweck = WarenausgangZweckEnum.Ausbildungskurs,
                     Menge = 2,
@@ -389,8 +739,8 @@ public static class SeedData
                 new WarenausgangArtikelPositionen
                 {
                     WarenausgangId = warenausgang1.Id,
-                    ArtikelId = artikelList[1].Id, // Maus
-                    Artikel = artikelList[1], // Artikel korrekt zuweisen
+                    ArtikelId = artikelList[2].Id, // Maus
+                    Artikel = artikelList[2], // Artikel korrekt zuweisen
                     Zweck = WarenausgangZweckEnum.Bestellung,
                     Menge = 2,
                     Bemerkung = "Mäuse für neue Laptops"
@@ -403,7 +753,8 @@ public static class SeedData
                 new WarenausgangArtikelPositionen
                 {
                     WarenausgangId = warenausgang2.Id,
-                    ArtikelId = artikelList[3].Id, // Monitor
+                    ArtikelId = artikelList[4].Id, // Monitor
+                    Artikel = artikelList[4], // Artikel korrekt zuweisen
                     Zweck = WarenausgangZweckEnum.Bestellung,
                     Menge = 1,
                     Verkaufspreis = 249.99m,
@@ -413,7 +764,8 @@ public static class SeedData
                 new WarenausgangArtikelPositionen
                 {
                     WarenausgangId = warenausgang2.Id,
-                    ArtikelId = artikelList[4].Id, // USB-Stick
+                    ArtikelId = artikelList[5].Id, // USB-Stick
+                    Artikel = artikelList[5], // Artikel korrekt zuweisen
                     Zweck = WarenausgangZweckEnum.Ausbildungskurs,
                     Menge = 5,
                     Verkaufspreis = 14.99m,
