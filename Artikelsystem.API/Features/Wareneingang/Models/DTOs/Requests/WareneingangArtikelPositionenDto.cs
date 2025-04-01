@@ -10,4 +10,5 @@ namespace Artikelsystem.Api.Features.Wareneingang.Models.DTOs.Requests;
         public int Menge { get; set; }
         public decimal Einzelpreis { get; set; }
         public decimal Gesamtpreis { get; set; }
+        public required WareneingangDto? Wareneingang { get; set; }
     }
