@@ -15,5 +15,10 @@ public class ArtikelConfiguration : IEntityTypeConfiguration<Models.Entitys.Arti
             .HasOne(a => a.ArtikelStatistik)
             .WithOne(s => s.Artikel)
             .HasForeignKey<ArtikelStatistik>(s => s.ArtikelId);
+
+        builder
+            .HasMany(a => a.ArtikelZusatzWerte)
+            .WithOne()
+            .HasForeignKey(az => az.ArtikelId);
     }
 }

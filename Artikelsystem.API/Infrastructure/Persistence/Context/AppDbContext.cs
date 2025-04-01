@@ -35,6 +35,12 @@ public class AppDbContext : DbContext
     public DbSet<WareneingangArtikelPositionen> WareneingangArtikel { get; set; }
     public DbSet<Warenausgaenge> Warenausgaenge { get; set; }
     public DbSet<WarenausgangArtikelPositionen> WarenausgangArtikelPosition { get; set; }
+    public DbSet<Artikelgruppe> Artikelgruppe { get; set; }
+    public DbSet<ArtikelgruppeZusatzfelder> ArtikelgruppeZusatzfelder { get; set; }
+    public DbSet<ArtikelZusatzWert> ArtikelZusatzWert { get; set; }
+    public DbSet<Zusatzfeld> Zusatzfeld { get; set; }
+    public DbSet<Produktkategorie> Produktkategorie { get; set; }
+    public DbSet<Zusatzwert> Zusatzwert { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,6 +56,19 @@ public class AppDbContext : DbContext
 
         // definiere berechnete Felder auf DB in ArtikelStatistiken
         modelBuilder.ApplyConfiguration(new ArtikelStatistikConfiguration());
+
+        modelBuilder.ApplyConfiguration(new ArtikelgruppeConfiguration());
+        modelBuilder.ApplyConfiguration(new ArtikelgruppeZusatzfelderConfiguration());
+        modelBuilder.ApplyConfiguration(new ArtikelZusatzWertConfiguration());
+        modelBuilder.ApplyConfiguration(new ProduktkategerieConfiguration());
+        modelBuilder.ApplyConfiguration(new ZusatzfeldConfiguration());
+        modelBuilder.ApplyConfiguration(new ZusatzwertConfiguration());
+
+
+
+
+
+
     }
 
     public override int SaveChanges()

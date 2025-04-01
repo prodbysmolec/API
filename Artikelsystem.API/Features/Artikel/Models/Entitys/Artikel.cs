@@ -19,4 +19,6 @@ namespace Artikelsystem.Api.Features.Artikel.Models.Entitys;
         public virtual ICollection<WareneingangArtikelPositionen> Wareneingaenge { get; set; } = new List<WareneingangArtikelPositionen>();
         public virtual ICollection<WarenausgangArtikelPositionen> Warenausgaenge { get; set; } = new List<WarenausgangArtikelPositionen>();
         public virtual ArtikelStatistik? ArtikelStatistik { get; set; }
+        // Ergänzung für die Artikel-Klasse:
+        public virtual ICollection<ArtikelZusatzWert> ArtikelZusatzWerte { get; set; } = new HashSet<ArtikelZusatzWert>();
     }
