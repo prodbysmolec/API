@@ -9,6 +9,8 @@ using Artikelsystem.Api.Features.Wareneingang.Models.Entitys;
 using Artikelsystem.Api.Features.Wareneingang.Configurations;
 using Artikelsystem.Api.Features.Employees.Configurations;
 using Artikelsystem.Api.Features.Artikel.Configurations;
+using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
+using Artikelsystem.Api.Features.Warenausgang.Configurations;
 
 
 namespace Artikelsystem.Api.Infrastructure.Persistence.Context;
@@ -31,6 +33,14 @@ public class AppDbContext : DbContext
     public DbSet<Lieferant> Lieferanten { get; set; }
     public DbSet<Wareneingaenge> Wareneingaenge { get; set; }
     public DbSet<WareneingangArtikelPositionen> WareneingangArtikel { get; set; }
+    public DbSet<Warenausgaenge> Warenausgaenge { get; set; }
+    public DbSet<WarenausgangArtikelPositionen> WarenausgangArtikelPosition { get; set; }
+    public DbSet<Artikelgruppe> Artikelgruppe { get; set; }
+    public DbSet<ArtikelgruppeZusatzfelder> ArtikelgruppeZusatzfelder { get; set; }
+    public DbSet<ArtikelZusatzWert> ArtikelZusatzWert { get; set; }
+    public DbSet<Zusatzfeld> Zusatzfeld { get; set; }
+    public DbSet<Produktkategorie> Produktkategorie { get; set; }
+    public DbSet<Zusatzwert> Zusatzwert { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -40,8 +50,25 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new WareneingaengeConfiguration());            
         modelBuilder.ApplyConfiguration(new WareneingangArtikelPositionenConfiguration());
 
+        modelBuilder.ApplyConfiguration(new WarenausgaengeConfiguration());
+        modelBuilder.ApplyConfiguration(new WarenausgangArtikelConfiguration());
+
+
         // definiere berechnete Felder auf DB in ArtikelStatistiken
         modelBuilder.ApplyConfiguration(new ArtikelStatistikConfiguration());
+
+        modelBuilder.ApplyConfiguration(new ArtikelgruppeConfiguration());
+        modelBuilder.ApplyConfiguration(new ArtikelgruppeZusatzfelderConfiguration());
+        modelBuilder.ApplyConfiguration(new ArtikelZusatzWertConfiguration());
+        modelBuilder.ApplyConfiguration(new ProduktkategerieConfiguration());
+        modelBuilder.ApplyConfiguration(new ZusatzfeldConfiguration());
+        modelBuilder.ApplyConfiguration(new ZusatzwertConfiguration());
+
+
+
+
+
+
     }
 
     public override int SaveChanges()

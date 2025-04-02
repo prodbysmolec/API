@@ -28,7 +28,7 @@ public class WarenausgangArtikelPositionen
         public decimal? Gesamtpreis { get; set; }
 
         // Navigation Properties
-        public virtual required Warenausgaenge Warenausgang { get; set; }
-        public virtual required Artikel.Models.Entitys.Artikel Artikel { get; set; }
+        public virtual Warenausgaenge? Warenausgang { get; set; }
+        public virtual Artikel.Models.Entitys.Artikel? Artikel { get; set; }
         // public virtual Veranstaltung? Veranstaltung { get; set; }
 }

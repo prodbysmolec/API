@@ -33,7 +33,7 @@ public class WarenausgangArtikelConfiguration : IEntityTypeConfiguration<Warenau
             .HasPrecision(18, 2);
 
         builder.HasOne(p => p.Artikel)
-            .WithMany()
+            .WithMany(a => a.Warenausgaenge)
             .HasForeignKey(p => p.ArtikelId)
             .OnDelete(DeleteBehavior.Restrict);
     }

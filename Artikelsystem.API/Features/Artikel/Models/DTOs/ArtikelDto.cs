@@ -1,4 +1,7 @@
 using Artikelsystem.Api.Features.Employees.Enums;
+using Artikelsystem.Api.Features.Warenausgang.Models.DTOs.Responses;
+using Artikelsystem.Api.Features.Wareneingang.Models.DTOs.Requests;
+
 
 namespace Artikelsystem.Api.Features.Artikel.Models.DTOs;
 
@@ -13,6 +16,8 @@ public class ArtikelDto
     public ArtikelStatus Status { get; set; }
     public byte[]? Bild { get; set; }
     public ArtikelStatistikDto? ArtikelStatistik { get; set; }
+    public List<WareneingangArtikelPositionenDto>? WareneingangArtikelPositionen { get; set; }
+    public List<WarenausgangArtikelPositionDto>? WarenausgangArtikelPositionen { get; set; }
 }
 
 public class ArtikelStatistikDto

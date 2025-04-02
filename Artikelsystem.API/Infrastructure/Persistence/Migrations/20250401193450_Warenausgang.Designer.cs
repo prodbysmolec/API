@@ -3,6 +3,7 @@ using System;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250401193450_Warenausgang")]
+    partial class Warenausgang
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,13 +40,13 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("LastModifiedOn")
+                    b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Maximalbestand")
@@ -84,7 +87,7 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal>("DurchschnittlicherEinzelpreis")
@@ -109,7 +112,7 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("LastModifiedOn")
+                    b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("VerkaufsMenge")
@@ -121,130 +124,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("ArtikelStatistiken");
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelZusatzWert", b =>
-                {
-                    b.Property<int>("ArtikelId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ZusatzwertId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("ArtikelId1")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ArtikelId", "ZusatzwertId");
-
-                    b.HasIndex("ArtikelId1");
-
-                    b.HasIndex("ZusatzwertId");
-
-                    b.ToTable("ArtikelZusatzWert");
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikelgruppe", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int>("ProduktkategorieId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProduktkategorieId");
-
-                    b.ToTable("Artikelgruppe");
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelgruppeZusatzfelder", b =>
-                {
-                    b.Property<int>("ArtikelgruppeID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ZusatzfelderID")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ArtikelgruppeID", "ZusatzfelderID");
-
-                    b.HasIndex("ZusatzfelderID");
-
-                    b.ToTable("ArtikelgruppeZusatzfelder");
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Produktkategorie", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Beschreibung")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Produktkategorie");
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzfeld", b =>
-                {
-                    b.Property<int>("ZusatzfeldID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ZusatzfeldID"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("ZusatzfeldID");
-
-                    b.ToTable("Zusatzfeld");
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzwert", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsChecked")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Wert")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int>("ZusatzFeldID")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ZusatzFeldID");
-
-                    b.ToTable("Zusatzwert");
                 });
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Employees.Models.Entitys.Benefit", b =>
@@ -291,7 +170,7 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
@@ -304,7 +183,7 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("LastModifiedOn")
+                    b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastName")
@@ -422,13 +301,13 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("LastModifiedOn")
+                    b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Mitarbeiter")
@@ -501,7 +380,7 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal>("Gesamtpreis")
@@ -511,7 +390,7 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("LastModifiedOn")
+                    b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -564,62 +443,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Artikel");
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelZusatzWert", b =>
-                {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", null)
-                        .WithMany()
-                        .HasForeignKey("ArtikelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", null)
-                        .WithMany("ArtikelZusatzWerte")
-                        .HasForeignKey("ArtikelId1");
-
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzwert", null)
-                        .WithMany()
-                        .HasForeignKey("ZusatzwertId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikelgruppe", b =>
-                {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Produktkategorie", "Produktkategorie")
-                        .WithMany("ArtikelGruppen")
-                        .HasForeignKey("ProduktkategorieId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Produktkategorie");
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelgruppeZusatzfelder", b =>
-                {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikelgruppe", null)
-                        .WithMany("ArtikelgruppeZusatzfelder")
-                        .HasForeignKey("ArtikelgruppeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzfeld", null)
-                        .WithMany("ArtikelGruppeZusatzFelder")
-                        .HasForeignKey("ZusatzfelderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzwert", b =>
-                {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzfeld", "ZusatzFeld")
-                        .WithMany("ZusatzWerte")
-                        .HasForeignKey("ZusatzFeldID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ZusatzFeld");
                 });
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Employees.Models.Entitys.EmployeeBenefit", b =>
@@ -683,28 +506,9 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                 {
                     b.Navigation("ArtikelStatistik");
 
-                    b.Navigation("ArtikelZusatzWerte");
-
                     b.Navigation("Warenausgaenge");
 
                     b.Navigation("Wareneingaenge");
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikelgruppe", b =>
-                {
-                    b.Navigation("ArtikelgruppeZusatzfelder");
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Produktkategorie", b =>
-                {
-                    b.Navigation("ArtikelGruppen");
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzfeld", b =>
-                {
-                    b.Navigation("ArtikelGruppeZusatzFelder");
-
-                    b.Navigation("ZusatzWerte");
                 });
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Employees.Models.Entitys.Employee", b =>

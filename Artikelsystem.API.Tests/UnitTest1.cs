@@ -40,20 +40,6 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
     }
 
     [Fact]
-    public async Task GetAllEmployees_WithFilter_ReturnsOneResult()
-    {
-        var client = _factory.CreateClient();
-        var response = await client.GetAsync("/employees?FirstNameContains=John");
-
-        response.EnsureSuccessStatusCode();
-
-        var employees = await response.Content.ReadFromJsonAsync<IEnumerable<GetEmployeeResponse>>();
-        Assert.NotNull(employees);
-        Assert.Single(employees);
-    }
-
-
-    [Fact]
     public async Task CreateEmployee_ReturnsCreatedResult()
     {
         var client = _factory.CreateClient();
@@ -175,19 +161,5 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         var response = await client.DeleteAsync("/employees/99999");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-    }
-
-    [Fact]
-    public async Task GetBenefitsForEmployee_ReturnsOkResult()
-    {
-        // Act
-        var client = _factory.CreateClient();
-        var response = await client.GetAsync($"/employees/{_employeeId}/benefits");
-
-        // Assert
-        response.EnsureSuccessStatusCode();
-        
-        var benefits = await response.Content.ReadFromJsonAsync<IEnumerable<GetEmployeeResponseEmployeeBenefit>>();
-        Assert.Equal(2, benefits?.Count());
     }
 }

@@ -16,4 +16,5 @@ namespace Artikelsystem.Api.Features.Warenausgang.Models.DTOs.Responses;
     public decimal? Verkaufspreis { get; set; }
     public string Rechnungsnummer { get; set; } = "";
     public decimal? Gesamtpreis { get; set; }
+    public required WarenausgangDto? Warenausgang { get; set; }
 }
