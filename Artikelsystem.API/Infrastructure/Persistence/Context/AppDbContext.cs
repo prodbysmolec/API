@@ -11,6 +11,8 @@ using Artikelsystem.Api.Features.Employees.Configurations;
 using Artikelsystem.Api.Features.Artikel.Configurations;
 using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
 using Artikelsystem.Api.Features.Warenausgang.Configurations;
+using Artikelsystem.Api.Features.Inventur.Models.Entitys;
+using Artikelsystem.Api.Features.Inventur.Configuration;
 
 
 namespace Artikelsystem.Api.Infrastructure.Persistence.Context;
@@ -41,6 +43,11 @@ public class AppDbContext : DbContext
     public DbSet<Zusatzfeld> Zusatzfeld { get; set; }
     public DbSet<Produktkategorie> Produktkategorie { get; set; }
     public DbSet<Zusatzwert> Zusatzwert { get; set; }
+    public DbSet<Inventur> Inventuren { get; set; }
+    public DbSet<InventurPosition> InventurPositionen { get; set; }
+    public DbSet<InventurBerichte> InventurBerichte { get; set; }
+    public DbSet<ArtikelInventurHistorie> ArtikelInventurHistorie { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -63,7 +70,9 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ProduktkategerieConfiguration());
         modelBuilder.ApplyConfiguration(new ZusatzfeldConfiguration());
         modelBuilder.ApplyConfiguration(new ZusatzwertConfiguration());
-
+        modelBuilder.ApplyConfiguration(new InventurConfiguration());
+        modelBuilder.ApplyConfiguration(new InventurPositionConfiguration());
+    
 
 
 

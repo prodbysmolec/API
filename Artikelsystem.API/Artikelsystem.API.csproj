@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Features/Artikel/Validators/" />
+    <Folder Include="Features/Inventur/Validators/" />
     <Folder Include="Features/Lieferant/Controllers/" />
     <Folder Include="Features/Lieferant/Validators/" />
     <Folder Include="Features/Veranstaltung/" />

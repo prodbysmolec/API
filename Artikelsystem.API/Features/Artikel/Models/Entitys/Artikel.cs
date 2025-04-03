@@ -16,9 +16,11 @@ namespace Artikelsystem.Api.Features.Artikel.Models.Entitys;
         public int Menge { get; set; }
         public ArtikelStatus Status { get; set; } = ArtikelStatus.Verfügbar;    
         public byte[] Bild { get; set; } = new byte[0];
+        public bool HistorischGesetzt { get; set; } = false;
         public virtual ICollection<WareneingangArtikelPositionen> Wareneingaenge { get; set; } = new List<WareneingangArtikelPositionen>();
         public virtual ICollection<WarenausgangArtikelPositionen> Warenausgaenge { get; set; } = new List<WarenausgangArtikelPositionen>();
         public virtual ArtikelStatistik? ArtikelStatistik { get; set; }
         // Ergänzung für die Artikel-Klasse:
         public virtual ICollection<ArtikelZusatzWert> ArtikelZusatzWerte { get; set; } = new HashSet<ArtikelZusatzWert>();
+        public virtual ICollection<ArtikelInventurHistorie> InventurHistorie { get; set; } = new HashSet<ArtikelInventurHistorie>();
     }

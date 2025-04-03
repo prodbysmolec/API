@@ -38,6 +38,7 @@ public class EmployeesController : BaseController
         int recordsPerPage = request?.RecordsPerPage ?? 100;
 
         IQueryable<Employee> query = _dbContext.Employees
+            .Include(e => e.Benefits)
             .Skip((page - 1) * recordsPerPage)
             .Take(recordsPerPage);
 

@@ -3,6 +3,7 @@ using System;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250402103823_InventurFeld")]
+    partial class InventurFeld
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,9 +42,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("HistorischGesetzt")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
@@ -71,44 +71,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Artikel");
-                });
-
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelInventurHistorie", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AlteBestandsmenge")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ArtikelId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("Datum")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Differenz")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("DifferenzWert")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("InventurId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("NeueBestandsmenge")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ArtikelId");
-
-                    b.HasIndex("InventurId");
-
-                    b.ToTable("ArtikelInventurHistorie");
                 });
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelStatistik", b =>
@@ -404,7 +366,7 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("AbschlussDatum")
+                    b.Property<DateTime>("AbschlussDatum")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Bemerkung")
@@ -439,53 +401,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.ToTable("Inventuren");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Inventur.Models.Entitys.InventurBerichte", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AnzahlPositionenMitDifferenz")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("Erstellungsdatum")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<decimal>("GesamtDifferenzWert")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("Inhalt")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("InventurId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Titel")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InventurId");
-
-                    b.ToTable("InventurBerichte");
-                });
-
             modelBuilder.Entity("Artikelsystem.Api.Features.Inventur.Models.Entitys.InventurPosition", b =>
                 {
                     b.Property<int>("Id")
@@ -508,8 +423,7 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal?>("DifferenzWert")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<int?>("GezaehlteMenge")
                         .HasColumnType("integer");
@@ -526,7 +440,7 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Menge")
+                    b.Property<int>("SystemMenge")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -738,25 +652,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.ToTable("WareneingangArtikelPositionen", (string)null);
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelInventurHistorie", b =>
-                {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
-                        .WithMany("InventurHistorie")
-                        .HasForeignKey("ArtikelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Artikelsystem.Api.Features.Inventur.Models.Entitys.Inventur", "Inventur")
-                        .WithMany()
-                        .HasForeignKey("InventurId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Artikel");
-
-                    b.Navigation("Inventur");
-                });
-
             modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelStatistik", b =>
                 {
                     b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
@@ -843,17 +738,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Inventur.Models.Entitys.InventurBerichte", b =>
-                {
-                    b.HasOne("Artikelsystem.Api.Features.Inventur.Models.Entitys.Inventur", "Inventur")
-                        .WithMany("Berichte")
-                        .HasForeignKey("InventurId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Inventur");
-                });
-
             modelBuilder.Entity("Artikelsystem.Api.Features.Inventur.Models.Entitys.InventurPosition", b =>
                 {
                     b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
@@ -917,8 +801,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
 
                     b.Navigation("ArtikelZusatzWerte");
 
-                    b.Navigation("InventurHistorie");
-
                     b.Navigation("Warenausgaenge");
 
                     b.Navigation("Wareneingaenge");
@@ -948,8 +830,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Inventur.Models.Entitys.Inventur", b =>
                 {
-                    b.Navigation("Berichte");
-
                     b.Navigation("Positionen");
                 });
 
