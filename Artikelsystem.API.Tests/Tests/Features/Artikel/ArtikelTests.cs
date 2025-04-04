@@ -8,7 +8,7 @@ using Artikelsystem.API.Tests;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
-namespace Artikelsystem.Api.Tests.Tests;
+namespace Artikelsystem.Api.Tests.Tests.Features.Artikel;
 
 public class ArtikelTests : IClassFixture<CustomWebApplicationFactory>
 {
