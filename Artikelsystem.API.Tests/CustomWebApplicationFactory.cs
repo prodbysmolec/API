@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Internal;
 using Npgsql;
 using Artikelsystem.Api;
+using Artikelsystem.Api.Infrastructure.Persistence.Context;
 
 namespace Artikelsystem.API.Tests;
 
