@@ -1,4 +1,5 @@
 using Artikelsystem.Api.Features.Employees.Models.Entitys;
+using Artikelsystem.Api.Features.Inventur.Services;
 using Artikelsystem.Api.Features.Lieferant.Repositories;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Artikelsystem.Api.Infrastructure.Persistence.Repositories;
@@ -28,7 +29,10 @@ builder.Services.AddDbContext<AppDbContext>(options => {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
+#region Services DI
 builder.Services.AddScoped<ILieferantRepository, LieferantRepository>();
+builder.Services.AddScoped<IInventurService, InventurService>();
+#endregion
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddProblemDetails();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
