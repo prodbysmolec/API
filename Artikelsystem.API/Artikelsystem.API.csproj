@@ -29,4 +29,8 @@
     <Folder Include="Features/Warenausgang/Controllers/" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../Artikelsystem.Shared/Artikelsystem.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
