@@ -17,4 +17,5 @@ public interface IInventurService
     Task<InventurBerichtDto> GetInventurBerichtById(int berichtId);
     Task<InventurBerichtDto?> GetInventurBerichtFuerInventur(int inventurId);
     Task<InventurBerichtDto> GenerateInventurBericht(int inventurId, string benutzer);
+     Task<InventurDto> DeleteInventur(int inventurId);
 }

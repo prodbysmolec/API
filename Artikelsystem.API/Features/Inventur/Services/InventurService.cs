@@ -6,26 +6,43 @@ using Artikelsystem.Api.Features.Artikel.Models.Entitys;
 using Artikelsystem.Api.Features.Inventur.Models.Dtos;
 using Artikelsystem.Api.Features.Inventur.Models.Entitys;
 using Artikelsystem.Api.Features.Inventur.Models.Enums;
+using Artikelsystem.Api.Features.Inventur.Validators;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
+using FluentValidation;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Artikelsystem.Api.Features.Inventur.Services;
 
-
 public class InventurService : IInventurService
 {
     private readonly AppDbContext _dbContext;
     private readonly ILogger<InventurService> _logger;
+    private readonly CreateInventurRequestValidator _createInventurValidator;
+    private readonly UpdateInventurPositionRequestValidator _updatePositionValidator;
 
-    public InventurService(AppDbContext dbContext, ILogger<InventurService> logger)
+    public InventurService(
+        AppDbContext dbContext, 
+        ILogger<InventurService> logger,
+        CreateInventurRequestValidator createInventurValidator,
+        UpdateInventurPositionRequestValidator updatePositionValidator)
     {
         _dbContext = dbContext;
         _logger = logger;
+        _createInventurValidator = createInventurValidator;
+        _updatePositionValidator = updatePositionValidator;
     }
 
     public async Task<InventurDto> ErstelleInventur(CreateInventurRequest request)
     {
+        // Validiere die Anfrage
+        var validationResult = await _createInventurValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+
         var inventur = new Models.Entitys.Inventur
         {
             Bezeichnung = request.Bezeichnung,
@@ -46,6 +63,11 @@ public class InventurService : IInventurService
 
     public async Task<InventurDto> StarteInventur(int inventurId)
     {
+        if (inventurId <= 0)
+        {
+            throw new ValidationException("Die Inventur-ID muss größer als 0 sein.");
+        }
+
         var existierendeInventur = await _dbContext.Inventuren
             .AnyAsync(i => i.Status == InventurStatus.InBearbeitung);
 
@@ -56,7 +78,7 @@ public class InventurService : IInventurService
 
         var inventur = await _dbContext.Inventuren
             .Include(i => i.Positionen)
-                .ThenInclude(p => p.Artikel)  // Make sure to include the Artikel entity
+                .ThenInclude(p => p.Artikel)
             .FirstOrDefaultAsync(i => i.Id == inventurId);
 
         if (inventur == null)
@@ -80,7 +102,7 @@ public class InventurService : IInventurService
             .ToListAsync());
 
         // Neue Artikel abrufen, die noch nicht in der Inventur vorhanden sind
-        var alleArtikel = await _dbContext.Artikel.ToListAsync(); // Get all articles first
+        var alleArtikel = await _dbContext.Artikel.ToListAsync();
         
         var neueArtikelPositionen = new List<InventurPosition>();
         
@@ -92,7 +114,7 @@ public class InventurService : IInventurService
                 {
                     InventurId = inventurId,
                     ArtikelId = artikel.Id,
-                    Artikel = artikel, // Set the full Artikel entity
+                    //Artikel = artikel,
                     Menge = artikel.Menge,
                     CreatedOn = DateTime.UtcNow,
                     CreatedBy = inventur.LastModifiedBy,
@@ -134,8 +156,26 @@ public class InventurService : IInventurService
         return MapToInventurDto(inventur!);
     }
 
+    public async Task<InventurDto> DeleteInventur(int inventurId)
+    {
+        var Inventur = await _dbContext.Inventuren.FindAsync(inventurId);
+        if(Inventur == null)
+        {
+            throw new NullReferenceException($"Inventur mit ID {inventurId} nicht gefunden.");    
+        }
+
+        _dbContext.Inventuren.Remove(Inventur);
+        await _dbContext.SaveChangesAsync();
+        return MapToInventurDto(Inventur);
+    }
+
     public async Task<InventurDto> GetInventurById(int inventurId)
     {
+        if (inventurId <= 0)
+        {
+            throw new ValidationException("Die Inventur-ID muss größer als 0 sein.");
+        }
+
         var inventur = await _dbContext.Inventuren
             .Include(i => i.Positionen)
             .ThenInclude(p => p.Artikel)
@@ -160,6 +200,13 @@ public class InventurService : IInventurService
 
     public async Task<InventurPositionDto> AktualisieereInventurPosition(UpdateInventurPositionRequest request)
     {
+        // Validiere die Anfrage
+        var validationResult = await _updatePositionValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+
         var position = await _dbContext.InventurPositionen
             .Include(p => p.Artikel)
             .FirstOrDefaultAsync(p => p.Id == request.PositionId && p.InventurId == request.InventurID && p.ArtikelId == request.ArtikelId);
@@ -176,7 +223,6 @@ public class InventurService : IInventurService
             throw new InvalidOperationException($"Inventur kann nicht bearbeitet werden, aktueller Status: {inventur.Status}");
         }
 
-
         position.GezaehlteMenge = request.GezaehlteMenge;
         position.IstGeprueft = request.IstGeprueft;
         position.Bemerkung = request.Bemerkung;
@@ -186,23 +232,19 @@ public class InventurService : IInventurService
         // Differenzwert berechnen
         if (position.GezaehlteMenge.HasValue && position.Artikel != null)
         {
-            var differenz = position.GezaehlteMenge.Value - position.Menge;
-            if(position.GezaehlteMenge.Value != 0)
+            position.Differenz = position.GezaehlteMenge.Value - position.Menge;
+            if (position.GezaehlteMenge.Value != 0)
             {
-            position.DifferenzWert = differenz * position.Artikel.Preis;
+                position.DifferenzWert = position.Differenz * position.Artikel.Preis;
             }
         }
 
-        var isTracked = _dbContext.ChangeTracker.Entries<InventurPosition>()
-        .Any(e => e.Entity.Id == position.Id && e.State != EntityState.Unchanged);
-        Console.WriteLine($"Wird getrackt: {isTracked}");
         _dbContext.Entry(position).State = EntityState.Modified;
 
         await _dbContext.SaveChangesAsync();
 
         return MapToInventurPositionDto(position);
     }
-
 
     public async Task<List<InventurBerichtDto>> GetInventurBerichte()
     {
@@ -216,6 +258,11 @@ public class InventurService : IInventurService
 
     public async Task<InventurBerichtDto> GetInventurBerichtById(int berichtId)
     {
+        if (berichtId <= 0)
+        {
+            throw new ValidationException("Die Bericht-ID muss größer als 0 sein.");
+        }
+
         var bericht = await _dbContext.InventurBerichte
             .Include(b => b.Inventur)
             .FirstOrDefaultAsync(b => b.Id == berichtId);
@@ -230,6 +277,11 @@ public class InventurService : IInventurService
 
     public async Task<InventurBerichtDto?> GetInventurBerichtFuerInventur(int inventurId)
     {
+        if (inventurId <= 0)
+        {
+            throw new ValidationException("Die Inventur-ID muss größer als 0 sein.");
+        }
+
         var bericht = await _dbContext.InventurBerichte
             .Include(b => b.Inventur)
             .FirstOrDefaultAsync(b => b.InventurId == inventurId);
@@ -244,6 +296,16 @@ public class InventurService : IInventurService
 
     public async Task<InventurBerichtDto> GenerateInventurBericht(int inventurId, string benutzer)
     {
+        if (inventurId <= 0)
+        {
+            throw new ValidationException("Die Inventur-ID muss größer als 0 sein.");
+        }
+
+        if (string.IsNullOrWhiteSpace(benutzer))
+        {
+            throw new ValidationException("Der Benutzer darf nicht leer sein.");
+        }
+
         var inventur = await _dbContext.Inventuren
             .Include(i => i.Positionen)
             .ThenInclude(p => p.Artikel)
@@ -262,7 +324,7 @@ public class InventurService : IInventurService
         var gesamtDifferenzWert = positionenMitDifferenz
             .Sum(p => p.DifferenzWert ?? 0);
         
-        // Berichtsinhalt erstellen (als formatierter Text)
+        // Berichtsinhalt erstellen
         var berichtsInhalt = new System.Text.StringBuilder();
         berichtsInhalt.AppendLine($"# Inventurbericht: {inventur.Bezeichnung}");
         berichtsInhalt.AppendLine($"Datum: {DateTime.UtcNow:dd.MM.yyyy HH:mm:ss}");
@@ -309,51 +371,54 @@ public class InventurService : IInventurService
         return MapToInventurBerichtDto(bericht);
     }
 
-
-
     // Hilfsmethoden für das Mapping
-private InventurDto MapToInventurDto(Models.Entitys.Inventur inventur)
-{
-    var dto = new InventurDto
+    private InventurDto MapToInventurDto(Models.Entitys.Inventur inventur)
     {
-        Id = inventur.Id,
-        Bezeichnung = inventur.Bezeichnung,
-        StartDatum = inventur.StartDatum,
-        AbschlussDatum = inventur.AbschlussDatum,
-        Status = inventur.Status,
-        Bemerkung = inventur.Bemerkung,
-        // Other properties...
-        
-        Positionen = inventur.Positionen?.Select(p => new InventurPositionDto
+        var dto = new InventurDto
         {
-            Id = p.Id,
-            ArtikelId = p.ArtikelId,
-            ArtikelName = p.Artikel?.Name ?? "Unbekannt", // Use the Artikel entity
-            ArtikelPreis = p.Artikel?.Preis ?? 0,
-            SystemMenge = p.Menge,
-            GezaehlteMenge = p.GezaehlteMenge,
-            IstGeprueft = p.IstGeprueft,
-            Differenz = p.Differenz,
-            DifferenzWert = p.DifferenzWert,
-            Bemerkung = p.Bemerkung,
-            CreatedBy = p.CreatedBy,
-            CreatedOn = p.CreatedOn,
-            LastModifiedBy = p.LastModifiedBy,
-            LastModifiedOn = p.LastModifiedOn
-        }).ToList() ?? new List<InventurPositionDto>()
-    };
-    
-    // Calculate summary statistics
-    dto.AnzahlArtikel = dto.Positionen?.Count ?? 0;
-    dto.AnzahlGeprueft = dto.Positionen?.Count(p => p.IstGeprueft) ?? 0;
-    dto.AnzahlDifferenzen = dto.Positionen?.Count(p => p.Differenz != 0) ?? 0;
-    dto.GesamtDifferenzWert = dto.Positionen?.Sum(p => p.DifferenzWert ?? 0) ?? 0;
-    
-    return dto;
-}
+            Id = inventur.Id,
+            Bezeichnung = inventur.Bezeichnung,
+            StartDatum = inventur.StartDatum,
+            AbschlussDatum = inventur.AbschlussDatum,
+            Status = inventur.Status,
+            Bemerkung = inventur.Bemerkung,
+            // Other properties...
+            
+            Positionen = inventur.Positionen?.Select(p => new InventurPositionDto
+            {
+                Id = p.Id,
+                ArtikelId = p.ArtikelId,
+                ArtikelName = p.Artikel?.Name ?? "Unbekannt",
+                ArtikelPreis = p.Artikel?.Preis ?? 0,
+                SystemMenge = p.Menge,
+                GezaehlteMenge = p.GezaehlteMenge,
+                IstGeprueft = p.IstGeprueft,
+                Differenz = p.Differenz,
+                DifferenzWert = p.DifferenzWert,
+                Bemerkung = p.Bemerkung,
+                CreatedBy = p.CreatedBy,
+                CreatedOn = p.CreatedOn,
+                LastModifiedBy = p.LastModifiedBy,
+                LastModifiedOn = p.LastModifiedOn
+            }).ToList() ?? new List<InventurPositionDto>()
+        };
+        
+        // Calculate summary statistics
+        dto.AnzahlArtikel = dto.Positionen?.Count ?? 0;
+        dto.AnzahlGeprueft = dto.Positionen?.Count(p => p.IstGeprueft) ?? 0;
+        dto.AnzahlDifferenzen = dto.Positionen?.Count(p => p.Differenz != 0) ?? 0;
+        dto.GesamtDifferenzWert = dto.Positionen?.Sum(p => p.DifferenzWert ?? 0) ?? 0;
+        
+        return dto;
+    }
 
     public async Task<InventurDto> SchliesseInventurAb(int inventurId)
     {
+        if (inventurId <= 0)
+        {
+            throw new ValidationException("Die Inventur-ID muss größer als 0 sein.");
+        }
+
         using var transaction = await _dbContext.Database.BeginTransactionAsync();
         
         try
@@ -445,6 +510,7 @@ private InventurDto MapToInventurDto(Models.Entitys.Inventur inventur)
             
             // Inventurbericht erstellen
             await GenerateInventurBericht(inventurId, inventur.LastModifiedBy ?? "System");
+            
             _dbContext.Entry(inventur).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
             await transaction.CommitAsync();
@@ -499,9 +565,5 @@ private InventurDto MapToInventurDto(Models.Entitys.Inventur inventur)
             LastModifiedBy = position.LastModifiedBy,
             LastModifiedOn = position.LastModifiedOn
         };
-
-
-
-
     }
 }

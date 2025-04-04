@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Artikelsystem.Api.Features.Inventur.Models.Dtos;
 using Artikelsystem.Api.Features.Inventur.Services;
 using Artikelsystem.API.Shared.Controllers;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Artikelsystem.Api.Features.Inventur.Controllers;
 
@@ -53,6 +56,10 @@ public class InventurController : BaseController
         {
             return NotFound();
         }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Errors);
+        }
     }
 
     /// <summary>
@@ -66,8 +73,15 @@ public class InventurController : BaseController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ErstelleInventur(CreateInventurRequest request)
     {
-        var inventur = await _inventurService.ErstelleInventur(request);
-        return CreatedAtAction(nameof(GetInventurById), new { id = inventur.Id }, inventur);
+        try
+        {
+            var inventur = await _inventurService.ErstelleInventur(request);
+            return CreatedAtAction(nameof(GetInventurById), new { id = inventur.Id }, inventur);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Errors);
+        }
     }
 
     /// <summary>
@@ -91,6 +105,10 @@ public class InventurController : BaseController
         {
             return NotFound();
         }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Errors);
+        }
         catch (InvalidOperationException ex)
         {
             return BadRequest(ex.Message);
@@ -112,6 +130,10 @@ public class InventurController : BaseController
         catch (KeyNotFoundException)
         {
             return NotFound();
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Errors);
         }
         catch (InvalidOperationException ex)
         {
@@ -152,6 +174,10 @@ public class InventurController : BaseController
                 
             return Ok(bericht);
         }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Errors);
+        }
         catch (KeyNotFoundException)
         {
             return NotFound();
@@ -173,6 +199,10 @@ public class InventurController : BaseController
         {
             var bericht = await _inventurService.GetInventurBerichtById(id);
             return Ok(bericht);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Errors);
         }
         catch (KeyNotFoundException)
         {
@@ -197,6 +227,10 @@ public class InventurController : BaseController
             var inventur = await _inventurService.SchliesseInventurAb(id);
             return Ok(inventur);
         }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Errors);
+        }
         catch (KeyNotFoundException)
         {
             return NotFound();
@@ -206,4 +240,20 @@ public class InventurController : BaseController
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> EntferneInventur(int id)
+    {
+        var Inventur = await _inventurService.DeleteInventur(id);
+        if(Inventur == null)
+        {
+            return NotFound("Inventur konnte nicht gelöscht werden. Es existiert keine Inventur mit der angegebenen ID.");
+        }
+
+        return Ok("Inventur wurde gelöscht.");
+    }
+
 }
