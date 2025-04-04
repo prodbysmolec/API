@@ -10,7 +10,7 @@ public class ArtikelZusatzWertConfiguration : IEntityTypeConfiguration<ArtikelZu
 {
     public void Configure(EntityTypeBuilder<ArtikelZusatzWert> builder)
     {
-        builder.HasKey(azw => new { azw.ArtikelId, azw.ZusatzwertId});
+        builder.HasKey(azw => new { azw.ArtikelId, azw.ZusatzwertId });
 
         // Many zu Many zwischen Artikel und Zusatzwert
         builder.HasOne<Models.Entitys.Artikel>()

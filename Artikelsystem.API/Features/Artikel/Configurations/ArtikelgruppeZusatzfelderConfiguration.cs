@@ -9,7 +9,7 @@ public class ArtikelgruppeZusatzfelderConfiguration : IEntityTypeConfiguration<A
 {
     public void Configure(EntityTypeBuilder<ArtikelgruppeZusatzfelder> builder)
     {
-        builder.HasKey(agz => new {agz.ArtikelgruppeID, agz.ZusatzfelderID});
+        builder.HasKey(agz => new { agz.ArtikelgruppeID, agz.ZusatzfelderID });
 
         builder.HasOne<Artikelgruppe>()
             .WithMany(agz => agz.ArtikelgruppeZusatzfelder)
