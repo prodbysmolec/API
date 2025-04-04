@@ -26,7 +26,7 @@ public class InventurPositionConfiguration : IEntityTypeConfiguration<InventurPo
 
         builder.Property(ip => ip.DifferenzWert)
             .HasPrecision(18, 2);
-        
+
         // Differenz als berechnetes Feld
         builder.Ignore(ip => ip.Differenz);
     }

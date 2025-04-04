@@ -9,5 +9,5 @@ public class CreateWarenausgangArtikelPositionRequest
     public int Menge { get; set; }
     public string? Bemerkung { get; set; }
     public decimal? Verkaufspreis { get; set; }
-    public string? Rechnungsnummer { get; set; } 
+    public string? Rechnungsnummer { get; set; }
 }

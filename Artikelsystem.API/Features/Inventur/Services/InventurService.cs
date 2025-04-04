@@ -23,7 +23,7 @@ public class InventurService : IInventurService
     private readonly UpdateInventurPositionRequestValidator _updatePositionValidator;
 
     public InventurService(
-        AppDbContext dbContext, 
+        AppDbContext dbContext,
         ILogger<InventurService> logger,
         CreateInventurRequestValidator createInventurValidator,
         UpdateInventurPositionRequestValidator updatePositionValidator)
@@ -103,9 +103,9 @@ public class InventurService : IInventurService
 
         // Neue Artikel abrufen, die noch nicht in der Inventur vorhanden sind
         var alleArtikel = await _dbContext.Artikel.ToListAsync();
-        
+
         var neueArtikelPositionen = new List<InventurPosition>();
-        
+
         foreach (var artikel in alleArtikel)
         {
             if (!existierendeArtikelIds.Contains(artikel.Id))
@@ -121,7 +121,7 @@ public class InventurService : IInventurService
                     LastModifiedOn = DateTime.UtcNow,
                     LastModifiedBy = inventur.LastModifiedBy
                 };
-                
+
                 neueArtikelPositionen.Add(neuePosition);
             }
         }
@@ -129,13 +129,13 @@ public class InventurService : IInventurService
         if (neueArtikelPositionen.Any())
         {
             await _dbContext.InventurPositionen.AddRangeAsync(neueArtikelPositionen);
-            
+
             // Make sure the Positionen collection is initialized
             if (inventur.Positionen == null)
             {
                 inventur.Positionen = new List<InventurPosition>();
             }
-            
+
             // Add new articles to the inventur.Positionen collection
             foreach (var position in neueArtikelPositionen)
             {
@@ -146,7 +146,7 @@ public class InventurService : IInventurService
         _dbContext.Entry(inventur).State = EntityState.Modified;
 
         await _dbContext.SaveChangesAsync();
-        
+
         // Reload the inventory with all related data to ensure proper mapping
         inventur = await _dbContext.Inventuren
             .Include(i => i.Positionen)
@@ -159,9 +159,9 @@ public class InventurService : IInventurService
     public async Task<InventurDto> DeleteInventur(int inventurId)
     {
         var Inventur = await _dbContext.Inventuren.FindAsync(inventurId);
-        if(Inventur == null)
+        if (Inventur == null)
         {
-            throw new NullReferenceException($"Inventur mit ID {inventurId} nicht gefunden.");    
+            throw new NullReferenceException($"Inventur mit ID {inventurId} nicht gefunden.");
         }
 
         _dbContext.Inventuren.Remove(Inventur);
@@ -228,7 +228,7 @@ public class InventurService : IInventurService
         position.Bemerkung = request.Bemerkung;
         position.LastModifiedOn = DateTime.UtcNow;
         position.LastModifiedBy = request.BearbeitetVon;
-        
+
         // Differenzwert berechnen
         if (position.GezaehlteMenge.HasValue && position.Artikel != null)
         {
@@ -252,7 +252,7 @@ public class InventurService : IInventurService
             .Include(b => b.Inventur)
             .OrderByDescending(b => b.Erstellungsdatum)
             .ToListAsync();
-            
+
         return berichte.Select(MapToInventurBerichtDto).ToList();
     }
 
@@ -266,12 +266,12 @@ public class InventurService : IInventurService
         var bericht = await _dbContext.InventurBerichte
             .Include(b => b.Inventur)
             .FirstOrDefaultAsync(b => b.Id == berichtId);
-            
+
         if (bericht == null)
         {
             throw new KeyNotFoundException($"Inventurbericht mit ID {berichtId} nicht gefunden");
         }
-        
+
         return MapToInventurBerichtDto(bericht);
     }
 
@@ -285,12 +285,12 @@ public class InventurService : IInventurService
         var bericht = await _dbContext.InventurBerichte
             .Include(b => b.Inventur)
             .FirstOrDefaultAsync(b => b.InventurId == inventurId);
-            
+
         if (bericht == null)
         {
             return null;
         }
-        
+
         return MapToInventurBerichtDto(bericht);
     }
 
@@ -310,20 +310,20 @@ public class InventurService : IInventurService
             .Include(i => i.Positionen)
             .ThenInclude(p => p.Artikel)
             .FirstOrDefaultAsync(i => i.Id == inventurId);
-        
+
         if (inventur == null)
         {
             throw new KeyNotFoundException($"Inventur mit ID {inventurId} nicht gefunden");
         }
-        
+
         // Berichtsdaten sammeln
         var positionenMitDifferenz = inventur.Positionen
             .Where(p => p.GezaehlteMenge.HasValue && p.GezaehlteMenge.Value != p.Menge)
             .ToList();
-            
+
         var gesamtDifferenzWert = positionenMitDifferenz
             .Sum(p => p.DifferenzWert ?? 0);
-        
+
         // Berichtsinhalt erstellen
         var berichtsInhalt = new System.Text.StringBuilder();
         berichtsInhalt.AppendLine($"# Inventurbericht: {inventur.Bezeichnung}");
@@ -336,20 +336,20 @@ public class InventurService : IInventurService
         berichtsInhalt.AppendLine($"Positionen mit Differenzen: {positionenMitDifferenz.Count}");
         berichtsInhalt.AppendLine($"Gesamtdifferenzwert: {gesamtDifferenzWert:C2}");
         berichtsInhalt.AppendLine();
-        
+
         // Detaillierte Liste der Differenzen
         if (positionenMitDifferenz.Any())
         {
             berichtsInhalt.AppendLine("## Positionen mit Differenzen");
             berichtsInhalt.AppendLine("| Artikel | Systemmenge | Gezählte Menge | Differenz | Differenzwert | Bemerkung |");
             berichtsInhalt.AppendLine("|---------|-------------|---------------|-----------|---------------|-----------|");
-            
+
             foreach (var position in positionenMitDifferenz.OrderByDescending(p => p.DifferenzWert))
             {
                 berichtsInhalt.AppendLine($"| {position.Artikel.Name} | {position.Menge} | {position.GezaehlteMenge} | {position.Differenz} | {position.DifferenzWert:C2} | {position.Bemerkung} |");
             }
         }
-        
+
         // Bericht in der Datenbank speichern
         var bericht = new InventurBerichte
         {
@@ -364,10 +364,10 @@ public class InventurService : IInventurService
             LastModifiedBy = benutzer,
             LastModifiedOn = DateTime.UtcNow
         };
-        
+
         _dbContext.InventurBerichte.Add(bericht);
         await _dbContext.SaveChangesAsync();
-        
+
         return MapToInventurBerichtDto(bericht);
     }
 
@@ -383,7 +383,7 @@ public class InventurService : IInventurService
             Status = inventur.Status,
             Bemerkung = inventur.Bemerkung,
             // Other properties...
-            
+
             Positionen = inventur.Positionen?.Select(p => new InventurPositionDto
             {
                 Id = p.Id,
@@ -402,13 +402,13 @@ public class InventurService : IInventurService
                 LastModifiedOn = p.LastModifiedOn
             }).ToList() ?? new List<InventurPositionDto>()
         };
-        
+
         // Calculate summary statistics
         dto.AnzahlArtikel = dto.Positionen?.Count ?? 0;
         dto.AnzahlGeprueft = dto.Positionen?.Count(p => p.IstGeprueft) ?? 0;
         dto.AnzahlDifferenzen = dto.Positionen?.Count(p => p.Differenz != 0) ?? 0;
         dto.GesamtDifferenzWert = dto.Positionen?.Sum(p => p.DifferenzWert ?? 0) ?? 0;
-        
+
         return dto;
     }
 
@@ -420,7 +420,7 @@ public class InventurService : IInventurService
         }
 
         using var transaction = await _dbContext.Database.BeginTransactionAsync();
-        
+
         try
         {
             var inventur = await _dbContext.Inventuren
@@ -429,27 +429,27 @@ public class InventurService : IInventurService
                 .ThenInclude(p => p.Artikel)
                 .ThenInclude(a => a.ArtikelStatistik)
                 .FirstOrDefaultAsync(i => i.Id == inventurId);
-    
+
             if (inventur == null)
             {
                 throw new KeyNotFoundException($"Inventur mit ID {inventurId} nicht gefunden");
             }
-    
+
             if (inventur.Status != InventurStatus.InBearbeitung)
             {
                 throw new InvalidOperationException($"Inventur kann nicht abgeschlossen werden, aktueller Status: {inventur.Status}");
             }
-    
+
             // Alle Positionen sollten geprüft sein
             var ungeprueftePositionen = inventur.Positionen.Where(p => !p.IstGeprueft).ToList();
             if (ungeprueftePositionen.Any())
             {
                 throw new InvalidOperationException($"Es gibt noch {ungeprueftePositionen.Count} ungeprüfte Positionen");
             }
-    
+
             // Artikel aktualisieren und Inventurhistorie erstellen
             var historieEintraege = new List<ArtikelInventurHistorie>();
-            
+
             foreach (var position in inventur.Positionen)
             {
                 if (position.GezaehlteMenge.HasValue && position.Artikel != null)
@@ -458,20 +458,20 @@ public class InventurService : IInventurService
                     var alteBestandsmenge = artikel.Menge;
                     var neueBestandsmenge = position.GezaehlteMenge.Value;
                     var differenz = neueBestandsmenge - alteBestandsmenge;
-                    
+
                     // Differenzwert berechnen, falls nicht vorhanden
                     if (!position.DifferenzWert.HasValue)
                     {
                         position.DifferenzWert = differenz * artikel.Preis;
                     }
-                    
+
                     // Nur bei Differenz Artikel aktualisieren
-                    if (differenz != 0) 
+                    if (differenz != 0)
                     {
                         artikel.Menge = neueBestandsmenge;
                         artikel.LastModifiedOn = DateTime.UtcNow;
                         artikel.LastModifiedBy = inventur.LastModifiedBy;
-    
+
                         // Auch die ArtikelStatistik aktualisieren, falls vorhanden
                         if (artikel.ArtikelStatistik != null)
                         {
@@ -480,7 +480,7 @@ public class InventurService : IInventurService
                             artikel.ArtikelStatistik.LastModifiedOn = DateTime.UtcNow;
                             artikel.ArtikelStatistik.LastModifiedBy = inventur.LastModifiedBy;
                         }
-                        
+
                         // Historischen Eintrag erstellen
                         historieEintraege.Add(new ArtikelInventurHistorie
                         {
@@ -496,25 +496,25 @@ public class InventurService : IInventurService
                     _dbContext.Entry(artikel).State = EntityState.Modified;
                 }
             }
-    
+
             // Historieneinträge speichern, falls vorhanden
             if (historieEintraege.Any())
             {
                 await _dbContext.ArtikelInventurHistorie.AddRangeAsync(historieEintraege);
             }
-            
+
             // Inventur abschließen
             inventur.Status = InventurStatus.Abgeschlossen;
             inventur.AbschlussDatum = DateTime.UtcNow;
             inventur.LastModifiedOn = DateTime.UtcNow;
-            
+
             // Inventurbericht erstellen
             await GenerateInventurBericht(inventurId, inventur.LastModifiedBy ?? "System");
-            
+
             _dbContext.Entry(inventur).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
             await transaction.CommitAsync();
-    
+
             return MapToInventurDto(inventur);
         }
         catch (Exception ex)

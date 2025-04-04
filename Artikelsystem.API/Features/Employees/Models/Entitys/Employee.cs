@@ -37,6 +37,6 @@ public class EmployeeBenefit
 
     public int BenefitId { get; set; }
     public Benefit Benefit { get; set; } = null!;
-    
+
     public decimal? CostToEmployee { get; set; }
 }

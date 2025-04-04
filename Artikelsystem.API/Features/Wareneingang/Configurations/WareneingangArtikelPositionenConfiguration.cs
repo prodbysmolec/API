@@ -9,34 +9,34 @@ public class WareneingangArtikelPositionenConfiguration : IEntityTypeConfigurati
 {
     public void Configure(EntityTypeBuilder<WareneingangArtikelPositionen> builder)
     {
-       builder.ToTable("WareneingangArtikelPositionen");
-       
-       builder.HasKey(wareneingangPosition => wareneingangPosition.Id);
-       builder.Property(wareneingangPosition => wareneingangPosition.Id).UseIdentityColumn();
+        builder.ToTable("WareneingangArtikelPositionen");
 
-       builder.Property(wareneingangPosition => wareneingangPosition.Menge)
-              .IsRequired();
+        builder.HasKey(wareneingangPosition => wareneingangPosition.Id);
+        builder.Property(wareneingangPosition => wareneingangPosition.Id).UseIdentityColumn();
 
-       builder.Property(wareneingangPosition => wareneingangPosition.Einzelpreis)
-            .HasComputedColumnSql("\"Menge\" * \"Gesamtpreis\"", stored: true);
+        builder.Property(wareneingangPosition => wareneingangPosition.Menge)
+               .IsRequired();
 
-       builder.Property(wareneingangPosition => wareneingangPosition.Gesamtpreis)
-            .HasPrecision(18, 2);
+        builder.Property(wareneingangPosition => wareneingangPosition.Einzelpreis)
+             .HasComputedColumnSql("\"Menge\" * \"Gesamtpreis\"", stored: true);
 
-       // Eindeutigkeitsbeschränkung erstellen
-       builder.HasIndex(wareneingangPosition => new { wareneingangPosition.WareneingangId, wareneingangPosition.ArtikelId })
-              .IsUnique();
+        builder.Property(wareneingangPosition => wareneingangPosition.Gesamtpreis)
+             .HasPrecision(18, 2);
 
-       // Beziehungen definieren
+        // Eindeutigkeitsbeschränkung erstellen
+        builder.HasIndex(wareneingangPosition => new { wareneingangPosition.WareneingangId, wareneingangPosition.ArtikelId })
+               .IsUnique();
 
-       // Wenn eine WareneingangPosition gelöscht wird soll der Artikel nicht gelöscht werden!
-       builder.HasOne(wareneingangPosition => wareneingangPosition.Artikel)
-              .WithMany(a => a.Wareneingaenge)
-              .HasForeignKey(wa => wa.ArtikelId)
-              .OnDelete(DeleteBehavior.Restrict);
+        // Beziehungen definieren
 
-       builder.HasOne(wa => wa.Wareneingang)
-              .WithMany(w => w.WareneingangsPositionen)
-              .HasForeignKey(wa => wa.WareneingangId);
+        // Wenn eine WareneingangPosition gelöscht wird soll der Artikel nicht gelöscht werden!
+        builder.HasOne(wareneingangPosition => wareneingangPosition.Artikel)
+               .WithMany(a => a.Wareneingaenge)
+               .HasForeignKey(wa => wa.ArtikelId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(wa => wa.Wareneingang)
+               .WithMany(w => w.WareneingangsPositionen)
+               .HasForeignKey(wa => wa.WareneingangId);
     }
 }

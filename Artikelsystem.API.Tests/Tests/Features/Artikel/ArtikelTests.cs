@@ -85,18 +85,18 @@ public class ArtikelTests : IClassFixture<CustomWebApplicationFactory>
         response.EnsureSuccessStatusCode();
         var artikel = await response.Content.ReadFromJsonAsync<GetArtikelResponse>();
         Assert.NotNull(artikel);
-        
+
         // Mindestens einer der folgenden Tests sollte bestanden werden, abhängig von den Testdaten
         if (artikel.WareneingangArtikelPosition != null)
         {
             Assert.True(artikel.WareneingangArtikelPosition.Count >= 0);
         }
-        
+
         if (artikel.WarenausgangArtikelPosition != null)
         {
             Assert.True(artikel.WarenausgangArtikelPosition.Count >= 0);
         }
-        
+
         if (artikel.Statistik != null)
         {
             Assert.NotNull(artikel.Statistik);
@@ -220,7 +220,7 @@ public class ArtikelTests : IClassFixture<CustomWebApplicationFactory>
         var client = _factory.CreateClient();
         // Dies ist eine Annahme - in einer realen Test-Suite müsste man sicherstellen, 
         // dass dieser Artikel existiert aber keine Statistik hat
-        var existingIdWithoutStatistik = 2; 
+        var existingIdWithoutStatistik = 2;
 
         // Act
         var response = await client.GetAsync($"/artikel/{existingIdWithoutStatistik}/statistik");
@@ -260,7 +260,7 @@ public class ArtikelTests : IClassFixture<CustomWebApplicationFactory>
         var artikelResponse = await client.GetAsync($"/artikel/{existingId}?includeArtikelStatistik=true");
         artikelResponse.EnsureSuccessStatusCode();
         var artikel = await artikelResponse.Content.ReadFromJsonAsync<GetArtikelResponse>();
-        
+
         // Dann separat die Statistik holen
         var statistikResponse = await client.GetAsync($"/artikel/{existingId}/statistik");
         statistikResponse.EnsureSuccessStatusCode();
@@ -285,13 +285,13 @@ public class ArtikelTests : IClassFixture<CustomWebApplicationFactory>
         var listResponse = await client.GetAsync($"/artikel?statusId={statusId}");
         listResponse.EnsureSuccessStatusCode();
         var artikelList = await listResponse.Content.ReadFromJsonAsync<List<GetArtikelResponse>>();
-        
+
         // Wenn keine Artikel gefunden wurden, Test überspringen
         if (artikelList == null || !artikelList.Any())
         {
             return;
         }
-        
+
         // Einzelnen Artikel per ID abfragen
         var firstArtikel = artikelList.First();
         var detailResponse = await client.GetAsync($"/artikel/{firstArtikel.Id}");
@@ -312,7 +312,7 @@ public class ArtikelTests : IClassFixture<CustomWebApplicationFactory>
     {
         // Arrange
         var client = _factory.CreateClient();
-        
+
         // Act
         var response = await client.GetAsync("/artikel/invalid"); // Nicht-numerische ID
 
@@ -325,7 +325,7 @@ public class ArtikelTests : IClassFixture<CustomWebApplicationFactory>
     {
         // Arrange
         var client = _factory.CreateClient();
-        
+
         // Act
         var response = await client.GetAsync("/artikel/invalid/statistik"); // Nicht-numerische ID
 

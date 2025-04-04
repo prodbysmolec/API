@@ -60,7 +60,7 @@ public class ArtikelController : BaseController
 
         return Ok(artikel.Select(ArtikelToGetArtikelResponse));
     }
-    
+
     /// <summary>
     /// Gets an article by its ID with options to include related data.
     /// </summary>
@@ -78,13 +78,13 @@ public class ArtikelController : BaseController
 
         // Start with base query
         IQueryable<Models.Entitys.Artikel> query = _dbContext.Artikel;
-        
+
         // Include related data based on request
         IncludeRelatedData(ref query, request);
 
         var artikel = await query.SingleOrDefaultAsync(a => a.Id == id);
-        
-        if(artikel == null) 
+
+        if (artikel == null)
         {
             _logger.LogWarning("Article with ID {ArtikelId} not found", id);
             return NotFound();
@@ -125,7 +125,7 @@ public class ArtikelController : BaseController
             Menge = e.Menge,
             Einzelpreis = e.Einzelpreis,
             Gesamtpreis = e.Gesamtpreis,
-            Wareneingang = e.Wareneingang != null ? new WareneingangDto 
+            Wareneingang = e.Wareneingang != null ? new WareneingangDto
             {
                 Id = e.Wareneingang.Id,
                 AllgemeineBemerkungen = e.Wareneingang.AllgemeineBemerkungen ?? "",
@@ -236,7 +236,7 @@ public class ArtikelController : BaseController
         {
             query = query.Where(a => a.Preis >= request.MinPreis.Value);
         }
-        
+
         if (request.MaxPreis.HasValue)
         {
             query = query.Where(a => a.Preis <= request.MaxPreis.Value);
@@ -247,7 +247,7 @@ public class ArtikelController : BaseController
         {
             query = query.Where(a => a.Menge >= request.MinMenge.Value);
         }
-        
+
         if (request.MaxMenge.HasValue)
         {
             query = query.Where(a => a.Menge <= request.MaxMenge.Value);
@@ -264,34 +264,34 @@ public class ArtikelController : BaseController
         {
             query = query.Where(a => a.Menge < a.Mindestbestand);
         }
-        
+
         if (request.UeberMaximalbestand.HasValue && request.UeberMaximalbestand.Value)
         {
             query = query.Where(a => a.Menge > a.Maximalbestand);
         }
-        
+
         // Filter by statistics
         if (request.MinDurchschnittlicherEinzelpreis.HasValue)
         {
-            query = query.Where(a => a.ArtikelStatistik != null && 
+            query = query.Where(a => a.ArtikelStatistik != null &&
                                     a.ArtikelStatistik.DurchschnittlicherEinzelpreis >= request.MinDurchschnittlicherEinzelpreis.Value);
         }
-        
+
         if (request.MaxDurchschnittlicherEinzelpreis.HasValue)
         {
-            query = query.Where(a => a.ArtikelStatistik != null && 
+            query = query.Where(a => a.ArtikelStatistik != null &&
                                     a.ArtikelStatistik.DurchschnittlicherEinzelpreis <= request.MaxDurchschnittlicherEinzelpreis.Value);
         }
-        
+
         if (request.MinLagerwert.HasValue)
         {
-            query = query.Where(a => a.ArtikelStatistik != null && 
+            query = query.Where(a => a.ArtikelStatistik != null &&
                                     a.ArtikelStatistik.Lagerwert >= request.MinLagerwert.Value);
         }
-        
+
         if (request.MaxLagerwert.HasValue)
         {
-            query = query.Where(a => a.ArtikelStatistik != null && 
+            query = query.Where(a => a.ArtikelStatistik != null &&
                                     a.ArtikelStatistik.Lagerwert <= request.MaxLagerwert.Value);
         }
     }
@@ -301,15 +301,15 @@ public class ArtikelController : BaseController
         if (!string.IsNullOrWhiteSpace(request.SortBy))
         {
             bool isDescending = request.SortDesc.HasValue && request.SortDesc.Value;
-            
+
             query = request.SortBy.ToLower() switch
             {
                 "name" => isDescending ? query.OrderByDescending(a => a.Name) : query.OrderBy(a => a.Name),
                 "preis" => isDescending ? query.OrderByDescending(a => a.Preis) : query.OrderBy(a => a.Preis),
                 "menge" => isDescending ? query.OrderByDescending(a => a.Menge) : query.OrderBy(a => a.Menge),
                 "status" => isDescending ? query.OrderByDescending(a => a.Status) : query.OrderBy(a => a.Status),
-                "lagerwert" => isDescending ? 
-                    query.OrderByDescending(a => a.ArtikelStatistik != null ? a.ArtikelStatistik.Lagerwert : 0) : 
+                "lagerwert" => isDescending ?
+                    query.OrderByDescending(a => a.ArtikelStatistik != null ? a.ArtikelStatistik.Lagerwert : 0) :
                     query.OrderBy(a => a.ArtikelStatistik != null ? a.ArtikelStatistik.Lagerwert : 0),
                 _ => isDescending ? query.OrderByDescending(a => a.Id) : query.OrderBy(a => a.Id)
             };
@@ -328,14 +328,14 @@ public class ArtikelController : BaseController
         {
             query = query.Include(a => a.ArtikelStatistik);
         }
-        
+
         if (request.IncludeWareneingaenge)
         {
             query = query.Include(a => a.Wareneingaenge)
                         .ThenInclude(a => a.Wareneingang);
         }
 
-        if(request.IncludeWarenausgaenge)
+        if (request.IncludeWarenausgaenge)
         {
             query = query.Include(a => a.Warenausgaenge)
                     .ThenInclude(w => w.Warenausgang);
@@ -359,7 +359,7 @@ public class ArtikelController : BaseController
         MapArtikelStatistik(artikel, response);
         MapWarenausgaenge(artikel, response);
         MapWareneingaenge(artikel, response);
-        
+
         return response;
     }
 
@@ -424,7 +424,7 @@ public class ArtikelController : BaseController
                     Menge = e.Menge,
                     Einzelpreis = e.Einzelpreis,
                     Gesamtpreis = e.Gesamtpreis,
-                    Wareneingang = e.Wareneingang != null ? new WareneingangDto 
+                    Wareneingang = e.Wareneingang != null ? new WareneingangDto
                     {
                         Id = e.Wareneingang.Id,
                         AllgemeineBemerkungen = e.Wareneingang.AllgemeineBemerkungen ?? "",

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Internal;
 using Npgsql;
 using Artikelsystem.Api;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
+using Testcontainers.PostgreSql;
 
 namespace Artikelsystem.API.Tests;
 
@@ -84,17 +85,23 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
                     // Datenbank neu erstellen
                     CreateDatabase(masterConnection, databaseName);
-                    
+
                     masterConnection.Close();
 
                     // Migrationen anwenden und Seed-Daten einfügen
                     using var scope = services.BuildServiceProvider().CreateScope();
                     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                    dbContext.Database.Migrate();
-                    
+
+                    dbContext.Database.EnsureCreated();
+
+                    var script = dbContext.Database.GenerateCreateScript();
+                    //dbContext.Database.ExecuteSqlRaw(script);
+
+                    //dbContext.Database.Migrate();
+
                     // Optional: Hier könntest du TestSeedData.Initialize(dbContext) aufrufen 
                     // für spezifische Test-Seed-Daten
-                    
+
                     _databaseInitialized = true;
                 }
             }
@@ -130,7 +137,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                   AND pid <> pg_backend_pid();
                 
                 DROP DATABASE IF EXISTS ""{databaseName}"";";
-                
+
             using var command = new NpgsqlCommand(dropCommand, connection);
             command.ExecuteNonQuery();
         }

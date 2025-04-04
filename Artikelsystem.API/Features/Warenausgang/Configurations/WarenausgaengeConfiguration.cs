@@ -13,7 +13,7 @@ public class WarenausgaengeConfiguration : IEntityTypeConfiguration<Warenausgaen
 
         builder.HasKey(w => w.Id);
         builder.Property(w => w.Id).UseIdentityColumn();
-        
+
         builder.Property(w => w.AllgemeineBemerkungen)
             .HasMaxLength(500);
 

@@ -47,6 +47,7 @@ public class AppDbContext : DbContext
     public DbSet<InventurPosition> InventurPositionen { get; set; }
     public DbSet<InventurBerichte> InventurBerichte { get; set; }
     public DbSet<ArtikelInventurHistorie> ArtikelInventurHistorie { get; set; }
+    public DbSet<ArtikelLieferant> ArtikelLieferanten { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -54,7 +55,7 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new EmployeeBenefitConfiguration());
 
         // Wareneingang - Lieferant (N:1)
-        modelBuilder.ApplyConfiguration(new WareneingaengeConfiguration());            
+        modelBuilder.ApplyConfiguration(new WareneingaengeConfiguration());
         modelBuilder.ApplyConfiguration(new WareneingangArtikelPositionenConfiguration());
 
         modelBuilder.ApplyConfiguration(new WarenausgaengeConfiguration());
@@ -72,7 +73,7 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ZusatzwertConfiguration());
         modelBuilder.ApplyConfiguration(new InventurConfiguration());
         modelBuilder.ApplyConfiguration(new InventurPositionConfiguration());
-    
+
 
 
 

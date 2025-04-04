@@ -3,8 +3,8 @@ using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
 
 namespace Artikelsystem.Api.Features.Warenausgang.Models.DTOs.Responses;
 
-    public class WarenausgangArtikelPositionDto
-    {
+public class WarenausgangArtikelPositionDto
+{
     public int Id { get; set; }
     public int WarenausgangId { get; set; }
     public int ArtikelId { get; set; }

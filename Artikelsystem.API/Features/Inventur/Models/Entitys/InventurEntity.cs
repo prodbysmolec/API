@@ -11,7 +11,7 @@ public class InventurEntity
     public DateTime Erstellungsdatum { get; set; }
     public decimal GesamtDifferenzWert { get; set; }
     public int AnzahlPositionenMitDifferenz { get; set; }
-    
+
     // Navigation Propertys
     public virtual Inventur Inventur { get; set; } = null!;
 }

@@ -28,7 +28,7 @@ public class WarenausgangArtikelConfiguration : IEntityTypeConfiguration<Warenau
 
         builder.Property(p => p.Rechnungsnummer)
             .HasMaxLength(50);
-            
+
         builder.Property(p => p.Gesamtpreis)
             .HasPrecision(18, 2);
 

@@ -9,8 +9,8 @@ public class EmployeeBenefitConfiguration : IEntityTypeConfiguration<EmployeeBen
 {
     public void Configure(EntityTypeBuilder<EmployeeBenefit> builder)
     {
-            builder
-                .HasIndex(eb => new { eb.EmployeeId, eb.BenefitId })
-                .IsUnique();
+        builder
+            .HasIndex(eb => new { eb.EmployeeId, eb.BenefitId })
+            .IsUnique();
     }
 }

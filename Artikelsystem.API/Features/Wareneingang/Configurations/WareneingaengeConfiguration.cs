@@ -10,7 +10,7 @@ public class WareneingaengeConfiguration : IEntityTypeConfiguration<Wareneingaen
     public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Wareneingaenge> builder)
     {
         builder.HasKey(e => e.Id);
-        
+
         // Id als Autoinkrement
         builder.Property(w => w.Id).UseIdentityColumn();
 

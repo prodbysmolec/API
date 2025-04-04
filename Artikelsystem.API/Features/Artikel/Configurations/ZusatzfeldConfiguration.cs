@@ -9,13 +9,13 @@ public class ZusatzfeldConfiguration : IEntityTypeConfiguration<Zusatzfeld>
 {
     public void Configure(EntityTypeBuilder<Zusatzfeld> builder)
     {
-    builder.HasKey(z => z.ZusatzfeldID);
-        
-    builder.Property(z => z.Name)
-        .IsRequired()
-        .HasMaxLength(100);
+        builder.HasKey(z => z.ZusatzfeldID);
 
-    // IsChecked ist eine UI-bezogene Property, wird nicht in der db gespeichert
-    builder.Ignore(z => z.IsChecked);
+        builder.Property(z => z.Name)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        // IsChecked ist eine UI-bezogene Property, wird nicht in der db gespeichert
+        builder.Ignore(z => z.IsChecked);
     }
 }

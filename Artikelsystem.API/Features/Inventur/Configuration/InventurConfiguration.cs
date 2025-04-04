@@ -16,7 +16,7 @@ public class InventurConfiguration : IEntityTypeConfiguration<Models.Entitys.Inv
 
         builder.Property(i => i.Bemerkung)
             .HasMaxLength(500);
-            
+
         builder.Property(i => i.Status)
             .HasConversion<int>();
 

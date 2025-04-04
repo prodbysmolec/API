@@ -19,7 +19,7 @@ public class FluentValidationFilter : IAsyncActionFilter
         _serviceProvider = serviceProvider;
         _problemDetailsFactory = problemDetailsFactory;
     }
-    
+
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         foreach (var parameter in context.ActionDescriptor.Parameters)

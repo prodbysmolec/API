@@ -171,7 +171,7 @@ public class InventurController : BaseController
             var bericht = await _inventurService.GetInventurBerichtFuerInventur(id);
             if (bericht == null)
                 return NotFound();
-                
+
             return Ok(bericht);
         }
         catch (ValidationException ex)
@@ -248,7 +248,7 @@ public class InventurController : BaseController
     public async Task<IActionResult> EntferneInventur(int id)
     {
         var Inventur = await _inventurService.DeleteInventur(id);
-        if(Inventur == null)
+        if (Inventur == null)
         {
             return NotFound("Inventur konnte nicht gelöscht werden. Es existiert keine Inventur mit der angegebenen ID.");
         }

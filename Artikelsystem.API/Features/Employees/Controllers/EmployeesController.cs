@@ -42,13 +42,13 @@ public class EmployeesController : BaseController
             .Skip((page - 1) * recordsPerPage)
             .Take(recordsPerPage);
 
-        if(request != null)
+        if (request != null)
         {
             if (!string.IsNullOrWhiteSpace(request.FirstNameContains))
             {
                 query = query.Where(e => e.FirstName.Contains(request.FirstNameContains));
             }
-            
+
             if (!string.IsNullOrWhiteSpace(request.LastNameContains))
             {
                 query = query.Where(e => e.LastName.Contains(request.LastNameContains));
@@ -147,14 +147,14 @@ public class EmployeesController : BaseController
         var hasChanged = _dbContext.ChangeTracker.HasChanges();
         try
         {
-            if(!hasChanged)
+            if (!hasChanged)
             {
                 _logger.LogInformation("No changes detected for employee with ID: {EmployeeId}", id);
                 return BadRequest("No changes detected for employee update.");
             }
             _dbContext.Entry(existingEmployee).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
-            
+
             _logger.LogInformation("Employee with ID: {EmployeeId} successfully updated", id);
             return Ok(existingEmployee);
         }
@@ -178,7 +178,7 @@ public class EmployeesController : BaseController
     {
         var employee = await _dbContext.Employees.FindAsync(id);
 
-        if(employee == null)
+        if (employee == null)
         {
             return NotFound();
         }

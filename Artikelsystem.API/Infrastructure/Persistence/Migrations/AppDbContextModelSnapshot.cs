@@ -538,6 +538,65 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.ToTable("InventurPositionen");
                 });
 
+            modelBuilder.Entity("Artikelsystem.Api.Features.Lieferant.Models.Entitys.ArtikelLieferant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ArtikelId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ArtikelNrBeimLieferanten")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("Einkaufspreis")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime?>("GueltigBis")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("GueltigVon")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IstAktiv")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IstPrimaerLieferant")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("LieferantId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Lieferzeit")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Mindestbestellmenge")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtikelId");
+
+                    b.HasIndex("LieferantId");
+
+                    b.ToTable("ArtikelLieferanten");
+                });
+
             modelBuilder.Entity("Artikelsystem.Api.Features.Lieferant.Models.Entitys.Lieferant", b =>
                 {
                     b.Property<int>("Id")
@@ -557,6 +616,9 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<string>("Hausnummer")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IstAktiv")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -873,6 +935,25 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Navigation("Inventur");
                 });
 
+            modelBuilder.Entity("Artikelsystem.Api.Features.Lieferant.Models.Entitys.ArtikelLieferant", b =>
+                {
+                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
+                        .WithMany("ArtikelLieferanten")
+                        .HasForeignKey("ArtikelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Artikelsystem.Api.Features.Lieferant.Models.Entitys.Lieferant", "Lieferant")
+                        .WithMany("ArtikelLieferanten")
+                        .HasForeignKey("LieferantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artikel");
+
+                    b.Navigation("Lieferant");
+                });
+
             modelBuilder.Entity("Artikelsystem.Api.Features.Warenausgang.Models.Entitys.WarenausgangArtikelPositionen", b =>
                 {
                     b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
@@ -913,6 +994,8 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", b =>
                 {
+                    b.Navigation("ArtikelLieferanten");
+
                     b.Navigation("ArtikelStatistik");
 
                     b.Navigation("ArtikelZusatzWerte");
@@ -951,6 +1034,11 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Navigation("Berichte");
 
                     b.Navigation("Positionen");
+                });
+
+            modelBuilder.Entity("Artikelsystem.Api.Features.Lieferant.Models.Entitys.Lieferant", b =>
+                {
+                    b.Navigation("ArtikelLieferanten");
                 });
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Warenausgang.Models.Entitys.Warenausgaenge", b =>

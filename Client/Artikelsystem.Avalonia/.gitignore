@@ -1,0 +1,13 @@
+bin/
+obj/
+
+.idea
+.vscode
+
+.vs
+
+.user
+.suo
+.userosscache
+.sln.docstates
+.DS_Store

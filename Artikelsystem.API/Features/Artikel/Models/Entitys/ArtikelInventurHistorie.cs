@@ -12,7 +12,7 @@ public class ArtikelInventurHistorie
     public int Differenz { get; set; }
     public decimal DifferenzWert { get; set; }
     public DateTime Datum { get; set; }
-    
+
     // Navigation Propertys
     public virtual Artikel Artikel { get; set; } = null!;
     public virtual Inventur.Models.Entitys.Inventur Inventur { get; set; } = null!;

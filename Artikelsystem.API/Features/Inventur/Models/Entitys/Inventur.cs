@@ -7,7 +7,7 @@ namespace Artikelsystem.Api.Features.Inventur.Models.Entitys;
 public class Inventur : AuditableEntity
 {
     public int Id { get; set; }
-    public string? Bezeichnung { get; set; } 
+    public string? Bezeichnung { get; set; }
     public DateTime StartDatum { get; set; }
     public DateTime? AbschlussDatum { get; set; }
     public InventurStatus Status { get; set; }

@@ -10,8 +10,8 @@ public class CreateEmployeeRequestValidator : AbstractValidator<CreateEmployeeRe
     {
         RuleFor(x => x.FirstName)
             .NotEmpty();
-            
+
         RuleFor(x => x.LastName)
             .NotEmpty();
-    }   
+    }
 }

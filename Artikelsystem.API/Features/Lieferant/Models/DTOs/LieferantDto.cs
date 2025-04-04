@@ -13,4 +13,7 @@ public class LieferantDto
     public string Ort { get; set; } = string.Empty;
     public string Telefonnummer { get; set; } = string.Empty;
     public string? Notizen { get; set; }
+    public bool IstAktiv { get; set; }
+    public string AdresseFormatiert { get; set; } = string.Empty;
+    public bool? AlleAssoziationen { get; set; }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace Artikelsystem.Api.Shared.Validators;
 
 public static class Extensions
-    {
+{
     public static ModelStateDictionary ToModelStateDictionary(this ValidationResult validationResult)
     {
         var modelState = new ModelStateDictionary();
@@ -15,7 +15,7 @@ public static class Extensions
         {
             modelState.AddModelError(error.PropertyName, error.ErrorMessage);
         }
-        
+
         return modelState;
     }
 }

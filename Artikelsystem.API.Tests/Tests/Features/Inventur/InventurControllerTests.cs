@@ -41,7 +41,7 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
     {
         // Arrange
         var client = _factory.CreateClient();
-        
+
         // Erst eine neue Inventur erstellen, um eine bekannte ID zu haben
         var createRequest = new CreateInventurRequest
         {
@@ -49,7 +49,7 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
             Bemerkung = "Test Bemerkung",
             ErstelltVon = "IntegrationTest"
         };
-        
+
         var createResponse = await client.PostAsJsonAsync("/inventur", createRequest);
         createResponse.EnsureSuccessStatusCode();
         var createdInventur = await createResponse.Content.ReadFromJsonAsync<InventurDto>();
@@ -117,7 +117,7 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
             Bemerkung = "Wird im Test gestartet",
             ErstelltVon = "prodbysmolec"
         };
-        
+
         var createResponse = await client.PostAsJsonAsync("/inventur", createRequest);
         createResponse.EnsureSuccessStatusCode();
         var createdInventur = await createResponse.Content.ReadFromJsonAsync<InventurDto>();
@@ -150,18 +150,18 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
             Bemerkung = "Positionen werden aktualisiert",
             ErstelltVon = "prodbysmolec"
         };
-        
+
         var createResponse = await client.PostAsJsonAsync("/inventur", createRequest);
         createResponse.EnsureSuccessStatusCode();
         var createdInventur = await createResponse.Content.ReadFromJsonAsync<InventurDto>();
-        
+
         var startResponse = await client.PostAsync($"/inventur/{createdInventur?.Id}/starten", null);
         startResponse.EnsureSuccessStatusCode();
         var startedInventur = await startResponse.Content.ReadFromJsonAsync<InventurDto>();
-        
+
         Assert.NotNull(startedInventur);
         //Assert.NotEmpty(startedInventur.Positionen);
-        
+
         var position = startedInventur.Positionen[0];
         var updateRequest = new UpdateInventurPositionRequest
         {
@@ -197,7 +197,7 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
     {
         // Arrange
         var client = _factory.CreateClient();
-        
+
         await LoescheAlleInventuren(client);
 
         // 1. Inventur erstellen
@@ -207,19 +207,19 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
             Bemerkung = "Test des kompletten Inventur-Lebenszyklus",
             ErstelltVon = "prodbysmolec"
         };
-        
+
         var createResponse = await client.PostAsJsonAsync("/inventur", createRequest);
         createResponse.EnsureSuccessStatusCode();
         var createdInventur = await createResponse.Content.ReadFromJsonAsync<InventurDto>();
         Assert.NotNull(createdInventur);
-        
+
         // 2. Inventur starten
         var startResponse = await client.PostAsync($"/inventur/{createdInventur.Id}/starten", null);
         startResponse.EnsureSuccessStatusCode();
         var startedInventur = await startResponse.Content.ReadFromJsonAsync<InventurDto>();
         Assert.NotNull(startedInventur);
         //Assert.NotEmpty(startedInventur.Positionen);
-        
+
         // 3. Alle Positionen aktualisieren
         foreach (var position in startedInventur.Positionen)
         {
@@ -233,11 +233,11 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
                 BearbeitetVon = "prodbysmolec",
                 IstGeprueft = true
             };
-            
+
             var updateResponse = await client.PutAsJsonAsync("/inventur/positionen", updateRequest);
             updateResponse.EnsureSuccessStatusCode();
         }
-        
+
         // 4. Inventur abschließen
         var closeResponse = await client.PostAsync($"/inventur/{createdInventur.Id}/abschliessen", null);
         closeResponse.EnsureSuccessStatusCode();
@@ -245,12 +245,12 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
         Assert.NotNull(closedInventur);
         Assert.Equal(InventurStatus.Abgeschlossen, closedInventur.Status);
         Assert.NotNull(closedInventur.AbschlussDatum);
-        
+
         // 5. Inventurbericht abrufen
         var berichtResponse = await client.GetAsync($"/inventur/{createdInventur.Id}/bericht");
         berichtResponse.EnsureSuccessStatusCode();
         var bericht = await berichtResponse.Content.ReadFromJsonAsync<InventurBerichtDto>();
-        
+
         // Assert Bericht
         Assert.NotNull(bericht);
         Assert.Equal(createdInventur.Id, bericht.InventurId);
@@ -264,7 +264,7 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
     {
         // Arrange
         var client = _factory.CreateClient();
-        
+
         // 1. Inventur erstellen
         var createRequest = new CreateInventurRequest
         {
@@ -272,16 +272,16 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
             Bemerkung = "Einige Positionen bleiben ungeprüft",
             ErstelltVon = "prodbysmolec"
         };
-        
+
         var createResponse = await client.PostAsJsonAsync("/inventur", createRequest);
         createResponse.EnsureSuccessStatusCode();
         var createdInventur = await createResponse.Content.ReadFromJsonAsync<InventurDto>();
-        
+
         // 2. Inventur starten
         var startResponse = await client.PostAsync($"/inventur/{createdInventur!.Id}/starten", null);
         startResponse.EnsureSuccessStatusCode();
         var startedInventur = await startResponse.Content.ReadFromJsonAsync<InventurDto>();
-        
+
         // 3. Nur einen Teil der Positionen aktualisieren (erste Position)
         if (startedInventur?.Positionen.Count > 0)
         {
@@ -296,14 +296,14 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
                 BearbeitetVon = "prodbysmolec",
                 IstGeprueft = true
             };
-            
+
             var updateResponse = await client.PutAsJsonAsync("/inventur/positionen", updateRequest);
             updateResponse.EnsureSuccessStatusCode();
         }
-        
+
         // 4. Versuch, die Inventur abzuschließen
         var closeResponse = await client.PostAsync($"/inventur/{createdInventur.Id}/abschliessen", null);
-        
+
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, closeResponse.StatusCode);
     }
@@ -341,16 +341,16 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
             Bemerkung = "Bericht wird getestet",
             ErstelltVon = "prodbysmolec"
         };
-        
+
         var createResponse = await client.PostAsJsonAsync("/inventur", createRequest);
         createResponse.EnsureSuccessStatusCode();
         var createdInventur = await createResponse.Content.ReadFromJsonAsync<InventurDto>();
-        
+
         // 2. Inventur starten
         var startResponse = await client.PostAsync($"/inventur/{createdInventur?.Id}/starten", null);
         startResponse.EnsureSuccessStatusCode();
         var startedInventur = await startResponse.Content.ReadFromJsonAsync<InventurDto>();
-        
+
         // 3. Alle Positionen aktualisieren
         foreach (var position in startedInventur!.Positionen)
         {
@@ -364,17 +364,17 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
                 BearbeitetVon = "prodbysmolec",
                 IstGeprueft = true
             };
-            
+
             await client.PutAsJsonAsync("/inventur/positionen", updateRequest);
         }
-        
+
         // 4. Inventur abschließen
         var closeResponse = await client.PostAsync($"/inventur/{createdInventur!.Id}/abschliessen", null);
         closeResponse.EnsureSuccessStatusCode();
-        
+
         // Act - Bericht abrufen
         var berichtResponse = await client.GetAsync($"/inventur/{createdInventur.Id}/bericht");
-        
+
         // Assert
         berichtResponse.EnsureSuccessStatusCode();
         var bericht = await berichtResponse.Content.ReadFromJsonAsync<InventurBerichtDto>();
@@ -394,7 +394,7 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
         var berichteResponse = await client.GetAsync("/inventur/berichte");
         berichteResponse.EnsureSuccessStatusCode();
         var berichte = await berichteResponse.Content.ReadFromJsonAsync<List<InventurBerichtDto>>();
-        
+
         // Wenn keine Berichte vorhanden sind, erstellen wir einen durch einen vollständigen Inventurprozess
         if (berichte == null || berichte.Count == 0)
         {
@@ -405,15 +405,15 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
                 Bemerkung = "Berichts-ID-Abruf wird getestet",
                 ErstelltVon = "prodbysmolec"
             };
-            
+
             var createResponse = await client.PostAsJsonAsync("/inventur", createRequest);
             createResponse.EnsureSuccessStatusCode();
             var inventur = await createResponse.Content.ReadFromJsonAsync<InventurDto>();
-            
+
             var startResponse = await client.PostAsync($"/inventur/{inventur?.Id}/starten", null);
             startResponse.EnsureSuccessStatusCode();
             var startedInventur = await startResponse.Content.ReadFromJsonAsync<InventurDto>();
-            
+
             foreach (var position in startedInventur!.Positionen)
             {
                 var updateRequest = new UpdateInventurPositionRequest
@@ -426,26 +426,26 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
                     BearbeitetVon = "prodbysmolec",
                     IstGeprueft = true
                 };
-                
+
                 await client.PutAsJsonAsync("/inventur/positionen", updateRequest);
             }
-            
+
             await client.PostAsync($"/inventur/{inventur?.Id}/abschliessen", null);
-            
+
             // Erneut alle Berichte abrufen
             berichteResponse = await client.GetAsync("/inventur/berichte");
             berichteResponse.EnsureSuccessStatusCode();
             berichte = await berichteResponse.Content.ReadFromJsonAsync<List<InventurBerichtDto>>();
         }
-        
+
         Assert.NotNull(berichte);
         Assert.NotEmpty(berichte);
-        
+
         var berichtId = berichte[0].Id;
-        
+
         // Act
         var response = await client.GetAsync($"/inventur/berichte/{berichtId}");
-        
+
         // Assert
         response.EnsureSuccessStatusCode();
         var bericht = await response.Content.ReadFromJsonAsync<InventurBerichtDto>();
@@ -460,10 +460,10 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
         // Arrange
         var client = _factory.CreateClient();
         var invalidId = int.MaxValue; // Diese ID existiert höchstwahrscheinlich nicht
-        
+
         // Act
         var response = await client.GetAsync($"/inventur/berichte/{invalidId}");
-        
+
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -474,10 +474,10 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
         // Arrange
         var client = _factory.CreateClient();
         var nonExistingId = int.MaxValue; // Diese ID existiert höchstwahrscheinlich nicht
-        
+
         // Act
         var response = await client.GetAsync($"/inventur/{nonExistingId}/bericht");
-        
+
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }

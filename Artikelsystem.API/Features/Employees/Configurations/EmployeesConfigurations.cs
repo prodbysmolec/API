@@ -8,6 +8,6 @@ public class EmployeesConfigurations : IEntityTypeConfiguration<Employee>
 {
     public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Employee> builder)
     {
-        
+
     }
 }

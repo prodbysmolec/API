@@ -9,15 +9,15 @@ public class InventurBerichtDto
     public string Titel { get; set; } = string.Empty;
     public string Inhalt { get; set; } = string.Empty;
     public DateTime Erstellungsdatum { get; set; }
-    
+
     public decimal GesamtDifferenzWert { get; set; }
     public int AnzahlPositionenMitDifferenz { get; set; }
-    
+
     // Inventur Details
     public string? InventurBezeichnung { get; set; }
     public DateTime InventurStartDatum { get; set; }
     public DateTime? InventurAbschlussDatum { get; set; }
-    
+
     // Audit-Informationen
     public string? CreatedBy { get; set; }
     public DateTime CreatedOn { get; set; }

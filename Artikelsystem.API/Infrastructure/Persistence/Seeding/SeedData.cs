@@ -20,14 +20,14 @@ public static class SeedData
     public static void MigrateAndSeed(IServiceProvider serviceProvider)
     {
         var context = serviceProvider.GetRequiredService<AppDbContext>();
-        context.Database.Migrate();
+        //context.Database.Migrate();
 
         // Aktuelle Zeit und Benutzer
         var currentDateTime = DateTime.SpecifyKind(
-            DateTime.Parse("2025-04-02 10:57:53"), 
+            DateTime.Parse("2025-04-02 10:57:53"),
             DateTimeKind.Utc
         );
-        
+
         var currentUser = "prodbysmolec";
 
         if (!context.Employees.Any())
@@ -92,25 +92,25 @@ public static class SeedData
                     var employeeBenefits = new List<EmployeeBenefit>
                     {
                         // John's Benefits
-                        new EmployeeBenefit { 
-                            EmployeeId = john.Id, 
-                            BenefitId = healthBenefit.Id, 
-                            CostToEmployee = 100m 
+                        new EmployeeBenefit {
+                            EmployeeId = john.Id,
+                            BenefitId = healthBenefit.Id,
+                            CostToEmployee = 100m
                         },
-                        new EmployeeBenefit { 
-                            EmployeeId = john.Id, 
-                            BenefitId = dentalBenefit.Id 
+                        new EmployeeBenefit {
+                            EmployeeId = john.Id,
+                            BenefitId = dentalBenefit.Id
                         },
                         
                         // Jane's Benefits
-                        new EmployeeBenefit { 
-                            EmployeeId = jane.Id, 
-                            BenefitId = healthBenefit.Id, 
-                            CostToEmployee = 120m 
+                        new EmployeeBenefit {
+                            EmployeeId = jane.Id,
+                            BenefitId = healthBenefit.Id,
+                            CostToEmployee = 120m
                         },
-                        new EmployeeBenefit { 
-                            EmployeeId = jane.Id, 
-                            BenefitId = visionBenefit.Id 
+                        new EmployeeBenefit {
+                            EmployeeId = jane.Id,
+                            BenefitId = visionBenefit.Id
                         }
                     };
 
@@ -125,23 +125,23 @@ public static class SeedData
         {
             var kategorien = new List<Produktkategorie>
             {
-                new Produktkategorie 
-                { 
-                    Name = "Elektronik", 
+                new Produktkategorie
+                {
+                    Name = "Elektronik",
                     Beschreibung = "Elektronische Geräte und Zubehör"
                 },
-                new Produktkategorie 
-                { 
-                    Name = "Bekleidung", 
+                new Produktkategorie
+                {
+                    Name = "Bekleidung",
                     Beschreibung = "Kleidung und Accessoires"
                 },
-                new Produktkategorie 
-                { 
-                    Name = "Bürobedarf", 
+                new Produktkategorie
+                {
+                    Name = "Bürobedarf",
                     Beschreibung = "Material für den Büroalltag"
                 }
             };
-            
+
             context.Set<Produktkategorie>().AddRange(kategorien);
             context.SaveChanges();
         }
@@ -152,33 +152,33 @@ public static class SeedData
             var elektronik = context.Set<Produktkategorie>().FirstOrDefault(p => p.Name == "Elektronik");
             var bekleidung = context.Set<Produktkategorie>().FirstOrDefault(p => p.Name == "Bekleidung");
             var buero = context.Set<Produktkategorie>().FirstOrDefault(p => p.Name == "Bürobedarf");
-            
+
             if (elektronik != null && bekleidung != null && buero != null)
             {
                 var artikelgruppen = new List<Artikelgruppe>
                 {
-                    new Artikelgruppe 
-                    { 
-                        Name = "Computer", 
+                    new Artikelgruppe
+                    {
+                        Name = "Computer",
                         ProduktkategorieId = elektronik.Id
                     },
-                    new Artikelgruppe 
-                    { 
-                        Name = "Peripheriegeräte", 
-                        ProduktkategorieId = elektronik.Id 
+                    new Artikelgruppe
+                    {
+                        Name = "Peripheriegeräte",
+                        ProduktkategorieId = elektronik.Id
                     },
-                    new Artikelgruppe 
-                    { 
-                        Name = "T-Shirts", 
-                        ProduktkategorieId = bekleidung.Id 
+                    new Artikelgruppe
+                    {
+                        Name = "T-Shirts",
+                        ProduktkategorieId = bekleidung.Id
                     },
-                    new Artikelgruppe 
-                    { 
-                        Name = "Schreibwaren", 
-                        ProduktkategorieId = buero.Id 
+                    new Artikelgruppe
+                    {
+                        Name = "Schreibwaren",
+                        ProduktkategorieId = buero.Id
                     }
                 };
-                
+
                 context.Set<Artikelgruppe>().AddRange(artikelgruppen);
                 context.SaveChanges();
             }
@@ -198,7 +198,7 @@ public static class SeedData
                 new Zusatzfeld { Name = "Anschlusstyp" },
                 new Zusatzfeld { Name = "Schnittstelle" }
             };
-            
+
             context.Set<Zusatzfeld>().AddRange(zusatzfelder);
             context.SaveChanges();
         }
@@ -227,7 +227,7 @@ public static class SeedData
                 ram != null && festplatte != null && anschluss != null && schnittstelle != null)
             {
                 var zusatzwerte = new List<Zusatzwert>();
-                
+
                 // Farben
                 zusatzwerte.AddRange(new List<Zusatzwert>
                 {
@@ -237,7 +237,7 @@ public static class SeedData
                     new Zusatzwert { ZusatzFeldID = farbe.ZusatzfeldID, Wert = "Rot" },
                     new Zusatzwert { ZusatzFeldID = farbe.ZusatzfeldID, Wert = "Grün" }
                 });
-                
+
                 // Größen
                 zusatzwerte.AddRange(new List<Zusatzwert>
                 {
@@ -247,7 +247,7 @@ public static class SeedData
                     new Zusatzwert { ZusatzFeldID = größe.ZusatzfeldID, Wert = "XL" },
                     new Zusatzwert { ZusatzFeldID = größe.ZusatzfeldID, Wert = "XXL" }
                 });
-                
+
                 // Material
                 zusatzwerte.AddRange(new List<Zusatzwert>
                 {
@@ -256,7 +256,7 @@ public static class SeedData
                     new Zusatzwert { ZusatzFeldID = material.ZusatzfeldID, Wert = "Aluminium" },
                     new Zusatzwert { ZusatzFeldID = material.ZusatzfeldID, Wert = "Edelstahl" }
                 });
-                
+
                 // Prozessortyp
                 zusatzwerte.AddRange(new List<Zusatzwert>
                 {
@@ -266,7 +266,7 @@ public static class SeedData
                     new Zusatzwert { ZusatzFeldID = prozessor.ZusatzfeldID, Wert = "AMD Ryzen 5" },
                     new Zusatzwert { ZusatzFeldID = prozessor.ZusatzfeldID, Wert = "AMD Ryzen 7" }
                 });
-                
+
                 // Arbeitsspeicher
                 zusatzwerte.AddRange(new List<Zusatzwert>
                 {
@@ -275,7 +275,7 @@ public static class SeedData
                     new Zusatzwert { ZusatzFeldID = ram.ZusatzfeldID, Wert = "32 GB" },
                     new Zusatzwert { ZusatzFeldID = ram.ZusatzfeldID, Wert = "64 GB" }
                 });
-                
+
                 // Festplattentyp
                 zusatzwerte.AddRange(new List<Zusatzwert>
                 {
@@ -284,7 +284,7 @@ public static class SeedData
                     new Zusatzwert { ZusatzFeldID = festplatte.ZusatzfeldID, Wert = "SSD 1 TB" },
                     new Zusatzwert { ZusatzFeldID = festplatte.ZusatzfeldID, Wert = "HDD 1 TB" }
                 });
-                
+
                 // Anschlusstyp
                 zusatzwerte.AddRange(new List<Zusatzwert>
                 {
@@ -293,7 +293,7 @@ public static class SeedData
                     new Zusatzwert { ZusatzFeldID = anschluss.ZusatzfeldID, Wert = "Bluetooth" },
                     new Zusatzwert { ZusatzFeldID = anschluss.ZusatzfeldID, Wert = "Kabelgebunden" }
                 });
-                
+
                 // Schnittstellen
                 zusatzwerte.AddRange(new List<Zusatzwert>
                 {
@@ -302,7 +302,7 @@ public static class SeedData
                     new Zusatzwert { ZusatzFeldID = schnittstelle.ZusatzfeldID, Wert = "VGA" },
                     new Zusatzwert { ZusatzFeldID = schnittstelle.ZusatzfeldID, Wert = "USB 3.0" }
                 });
-                
+
                 context.Set<Zusatzwert>().AddRange(zusatzwerte);
                 context.SaveChanges();
             }
@@ -314,7 +314,7 @@ public static class SeedData
             var computerGruppe = context.Set<Artikelgruppe>().FirstOrDefault(a => a.Name == "Computer");
             var peripherieGruppe = context.Set<Artikelgruppe>().FirstOrDefault(a => a.Name == "Peripheriegeräte");
             var tshirtGruppe = context.Set<Artikelgruppe>().FirstOrDefault(a => a.Name == "T-Shirts");
-            
+
             var farbe = context.Set<Zusatzfeld>().FirstOrDefault(z => z.Name == "Farbe");
             var größe = context.Set<Zusatzfeld>().FirstOrDefault(z => z.Name == "Größe");
             var material = context.Set<Zusatzfeld>().FirstOrDefault(z => z.Name == "Material");
@@ -323,7 +323,7 @@ public static class SeedData
             var festplatte = context.Set<Zusatzfeld>().FirstOrDefault(z => z.Name == "Festplattentyp");
             var anschluss = context.Set<Zusatzfeld>().FirstOrDefault(z => z.Name == "Anschlusstyp");
             var schnittstelle = context.Set<Zusatzfeld>().FirstOrDefault(z => z.Name == "Schnittstelle");
-            
+
             if (computerGruppe != null && peripherieGruppe != null && tshirtGruppe != null &&
                 farbe != null && größe != null && material != null && prozessor != null &&
                 ram != null && festplatte != null && anschluss != null && schnittstelle != null)
@@ -347,7 +347,7 @@ public static class SeedData
                     new ArtikelgruppeZusatzfelder { ArtikelgruppeID = tshirtGruppe.Id, ZusatzfelderID = größe.ZusatzfeldID },
                     new ArtikelgruppeZusatzfelder { ArtikelgruppeID = tshirtGruppe.Id, ZusatzfelderID = material.ZusatzfeldID }
                 };
-                
+
                 context.Set<ArtikelgruppeZusatzfelder>().AddRange(verknüpfungen);
                 context.SaveChanges();
             }
@@ -360,7 +360,7 @@ public static class SeedData
             var computerGruppe = context.Set<Artikelgruppe>().FirstOrDefault(a => a.Name == "Computer");
             var peripherieGruppe = context.Set<Artikelgruppe>().FirstOrDefault(a => a.Name == "Peripheriegeräte");
             var tshirtGruppe = context.Set<Artikelgruppe>().FirstOrDefault(a => a.Name == "T-Shirts");
-            
+
             artikelList = new List<Artikel>
             {
                 // Computer
@@ -506,32 +506,32 @@ public static class SeedData
             var weiß = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "Weiß");
             var blau = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "Blau");
             var rot = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "Rot");
-            
+
             var sizeS = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "S");
             var sizeM = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "M");
             var sizeL = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "L");
             var sizeXL = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "XL");
-            
+
             var baumwolle = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "Baumwolle");
             var kunststoff = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "Kunststoff");
             var aluminium = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "Aluminium");
-            
+
             var i5 = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "Intel i5");
             var i7 = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "Intel i7");
             var ryzen5 = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "AMD Ryzen 5");
-            
+
             var ram8 = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "8 GB");
             var ram16 = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "16 GB");
             var ram32 = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "32 GB");
-            
+
             var ssd256 = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "SSD 256 GB");
             var ssd512 = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "SSD 512 GB");
             var ssd1tb = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "SSD 1 TB");
-            
+
             var usb = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "USB");
             var usbc = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "USB-C");
             var bluetooth = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "Bluetooth");
-            
+
             var hdmi = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "HDMI");
             var displayport = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "DisplayPort");
             var usb30 = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "USB 3.0");
@@ -589,7 +589,7 @@ public static class SeedData
                     new ArtikelZusatzWert { ArtikelId = artikelList[7].Id, ZusatzwertId = sizeL.Id },
                     new ArtikelZusatzWert { ArtikelId = artikelList[7].Id, ZusatzwertId = baumwolle.Id }
                 };
-                
+
                 context.Set<ArtikelZusatzWert>().AddRange(artikelZusatzwerte);
                 context.SaveChanges();
             }
@@ -599,7 +599,7 @@ public static class SeedData
             artikelList = context.Artikel.ToList();
         }
 
-        if(!context.Lieferanten.Any())
+        if (!context.Lieferanten.Any())
         {
             var lieferanten = new List<Lieferant>
             {
@@ -660,7 +660,7 @@ public static class SeedData
                 LastModifiedOn = currentDateTime.AddDays(-14),
                 LastModifiedBy = currentUser
             };
-            
+
             var wareneingang2 = new Wareneingaenge
             {
                 Gesamtpreis = 1200.0m,
@@ -670,11 +670,11 @@ public static class SeedData
                 LastModifiedOn = currentDateTime.AddDays(-5),
                 LastModifiedBy = currentUser
             };
-            
+
             context.Wareneingaenge.Add(wareneingang1);
             context.Wareneingaenge.Add(wareneingang2);
             context.SaveChanges();
-            
+
             // Positionen für Wareneingang 1
             var positionen1 = new List<WareneingangArtikelPositionen>
             {
@@ -695,7 +695,7 @@ public static class SeedData
                     Gesamtpreis = 200.0m
                 }
             };
-            
+
             // Positionen für Wareneingang 2
             var positionen2 = new List<WareneingangArtikelPositionen>
             {
@@ -724,7 +724,7 @@ public static class SeedData
                     Gesamtpreis = 250.0m
                 }
             };
-            
+
             context.Set<WareneingangArtikelPositionen>().AddRange(positionen1);
             context.Set<WareneingangArtikelPositionen>().AddRange(positionen2);
             context.SaveChanges();
@@ -752,11 +752,11 @@ public static class SeedData
                 LastModifiedOn = currentDateTime.AddDays(-3),
                 LastModifiedBy = currentUser
             };
-            
+
             context.Warenausgaenge.Add(warenausgang1);
             context.Warenausgaenge.Add(warenausgang2);
             context.SaveChanges();
-            
+
             // Positionen für Warenausgang 1 (intern)
             var positionen1 = new List<WarenausgangArtikelPositionen>
             {
@@ -777,7 +777,7 @@ public static class SeedData
                     Bemerkung = "Mäuse für neue Laptops"
                 }
             };
-            
+
             // Positionen für Warenausgang 2 (Verkauf)
             var positionen2 = new List<WarenausgangArtikelPositionen>
             {
@@ -809,7 +809,7 @@ public static class SeedData
         }
 
         // Seed für Inventuren
-        if(!context.Inventuren.Any())
+        if (!context.Inventuren.Any())
         {
             // Aktuelle Zeit und Benutzer für die Seed-Daten
             var inventur1 = new Inventur
@@ -879,4 +879,4 @@ public static class SeedData
             context.SaveChanges();
         }
     }
-}   
+}

@@ -23,10 +23,10 @@ public class InventurPosition : AuditableEntity
     public int Differenz { get; set; }
     public decimal? DifferenzWert { get; set; }
     #endregion
-    
+
     public string? Bemerkung { get; set; }
 
     // Navigation Propertys
     public virtual Inventur Inventur { get; set; } = null!;
-    public virtual Artikel.Models.Entitys.Artikel Artikel{ get; set; } = null!;
+    public virtual Artikel.Models.Entitys.Artikel Artikel { get; set; } = null!;
 }

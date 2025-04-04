@@ -10,5 +10,5 @@ public class UpdateInventurPositionRequest
     public int GezaehlteMenge { get; set; }
     public string? Bemerkung { get; set; }
     public string BearbeitetVon { get; set; } = string.Empty;
-    public bool IstGeprueft { get; set;} = false;
+    public bool IstGeprueft { get; set; } = false;
 }

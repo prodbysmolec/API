@@ -35,7 +35,7 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
     {
         var client = _factory.CreateClient();
         var response = await client.GetAsync("/employees/1");
-        
+
         response.EnsureSuccessStatusCode();
     }
 
@@ -43,11 +43,12 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
     public async Task CreateEmployee_ReturnsCreatedResult()
     {
         var client = _factory.CreateClient();
-        var response = await client.PostAsJsonAsync("/employees", new Employee { 
-            FirstName = "Lukas", 
+        var response = await client.PostAsJsonAsync("/employees", new Employee
+        {
+            FirstName = "Lukas",
             LastName = "Schmolz",
             SocialSecurityNumber = "12345"
-            });
+        });
 
         response.EnsureSuccessStatusCode();
     }
@@ -70,15 +71,16 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         Assert.Contains("LastName", problemDetails.Errors.Keys);
     }
 
-    
+
     [Fact]
     public async Task UpdateEmployee_ReturnsOkResult()
     {
         var client = _factory.CreateClient();
-        var response = await client.PutAsJsonAsync("/employees/1", new Employee { 
-            FirstName = "Johnne", 
-            LastName = "Doe", 
-            Address1 = "123 Main Smoott" 
+        var response = await client.PutAsJsonAsync("/employees/1", new Employee
+        {
+            FirstName = "Johnne",
+            LastName = "Doe",
+            Address1 = "123 Main Smoott"
         });
 
         if (!response.IsSuccessStatusCode)
@@ -99,10 +101,11 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
     public async Task UpdateEmployee_ReturnsOkResult2()
     {
         var client = _factory.CreateClient();
-        var response = await client.PutAsJsonAsync("/employees/1", new Employee { 
-            FirstName = "John", 
-            LastName = "Doe", 
-            Address1 = "123 Main Smoot" 
+        var response = await client.PutAsJsonAsync("/employees/1", new Employee
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Address1 = "123 Main Smoot"
         });
 
         if (!response.IsSuccessStatusCode)
@@ -130,7 +133,7 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        
+
         var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
         Assert.NotNull(problemDetails);
         Assert.Contains("Address1", problemDetails.Errors.Keys);
