@@ -8,10 +8,11 @@ using Artikelsystem.Api.Features.Lieferant.Models.Entitys;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Artikelsystem.Api.Features.Lieferant.Models.DTOs;
 using Artikelsystem.Api.Features.Lieferant.Controllers;
+using Artikelsystem.API.Features.Lieferant.Services;
 
 namespace Artikelsystem.Api.Features.Lieferant.Services;
 
-public class ArtikelLieferantService
+public class ArtikelLieferantService : IArtikelLieferantService
 {
     private readonly AppDbContext _context;
 

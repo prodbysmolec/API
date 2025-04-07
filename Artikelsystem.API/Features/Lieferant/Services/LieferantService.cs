@@ -1,6 +1,8 @@
 using Artikelsystem.Api.Features.Lieferant.Models.DTOs;
 using Artikelsystem.Api.Features.Lieferant.Models.Entitys;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
+using Artikelsystem.API.Features.Lieferant.Models.DTOs.Request;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 namespace Artikelsystem.Api.Features.Lieferant.Services
 {
 
-    public class LieferantService
+    public class LieferantService : ILieferantService
     {
         private readonly AppDbContext _context;
 
@@ -49,14 +51,19 @@ namespace Artikelsystem.Api.Features.Lieferant.Services
         /// <summary>
         /// Holt einen Lieferanten anhand seiner ID
         /// </summary>
-        public async Task<LieferantDetailDto?> GetLieferantById(int id)
+        public async Task<LieferantDetailDto?> GetLieferantById(bool? alles, int id)
         {
-            var lieferant = await _context.Lieferanten
-                .Include(l => l.ArtikelLieferanten)
-                .ThenInclude(al => al.Artikel)
-                .FirstOrDefaultAsync(l => l.Id == id);
+            var query = _context.Lieferanten.AsQueryable();
 
-            if (lieferant == null)
+            if(alles == true)
+            {
+                query.Include(l => l.ArtikelLieferanten)
+                    .ThenInclude(l => l.Artikel);
+            }
+
+            var lieferant = await query.FirstOrDefaultAsync(l => l.Id == id);
+
+            if(lieferant == null)
             {
                 return null;
             }

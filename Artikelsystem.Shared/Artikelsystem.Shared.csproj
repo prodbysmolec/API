@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include=".gitignore" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Constants/" />
     <Folder Include="DTOs/Artikel/Request/" />
     <Folder Include="Enums/" />

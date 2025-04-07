@@ -7,7 +7,6 @@ using Artikelsystem.API.Tests;
 
 namespace Artikelsystem.Api.Tests.Tests.Features.Lieferant;
 
-
 public class ArtikelLieferantControllerTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly CustomWebApplicationFactory _factory;
@@ -25,7 +24,7 @@ public class ArtikelLieferantControllerTests : IClassFixture<CustomWebApplicatio
         var artikelId = 1; // Verwenden Sie eine bekannte Artikel-ID für den Test
 
         // Act
-        var response = await client.GetAsync($"/api/artikel/{artikelId}/lieferanten");
+        var response = await client.GetAsync($"/ArtikelLieferant/artikel/{artikelId}/lieferanten");
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -62,7 +61,7 @@ public class ArtikelLieferantControllerTests : IClassFixture<CustomWebApplicatio
         var artikelId = 1;
         
         // Act
-        var response = await client.GetAsync($"/api/artikel/{artikelId}/lieferanten/primaer");
+        var response = await client.GetAsync($"/ArtikelLieferant/artikel/{artikelId}/lieferanten/primaer");
         
         // Assert - Je nach Testdaten könnte es OK oder NotFound sein
         if (response.StatusCode == HttpStatusCode.OK)
@@ -98,7 +97,7 @@ public class ArtikelLieferantControllerTests : IClassFixture<CustomWebApplicatio
         };
         
         // Act
-        var response = await client.PostAsJsonAsync($"/api/artikel/{artikelId}/lieferanten/{lieferantId}", addDto);
+        var response = await client.PostAsJsonAsync($"/ArtikelLieferant/artikel/{artikelId}/lieferanten/{lieferantId}", addDto);
         
         // Assert
         // Abhängig von der Testumgebung könnte dies fehlschlagen, wenn der Artikel oder Lieferant nicht existiert
@@ -140,7 +139,7 @@ public class ArtikelLieferantControllerTests : IClassFixture<CustomWebApplicatio
         };
         
         // Act
-        var response = await client.PostAsJsonAsync($"/api/artikel/{artikelId}/lieferanten/wechseln/{neuerLieferantId}", addDto);
+        var response = await client.PostAsJsonAsync($"/ArtikelLieferant/artikel/{artikelId}/lieferanten/wechseln/{neuerLieferantId}", addDto);
         
         // Assert
         // Abhängig von der Testumgebung könnte dies fehlschlagen, wenn der Artikel oder Lieferant nicht existiert
@@ -183,7 +182,7 @@ public class ArtikelLieferantControllerTests : IClassFixture<CustomWebApplicatio
         };
         
         // Act
-        var response = await client.PutAsJsonAsync($"/api/artikel/{artikelId}/lieferanten/{lieferantId}", updateDto);
+        var response = await client.PutAsJsonAsync($"/ArtikelLieferant/artikel/{artikelId}/lieferanten/{lieferantId}", updateDto);
         
         // Assert
         if (response.IsSuccessStatusCode)
@@ -216,7 +215,7 @@ public class ArtikelLieferantControllerTests : IClassFixture<CustomWebApplicatio
         var lieferantId = 1;
         
         // Act
-        var response = await client.PatchAsync($"/api/artikel/{artikelId}/lieferanten/{lieferantId}/deactivate", null);
+        var response = await client.PatchAsync($"/ArtikelLieferant/artikel/{artikelId}/lieferanten/{lieferantId}/deactivate", null);
         
         // Assert
         if (response.IsSuccessStatusCode)
@@ -224,7 +223,7 @@ public class ArtikelLieferantControllerTests : IClassFixture<CustomWebApplicatio
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             
             // Überprüfen, ob die Beziehung nun inaktiv ist
-            var checkResponse = await client.GetAsync($"/api/artikel/{artikelId}/lieferanten");
+            var checkResponse = await client.GetAsync($"/ArtikelLieferant/artikel/{artikelId}/lieferanten");
             checkResponse.EnsureSuccessStatusCode();
             var lieferanten = await checkResponse.Content.ReadFromJsonAsync<List<ArtikelLieferantDto>>();
             var deaktivierteBeziehung = lieferanten?.FirstOrDefault(l => l.LieferantId == lieferantId && !l.IstAktiv);
@@ -249,7 +248,7 @@ public class ArtikelLieferantControllerTests : IClassFixture<CustomWebApplicatio
         var suchbegriff = "Test"; // Anpassen nach Ihren Testdaten
         
         // Act
-        var response = await client.GetAsync($"/api/artikel/{artikelId}/lieferanten/search?suchbegriff={suchbegriff}");
+        var response = await client.GetAsync($"/ArtikelLieferant/artikel/{artikelId}/lieferanten/search?suchbegriff={suchbegriff}");
         
         // Assert
         response.EnsureSuccessStatusCode();
@@ -268,7 +267,7 @@ public class ArtikelLieferantControllerTests : IClassFixture<CustomWebApplicatio
         var lieferantId = 1;
         
         // Act
-        var response = await client.GetAsync($"/api/lieferanten/{lieferantId}/artikel");
+        var response = await client.GetAsync($"/ArtikelLieferant/lieferanten/{lieferantId}/artikel");
         
         // Assert
         response.EnsureSuccessStatusCode();

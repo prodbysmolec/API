@@ -1,11 +1,11 @@
-/Users/lukasschmolz/Repos/API/Artikelsystem.Shared/bin/Debug/net9.0/Artikelsystem.Shared.deps.json
-/Users/lukasschmolz/Repos/API/Artikelsystem.Shared/bin/Debug/net9.0/Artikelsystem.Shared.dll
-/Users/lukasschmolz/Repos/API/Artikelsystem.Shared/bin/Debug/net9.0/Artikelsystem.Shared.pdb
 /Users/lukasschmolz/Repos/API/Artikelsystem.Shared/obj/Debug/net9.0/Artikelsystem.Shared.GeneratedMSBuildEditorConfig.editorconfig
 /Users/lukasschmolz/Repos/API/Artikelsystem.Shared/obj/Debug/net9.0/Artikelsystem.Shared.AssemblyInfoInputs.cache
 /Users/lukasschmolz/Repos/API/Artikelsystem.Shared/obj/Debug/net9.0/Artikelsystem.Shared.AssemblyInfo.cs
 /Users/lukasschmolz/Repos/API/Artikelsystem.Shared/obj/Debug/net9.0/Artikelsystem.Shared.csproj.CoreCompileInputs.cache
 /Users/lukasschmolz/Repos/API/Artikelsystem.Shared/obj/Debug/net9.0/Artikelsystem.Shared.sourcelink.json
+/Users/lukasschmolz/Repos/API/Artikelsystem.Shared/bin/Debug/net9.0/Artikelsystem.Shared.deps.json
+/Users/lukasschmolz/Repos/API/Artikelsystem.Shared/bin/Debug/net9.0/Artikelsystem.Shared.dll
+/Users/lukasschmolz/Repos/API/Artikelsystem.Shared/bin/Debug/net9.0/Artikelsystem.Shared.pdb
 /Users/lukasschmolz/Repos/API/Artikelsystem.Shared/obj/Debug/net9.0/Artikelsystem.Shared.dll
 /Users/lukasschmolz/Repos/API/Artikelsystem.Shared/obj/Debug/net9.0/refint/Artikelsystem.Shared.dll
 /Users/lukasschmolz/Repos/API/Artikelsystem.Shared/obj/Debug/net9.0/Artikelsystem.Shared.pdb

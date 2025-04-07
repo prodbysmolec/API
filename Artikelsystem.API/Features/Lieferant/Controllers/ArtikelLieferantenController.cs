@@ -1,6 +1,7 @@
 using System;
 using Artikelsystem.Api.Features.Lieferant.Models.DTOs;
 using Artikelsystem.Api.Features.Lieferant.Services;
+using Artikelsystem.API.Features.Lieferant.Services;
 using Artikelsystem.API.Shared.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +11,11 @@ namespace Artikelsystem.Api.Features.Lieferant.Controllers;
 
 public class ArtikelLieferantController : BaseController
 {
-    private readonly ArtikelLieferantService _service;
+    private readonly IArtikelLieferantService _service;
     private readonly ILogger<ArtikelLieferantController> _logger;
 
     public ArtikelLieferantController(
-        ArtikelLieferantService service,
+        IArtikelLieferantService service,
         ILogger<ArtikelLieferantController> logger)
     {
         _logger = logger;

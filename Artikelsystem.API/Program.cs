@@ -1,10 +1,11 @@
 using Artikelsystem.Api.Features.Employees.Models.Entitys;
 using Artikelsystem.Api.Features.Inventur.Services;
-using Artikelsystem.Api.Features.Lieferant.Repositories;
+using Artikelsystem.Api.Features.Lieferant.Services;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Artikelsystem.Api.Infrastructure.Persistence.Repositories;
 using Artikelsystem.Api.Infrastructure.Persistence.Seeding;
 using Artikelsystem.Api.Shared.Validators;
+using Artikelsystem.API.Features.Lieferant.Services;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Internal;
@@ -31,8 +32,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 #region Services DI
-builder.Services.AddScoped<ILieferantRepository, LieferantRepository>();
 builder.Services.AddScoped<IInventurService, InventurService>();
+builder.Services.AddScoped<IArtikelLieferantService, ArtikelLieferantService>();
+builder.Services.AddScoped<ILieferantService, LieferantService>();
 #endregion
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddProblemDetails();
