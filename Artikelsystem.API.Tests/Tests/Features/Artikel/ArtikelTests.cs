@@ -34,7 +34,7 @@ public class ArtikelTests : IClassFixture<CustomWebApplicationFactory>
         var response = await client.GetAsync($"/artikel/{existingId}");
 
         // Assert
-        response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode); // expliziter Check
         var artikel = await response.Content.ReadFromJsonAsync<GetArtikelResponse>();
         Assert.NotNull(artikel);
         Assert.Equal(existingId, artikel.Id);

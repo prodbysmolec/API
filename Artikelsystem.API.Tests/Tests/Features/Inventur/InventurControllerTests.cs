@@ -265,6 +265,9 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
         // Arrange
         var client = _factory.CreateClient();
 
+        await LoescheAlleInventuren(client);
+
+
         // 1. Inventur erstellen
         var createRequest = new CreateInventurRequest
         {
