@@ -12,6 +12,7 @@ using Artikelsystem.Api.Features.Inventur.Models.Enums;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Artikelsystem.Api.Infrastructure.Persistence.Seeding;
 
@@ -30,6 +31,25 @@ public static class SeedData
 
         var currentUser = "prodbysmolec";
 
+        SeedEmployees(context);
+        SeedBenefits(context);
+        SeedProduktkategorien(context);
+        SeedArtikelGruppen(context);
+        SeedZusatzFelder(context);
+        SeedZusatzWerte(context);
+        SeedArtikelgruppeZusatzfelder(context);
+        SeedArtikelData(context, currentDateTime, currentUser);
+        SeedArtikelStatistiken(context, currentDateTime, currentUser);
+        SeedArtikelZusatzwerte(context, currentDateTime, currentUser);
+        SeedWareneingaenge(context, currentDateTime, currentUser);
+        SeedWarenausganege(context, currentDateTime, currentUser);   
+        SeedInventuren(context, currentDateTime, currentUser); 
+        SeedLieferanten(context);
+        SeedArtikelLieferant(context, currentDateTime, currentUser);
+    }
+
+    private static void SeedEmployees(AppDbContext context)
+    {
         if (!context.Employees.Any())
         {
             var employees = new List<Employee>
@@ -64,7 +84,11 @@ public static class SeedData
             context.Employees.AddRange(employees);
             context.SaveChanges();
         }
+    }
 
+    private static void SeedBenefits(AppDbContext context)
+    {
+        
         if (!context.Benefits.Any())
         {
             var benefits = new List<Benefit>
@@ -77,7 +101,7 @@ public static class SeedData
             context.Benefits.AddRange(benefits);
             context.SaveChanges();
 
-            // Besorge IDs
+            // Besorge IDs 
             var healthBenefit = context.Benefits.FirstOrDefault(b => b.Name == "Health");
             var dentalBenefit = context.Benefits.FirstOrDefault(b => b.Name == "Dental");
             var visionBenefit = context.Benefits.FirstOrDefault(b => b.Name == "Vision");
@@ -119,9 +143,11 @@ public static class SeedData
                 }
             }
         }
+    }
 
-        // Seed Produktkategorien
-        if (!context.Set<Produktkategorie>().Any())
+    private static void SeedProduktkategorien(AppDbContext context)
+    {
+        if (!context.Produktkategorie.Any())
         {
             var kategorien = new List<Produktkategorie>
             {
@@ -145,9 +171,12 @@ public static class SeedData
             context.Set<Produktkategorie>().AddRange(kategorien);
             context.SaveChanges();
         }
+    }
 
+    private static void SeedArtikelGruppen(AppDbContext context)
+    {
         // Seed Artikelgruppen
-        if (!context.Set<Artikelgruppe>().Any())
+        if (!context.Artikelgruppe.Any())
         {
             var elektronik = context.Set<Produktkategorie>().FirstOrDefault(p => p.Name == "Elektronik");
             var bekleidung = context.Set<Produktkategorie>().FirstOrDefault(p => p.Name == "Bekleidung");
@@ -183,9 +212,11 @@ public static class SeedData
                 context.SaveChanges();
             }
         }
+    }
 
-        // Seed Zusatzfelder
-        if (!context.Set<Zusatzfeld>().Any())
+    private static void SeedZusatzFelder(AppDbContext context)
+    {
+        if (!context.Zusatzfeld.Any())
         {
             var zusatzfelder = new List<Zusatzfeld>
             {
@@ -202,9 +233,11 @@ public static class SeedData
             context.Set<Zusatzfeld>().AddRange(zusatzfelder);
             context.SaveChanges();
         }
+    }
 
-        // Seed Zusatzwerte
-        if (!context.Set<Zusatzwert>().Any())
+    private static void SeedZusatzWerte(AppDbContext context)
+    {
+        if (!context.Zusatzwert.Any())
         {
             // Farben
             var farbe = context.Set<Zusatzfeld>().FirstOrDefault(z => z.Name == "Farbe");
@@ -307,9 +340,12 @@ public static class SeedData
                 context.SaveChanges();
             }
         }
+    }
 
+    private static void SeedArtikelgruppeZusatzfelder(AppDbContext context)
+    {
         // Verknüpfe Artikelgruppen mit Zusatzfeldern
-        if (!context.Set<ArtikelgruppeZusatzfelder>().Any())
+        if (!context.ArtikelgruppeZusatzfelder.Any())
         {
             var computerGruppe = context.Set<Artikelgruppe>().FirstOrDefault(a => a.Name == "Computer");
             var peripherieGruppe = context.Set<Artikelgruppe>().FirstOrDefault(a => a.Name == "Peripheriegeräte");
@@ -352,7 +388,10 @@ public static class SeedData
                 context.SaveChanges();
             }
         }
+    }
 
+    private static void SeedArtikelData(AppDbContext context, DateTime currentDateTime, string currentUser)
+    {
         // Seed Artikel data if none exists
         List<Artikel> artikelList = new List<Artikel>();
         if (!context.Artikel.Any())
@@ -473,34 +512,46 @@ public static class SeedData
                     LastModifiedBy = currentUser
                 }
             };
-
             context.Artikel.AddRange(artikelList);
             context.SaveChanges();
+        }
+    }
 
-            // Create statistics for each article
-            var artikelStatistikList = new List<ArtikelStatistik>();
-            foreach (var artikel in artikelList)
+    private static void SeedArtikelStatistiken(AppDbContext context, DateTime currentDateTime, string currentUser)
+    {
+        List<Artikel> artikelList = context.Artikel.ToList();
+        if(!context.ArtikelStatistiken.Any())
             {
-                var statistik = new ArtikelStatistik
+                var artikelStatistikList = new List<ArtikelStatistik>();
+                foreach (var artikel in artikelList)
                 {
-                    ArtikelId = artikel.Id,
-                    Gesamtmenge = artikel.Menge,
-                    DurchschnittlicherEinzelpreis = artikel.Preis * 0.7m, // Annahme: Einkaufspreis ist 70% des Verkaufspreises
-                    DurchschnittlicherVerkaufspreis = artikel.Preis,
-                    VerkaufsMenge = 0,
-                    Lagerwert = artikel.Menge * (artikel.Preis * 0.7m),
-                    GesamtVerkaufswert = 0,
-                    CreatedOn = currentDateTime,
-                    CreatedBy = currentUser,
-                    LastModifiedOn = currentDateTime,
-                    LastModifiedBy = currentUser
-                };
-                artikelStatistikList.Add(statistik);
+                    var statistik = new ArtikelStatistik
+                    {
+                        ArtikelId = artikel.Id,
+                        Gesamtmenge = artikel.Menge,
+                        DurchschnittlicherEinzelpreis = artikel.Preis * 0.7m, // Annahme: Einkaufspreis ist 70% des Verkaufspreises
+                        DurchschnittlicherVerkaufspreis = artikel.Preis,
+                        VerkaufsMenge = 0,
+                        Lagerwert = artikel.Menge * (artikel.Preis * 0.7m),
+                        GesamtVerkaufswert = 0,
+                        CreatedOn = currentDateTime,
+                        CreatedBy = currentUser,
+                        LastModifiedOn = currentDateTime,
+                        LastModifiedBy = currentUser
+                    };
+                    artikelStatistikList.Add(statistik);
+                }
+
+                context.ArtikelStatistiken.AddRange(artikelStatistikList);
+                context.SaveChanges();
             }
+    }
 
-            context.ArtikelStatistiken.AddRange(artikelStatistikList);
-            context.SaveChanges();
-
+    private static void SeedArtikelZusatzwerte(AppDbContext context, DateTime currentDateTime, string currentUser)
+    {
+        List<Artikel> artikelList = context.Artikel.ToList();
+        if(!context.ArtikelZusatzWert.Any())
+            {
             // Zusatzwerte zu Artikeln hinzufügen
             var schwarz = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "Schwarz");
             var weiß = context.Set<Zusatzwert>().FirstOrDefault(z => z.Wert == "Weiß");
@@ -594,60 +645,13 @@ public static class SeedData
                 context.SaveChanges();
             }
         }
-        else
-        {
-            artikelList = context.Artikel.ToList();
-        }
+    }  
 
-        if (!context.Lieferanten.Any())
-        {
-            var lieferanten = new List<Lieferant>
-            {
-                new Lieferant
-                {
-                    Firma = "TechSupply GmbH",
-                    Name = "Müller",
-                    Vorname = "Thomas",
-                    EmailAdresse = "t.mueller@techsupply.de",
-                    Strasse = "Industrieweg",
-                    Hausnummer = "42",
-                    PLZ = "10115",
-                    Ort = "Berlin",
-                    Telefonnummer = "030-12345678",
-                    Notizen = "Bevorzugter Lieferant für IT-Ausrüstung"
-                },
-                new Lieferant
-                {
-                    Firma = "Office Solutions AG",
-                    Name = "Schmidt",
-                    Vorname = "Anna",
-                    EmailAdresse = "a.schmidt@officesolutions.de",
-                    Strasse = "Büroallee",
-                    Hausnummer = "15",
-                    PLZ = "60313",
-                    Ort = "Frankfurt",
-                    Telefonnummer = "069-87654321",
-                    Notizen = "Liefert zuverlässig Büroartikel"
-                },
-                new Lieferant
-                {
-                    Firma = "ElectronicWholesale KG",
-                    Name = "Wagner",
-                    Vorname = "Michael",
-                    EmailAdresse = "m.wagner@electronic-wholesale.de",
-                    Strasse = "Elektronikstraße",
-                    Hausnummer = "7",
-                    PLZ = "80331",
-                    Ort = "München",
-                    Telefonnummer = "089-11223344",
-                    Notizen = "Spezialist für elektronische Bauteile",
-                }
-            };
-
-            context.Lieferanten.AddRange(lieferanten);
-            context.SaveChanges();
-        }
-
+    private static void SeedWareneingaenge(AppDbContext context, DateTime currentDateTime, string currentUser)
+    {
+        List<Artikel> artikelList = context.Artikel.ToList();
+        if(artikelList == null)
+            return;
         if (!context.Wareneingaenge.Any())
         {
             // Erstelle zwei Wareneingänge mit jeweils unterschiedlichen Artikelpositionen
@@ -729,7 +733,13 @@ public static class SeedData
             context.Set<WareneingangArtikelPositionen>().AddRange(positionen2);
             context.SaveChanges();
         }
+    }
 
+    private static void SeedWarenausganege(AppDbContext context, DateTime currentDateTime, string currentUser)
+    {
+        List<Artikel> artikelList = context.Artikel.ToList();
+        if(artikelList == null)
+            return;
         if (!context.Warenausgaenge.Any())
         {
             // Erstelle zwei Warenausgänge
@@ -807,7 +817,13 @@ public static class SeedData
             context.Set<WarenausgangArtikelPositionen>().AddRange(positionen2);
             context.SaveChanges();
         }
+    }
 
+    private static void SeedInventuren(AppDbContext context, DateTime currentDateTime, string currentUser)
+    {
+        List<Artikel> artikelList = context.Artikel.ToList();
+        if(artikelList == null)
+            return;
         // Seed für Inventuren
         if (!context.Inventuren.Any())
         {
@@ -879,4 +895,120 @@ public static class SeedData
             context.SaveChanges();
         }
     }
+
+    private static void SeedLieferanten(AppDbContext context)
+    {
+        if (!context.Lieferanten.Any())
+        {
+            var lieferanten = new List<Lieferant>
+            {
+                new Lieferant
+                {
+                    Firma = "TechSupply GmbH",
+                    Name = "Müller",
+                    Vorname = "Thomas",
+                    EmailAdresse = "t.mueller@techsupply.de",
+                    Strasse = "Industrieweg",
+                    Hausnummer = "42",
+                    PLZ = "10115",
+                    Ort = "Berlin",
+                    Telefonnummer = "030-12345678",
+                    Notizen = "Bevorzugter Lieferant für IT-Ausrüstung"
+                },
+                new Lieferant
+                {
+                    Firma = "Office Solutions AG",
+                    Name = "Schmidt",
+                    Vorname = "Anna",
+                    EmailAdresse = "a.schmidt@officesolutions.de",
+                    Strasse = "Büroallee",
+                    Hausnummer = "15",
+                    PLZ = "60313",
+                    Ort = "Frankfurt",
+                    Telefonnummer = "069-87654321",
+                    Notizen = "Liefert zuverlässig Büroartikel"
+                },
+                new Lieferant
+                {
+                    Firma = "ElectronicWholesale KG",
+                    Name = "Wagner",
+                    Vorname = "Michael",
+                    EmailAdresse = "m.wagner@electronic-wholesale.de",
+                    Strasse = "Elektronikstraße",
+                    Hausnummer = "7",
+                    PLZ = "80331",
+                    Ort = "München",
+                    Telefonnummer = "089-11223344",
+                    Notizen = "Spezialist für elektronische Bauteile",
+                }
+            };
+            context.Lieferanten.AddRange(lieferanten);
+            context.SaveChanges();
+        }
+    }
+
+    private static void SeedArtikelLieferant(AppDbContext context, DateTime currentDateTime, string currentUser)
+    {
+        if (!context.ArtikelLieferanten.Any())
+        {
+            var artikelList = context.Artikel.ToList();
+            var lieferanten = context.Lieferanten.ToList();
+
+            var techSupply = lieferanten.FirstOrDefault(l => l.Firma == "TechSupply GmbH");
+            var officeSolutions = lieferanten.FirstOrDefault(l => l.Firma == "Office Solutions AG");
+            var electronicWholesale = lieferanten.FirstOrDefault(l => l.Firma == "ElectronicWholesale KG");
+
+            var artikelLieferanten = new List<ArtikelLieferant>();
+
+            foreach (var artikel in artikelList)
+            {
+                Lieferant? zugeordneterLieferant = null;
+
+                if (artikel.Name.Contains("Laptop", StringComparison.OrdinalIgnoreCase)
+                    || artikel.Name.Contains("Notebook", StringComparison.OrdinalIgnoreCase)
+                    || artikel.Name.Contains("Computer", StringComparison.OrdinalIgnoreCase))
+                {
+                    zugeordneterLieferant = techSupply;
+                }
+                else if (artikel.Name.Contains("Tastatur", StringComparison.OrdinalIgnoreCase)
+                    || artikel.Name.Contains("Maus", StringComparison.OrdinalIgnoreCase)
+                    || artikel.Name.Contains("Monitor", StringComparison.OrdinalIgnoreCase)
+                    || artikel.Name.Contains("USB", StringComparison.OrdinalIgnoreCase))
+                {
+                    zugeordneterLieferant = officeSolutions;
+                }
+                else
+                {
+                    zugeordneterLieferant = electronicWholesale;
+                }
+
+                if (zugeordneterLieferant != null)
+                {
+                    var einkaufspreis = Math.Round(artikel.Preis * 0.7m, 2); // 70% vom Verkaufspreis
+
+                    artikelLieferanten.Add(new ArtikelLieferant
+                    {
+                        ArtikelId = artikel.Id,
+                        LieferantId = zugeordneterLieferant.Id,
+                        Einkaufspreis = einkaufspreis,
+                        Mindestbestellmenge = 5,
+                        Lieferzeit = 7,
+                        ArtikelNrBeimLieferanten = $"L-{zugeordneterLieferant.Id}-A-{artikel.Id}",
+                        IstAktiv = true,
+                        IstPrimaerLieferant = true,
+                        GueltigVon = currentDateTime.AddMonths(-1),
+                        GueltigBis = null,
+                        CreatedOn = currentDateTime,
+                        CreatedBy = currentUser,
+                        LastModifiedOn = currentDateTime,
+                        LastModifiedBy = currentUser
+                    });
+                }
+            }
+
+            context.ArtikelLieferanten.AddRange(artikelLieferanten);
+            context.SaveChanges();
+        }
+    }
+
 }
