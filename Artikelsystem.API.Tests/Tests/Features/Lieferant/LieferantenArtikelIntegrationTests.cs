@@ -36,8 +36,8 @@ namespace Artikelsystem.Tests.Integration
             var testArtikel = new Artikel
             {
                 Name = "Test Artikel",
-                CreatedBy = "Test",
-                CreatedOn = DateTime.Now,
+                ErstelltVon = "Test",
+                ErstelltAm = DateTime.Now,
                 Maximalbestand = 20,
                 Mindestbestand = 10,
             };

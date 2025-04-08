@@ -8,9 +8,9 @@ public class WarenausgangDto
     public int Id { get; set; }
     public string? AllgemeineBemerkungen { get; set; }
     public required WarenausgangZweckEnum Zweck { get; set; } = 0;
-    public DateTime CreatedOn { get; set; }
-    public DateTime UpdatedOn { get; set; }
-    public string? CreatedBy { get; set; } = "";
-    public string? UpdatedBy { get; set; } = "";
+    public DateTime ErstelltAm { get; set; }
+    public DateTime BearbeitetAm { get; set; }
+    public string? ErstelltVon { get; set; } = "";
+    public string? BearbeitetVon { get; set; } = "";
     public virtual List<WarenausgangArtikelPositionenDto> ArtikelPositionen { get; set; } = new List<WarenausgangArtikelPositionenDto>();
 }

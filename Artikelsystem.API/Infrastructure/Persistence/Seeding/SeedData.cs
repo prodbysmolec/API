@@ -525,10 +525,10 @@ public static class SeedData
                     Maximalbestand = 50,
                     Menge = 25,
                     Status = ArtikelStatus.Verfügbar,
-                    CreatedOn = currentDateTime,
-                    CreatedBy = currentUser,
-                    LastModifiedOn = currentDateTime,
-                    LastModifiedBy = currentUser
+                    ErstelltAm = currentDateTime,
+                    ErstelltVon = currentUser,
+                    BearbeitetAm = currentDateTime,
+                    BearbeitetVon = currentUser
                 },
                 new Artikel
                 {
@@ -538,10 +538,10 @@ public static class SeedData
                     Maximalbestand = 30,
                     Menge = 15,
                     Status = ArtikelStatus.Verfügbar,
-                    CreatedOn = currentDateTime,
-                    CreatedBy = currentUser,
-                    LastModifiedOn = currentDateTime,
-                    LastModifiedBy = currentUser
+                    ErstelltAm = currentDateTime,
+                    ErstelltVon = currentUser,
+                    BearbeitetAm = currentDateTime,
+                    BearbeitetVon = currentUser
                 },
                 
                 // Peripherie
@@ -553,10 +553,10 @@ public static class SeedData
                     Maximalbestand = 100,
                     Menge = 45,
                     Status = ArtikelStatus.Verfügbar,
-                    CreatedOn = currentDateTime,
-                    CreatedBy = currentUser,
-                    LastModifiedOn = currentDateTime,
-                    LastModifiedBy = currentUser
+                    ErstelltAm = currentDateTime,
+                    ErstelltVon = currentUser,
+                    BearbeitetAm = currentDateTime,
+                    BearbeitetVon = currentUser
                 },
                 new Artikel
                 {
@@ -566,10 +566,10 @@ public static class SeedData
                     Maximalbestand = 80,
                     Menge = 30,
                     Status = ArtikelStatus.Verfügbar,
-                    CreatedOn = currentDateTime,
-                    CreatedBy = currentUser,
-                    LastModifiedOn = currentDateTime,
-                    LastModifiedBy = currentUser
+                    ErstelltAm = currentDateTime,
+                    ErstelltVon = currentUser,
+                    BearbeitetAm = currentDateTime,
+                    BearbeitetVon = currentUser
                 },
                 new Artikel
                 {
@@ -579,10 +579,10 @@ public static class SeedData
                     Maximalbestand = 30,
                     Menge = 12,
                     Status = ArtikelStatus.Verfügbar,
-                    CreatedOn = currentDateTime,
-                    CreatedBy = currentUser,
-                    LastModifiedOn = currentDateTime,
-                    LastModifiedBy = currentUser
+                    ErstelltAm = currentDateTime,
+                    ErstelltVon = currentUser,
+                    BearbeitetAm = currentDateTime,
+                    BearbeitetVon = currentUser
                 },
                 new Artikel
                 {
@@ -592,10 +592,10 @@ public static class SeedData
                     Maximalbestand = 200,
                     Menge = 75,
                     Status = ArtikelStatus.Verfügbar,
-                    CreatedOn = currentDateTime,
-                    CreatedBy = currentUser,
-                    LastModifiedOn = currentDateTime,
-                    LastModifiedBy = currentUser
+                    ErstelltAm = currentDateTime,
+                    ErstelltVon = currentUser,
+                    BearbeitetAm = currentDateTime,
+                    BearbeitetVon = currentUser
                 },
                 
                 // T-Shirts
@@ -607,10 +607,10 @@ public static class SeedData
                     Maximalbestand = 150,
                     Menge = 100,
                     Status = ArtikelStatus.Verfügbar,
-                    CreatedOn = currentDateTime,
-                    CreatedBy = currentUser,
-                    LastModifiedOn = currentDateTime,
-                    LastModifiedBy = currentUser
+                    ErstelltAm = currentDateTime,
+                    ErstelltVon = currentUser,
+                    BearbeitetAm = currentDateTime,
+                    BearbeitetVon = currentUser
                 },
                 new Artikel
                 {
@@ -620,10 +620,10 @@ public static class SeedData
                     Maximalbestand = 100,
                     Menge = 50,
                     Status = ArtikelStatus.Verfügbar,
-                    CreatedOn = currentDateTime,
-                    CreatedBy = currentUser,
-                    LastModifiedOn = currentDateTime,
-                    LastModifiedBy = currentUser
+                    ErstelltAm = currentDateTime,
+                    ErstelltVon = currentUser,
+                    BearbeitetAm = currentDateTime,
+                    BearbeitetVon = currentUser
                 }
             };
             context.Artikel.AddRange(artikelList);
@@ -648,10 +648,10 @@ public static class SeedData
                         VerkaufsMenge = 0,
                         Lagerwert = artikel.Menge * (artikel.Preis * 0.7m),
                         GesamtVerkaufswert = 0,
-                        CreatedOn = currentDateTime,
-                        CreatedBy = currentUser,
-                        LastModifiedOn = currentDateTime,
-                        LastModifiedBy = currentUser
+                        ErstelltAm = currentDateTime,
+                        ErstelltVon = currentUser,
+                        BearbeitetAm = currentDateTime,
+                        BearbeitetVon = currentUser
                     };
                     artikelStatistikList.Add(statistik);
                 }
@@ -773,20 +773,20 @@ public static class SeedData
             {
                 Gesamtpreis = 850.0m,
                 AllgemeineBemerkungen = "Standardlieferung vom Hauptlieferanten",
-                CreatedOn = currentDateTime.AddDays(-14),
-                CreatedBy = currentUser,
-                LastModifiedOn = currentDateTime.AddDays(-14),
-                LastModifiedBy = currentUser
+                ErstelltAm = currentDateTime.AddDays(-14),
+                ErstelltVon = currentUser,
+                BearbeitetAm = currentDateTime.AddDays(-14),
+                BearbeitetVon = currentUser
             };
 
             var wareneingang2 = new Wareneingaenge
             {
                 Gesamtpreis = 1200.0m,
                 AllgemeineBemerkungen = "Dringende Nachbestellung",
-                CreatedOn = currentDateTime.AddDays(-5),
-                CreatedBy = currentUser,
-                LastModifiedOn = currentDateTime.AddDays(-5),
-                LastModifiedBy = currentUser
+                ErstelltAm = currentDateTime.AddDays(-5),
+                ErstelltVon = currentUser,
+                BearbeitetAm = currentDateTime.AddDays(-5),
+                BearbeitetVon = currentUser
             };
 
             context.Wareneingaenge.Add(wareneingang1);
@@ -860,20 +860,20 @@ public static class SeedData
             var warenausgang1 = new Warenausgaenge
             {
                 AllgemeineBemerkungen = "Bestellung für IT-Abteilung",
-                CreatedOn = currentDateTime.AddDays(-10),
-                CreatedBy = currentUser,
-                LastModifiedOn = currentDateTime.AddDays(-10),
-                LastModifiedBy = currentUser,
+                ErstelltAm = currentDateTime.AddDays(-10),
+                ErstelltVon = currentUser,
+                BearbeitetAm = currentDateTime.AddDays(-10),
+                BearbeitetVon = currentUser,
                 Zweck = WarenausgangZweckEnum.Bestellung
             };
 
             var warenausgang2 = new Warenausgaenge
             {
                 AllgemeineBemerkungen = "Verkauf an externen Kunden",
-                CreatedOn = currentDateTime.AddDays(-3),
-                CreatedBy = currentUser,
-                LastModifiedOn = currentDateTime.AddDays(-3),
-                LastModifiedBy = currentUser,
+                ErstelltAm = currentDateTime.AddDays(-3),
+                ErstelltVon = currentUser,
+                BearbeitetAm = currentDateTime.AddDays(-3),
+                BearbeitetVon = currentUser,
                 Zweck = WarenausgangZweckEnum.KooperationspartnerOesterreich
             };
 
@@ -945,10 +945,10 @@ public static class SeedData
                 AbschlussDatum = currentDateTime.AddDays(-28),
                 Status = InventurStatus.Abgeschlossen,
                 Bemerkung = "Reguläre Jahresinventur",
-                CreatedBy = currentUser,
-                CreatedOn = currentDateTime.AddDays(-30),
-                LastModifiedBy = currentUser,
-                LastModifiedOn = currentDateTime.AddDays(-28)
+                ErstelltVon = currentUser,
+                ErstelltAm = currentDateTime.AddDays(-30),
+                BearbeitetVon = currentUser,
+                BearbeitetAm = currentDateTime.AddDays(-28)
             };
 
             var inventur2 = new Inventur
@@ -957,10 +957,10 @@ public static class SeedData
                 StartDatum = currentDateTime.AddDays(-1),
                 Status = InventurStatus.InBearbeitung,
                 Bemerkung = "Überprüfung der Lagerbestände",
-                CreatedBy = currentUser,
-                CreatedOn = currentDateTime.AddDays(-2),
-                LastModifiedBy = currentUser,
-                LastModifiedOn = currentDateTime.AddDays(-1)
+                ErstelltVon = currentUser,
+                ErstelltAm = currentDateTime.AddDays(-2),
+                BearbeitetVon = currentUser,
+                BearbeitetAm = currentDateTime.AddDays(-1)
             };
 
             context.Inventuren.Add(inventur1);
@@ -979,10 +979,10 @@ public static class SeedData
                 IstGeprueft = true,
                 DifferenzWert = (item.Id % 3 == 0 || item.Id % 4 == 0) ? (item.Menge + (item.Id % 3 == 0 ? 2 : -1)) * item.Preis : 0,
                 Bemerkung = (item.Id % 3 == 0 || item.Id % 4 == 0) ? "Abweichung festgestellt" : "Bestand korrekt",
-                CreatedBy = currentUser,
-                CreatedOn = currentDateTime.AddDays(-30),
-                LastModifiedBy = currentUser,
-                LastModifiedOn = currentDateTime.AddDays(-29)
+                ErstelltVon = currentUser,
+                ErstelltAm = currentDateTime.AddDays(-30),
+                BearbeitetVon = currentUser,
+                BearbeitetAm = currentDateTime.AddDays(-29)
             }).ToList();
 
             var positionen2 = artikelList.Select(item => new InventurPosition
@@ -994,10 +994,10 @@ public static class SeedData
                 IstGeprueft = item.Id % 2 == 0,
                 DifferenzWert = (item.Id % 2 == 0 && item.Menge + (item.Id % 5 == 0 ? 1 : 0) != item.Menge) ? (item.Menge + (item.Id % 5 == 0 ? 1 : 0) - item.Menge) * item.Preis : null,
                 Bemerkung = item.Id % 2 == 0 ? "Bereits gezählt" : null,
-                CreatedBy = currentUser,
-                CreatedOn = currentDateTime.AddDays(-1),
-                LastModifiedBy = currentUser,
-                LastModifiedOn = item.Id % 2 == 0 ? currentDateTime.AddHours(-2) : currentDateTime.AddDays(-1)
+                ErstelltVon = currentUser,
+                ErstelltAm = currentDateTime.AddDays(-1),
+                BearbeitetVon = currentUser,
+                BearbeitetAm = item.Id % 2 == 0 ? currentDateTime.AddHours(-2) : currentDateTime.AddDays(-1)
             }).ToList();
 
             context.InventurPositionen.AddRange(positionen1);
@@ -1108,10 +1108,10 @@ public static class SeedData
                         IstPrimaerLieferant = true,
                         GueltigVon = currentDateTime.AddMonths(-1),
                         GueltigBis = null,
-                        CreatedOn = currentDateTime,
-                        CreatedBy = currentUser,
-                        LastModifiedOn = currentDateTime,
-                        LastModifiedBy = currentUser
+                        ErstelltAm = currentDateTime,
+                        ErstelltVon = currentUser,
+                        BearbeitetAm = currentDateTime,
+                        BearbeitetVon = currentUser
                     });
                 }
             }

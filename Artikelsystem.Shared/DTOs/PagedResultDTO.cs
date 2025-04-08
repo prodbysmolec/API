@@ -1,0 +1,11 @@
+using System;
+
+namespace Artikelsystem.Shared.DTOs;
+
+public class PagedResultDTO<T> where T : class
+{
+    public int TotalCount { get; set; }
+    public int PageSize { get; set; }
+    public int PageNumber { get; set; }
+    public List<T> Items { get; set; } = new List<T>();
+}

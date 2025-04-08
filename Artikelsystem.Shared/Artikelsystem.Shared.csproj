@@ -10,6 +10,7 @@
     <Folder Include="Constants/" />
     <Folder Include="DTOs/User/Responses/" />
     <Folder Include="DTOs/Warenausgang/Dtos/Request/" />
+    <Folder Include="DTOs/Warenausgang/Validations/" />
     <Folder Include="DTOs/Wareneingang/Dtos/Request/" />
     <Folder Include="Enums/" />
   </ItemGroup>

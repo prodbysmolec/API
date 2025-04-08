@@ -49,10 +49,10 @@ public class InventurService : IInventurService
             StartDatum = DateTime.UtcNow,
             Status = InventurStatus.Erstellt,
             Bemerkung = request.Bemerkung,
-            CreatedBy = request.ErstelltVon,
-            CreatedOn = DateTime.UtcNow,
-            LastModifiedBy = request.ErstelltVon,
-            LastModifiedOn = DateTime.UtcNow
+            ErstelltVon = request.ErstelltVon,
+            ErstelltAm = DateTime.UtcNow,
+            BearbeitetVon = request.ErstelltVon,
+            BearbeitetAm = DateTime.UtcNow
         };
 
         _dbContext.Inventuren.Add(inventur);
@@ -93,7 +93,7 @@ public class InventurService : IInventurService
 
         // Status aktualisieren
         inventur.Status = InventurStatus.InBearbeitung;
-        inventur.LastModifiedOn = DateTime.UtcNow;
+        inventur.BearbeitetAm = DateTime.UtcNow;
 
         // IDs der existierenden Positionen abrufen
         var existierendeArtikelIds = new HashSet<int>(await _dbContext.InventurPositionen
@@ -116,10 +116,10 @@ public class InventurService : IInventurService
                     ArtikelId = artikel.Id,
                     //Artikel = artikel,
                     Menge = artikel.Menge,
-                    CreatedOn = DateTime.UtcNow,
-                    CreatedBy = inventur.LastModifiedBy,
-                    LastModifiedOn = DateTime.UtcNow,
-                    LastModifiedBy = inventur.LastModifiedBy
+                    ErstelltAm = DateTime.UtcNow,
+                    ErstelltVon = inventur.BearbeitetVon,
+                    BearbeitetAm = DateTime.UtcNow,
+                    BearbeitetVon = inventur.BearbeitetVon
                 };
 
                 neueArtikelPositionen.Add(neuePosition);
@@ -226,8 +226,8 @@ public class InventurService : IInventurService
         position.GezaehlteMenge = request.GezaehlteMenge;
         position.IstGeprueft = request.IstGeprueft;
         position.Bemerkung = request.Bemerkung;
-        position.LastModifiedOn = DateTime.UtcNow;
-        position.LastModifiedBy = request.BearbeitetVon;
+        position.BearbeitetAm = DateTime.UtcNow;
+        position.BearbeitetVon = request.BearbeitetVon;
 
         // Differenzwert berechnen
         if (position.GezaehlteMenge.HasValue && position.Artikel != null)
@@ -359,10 +359,10 @@ public class InventurService : IInventurService
             Erstellungsdatum = DateTime.UtcNow,
             GesamtDifferenzWert = gesamtDifferenzWert,
             AnzahlPositionenMitDifferenz = positionenMitDifferenz.Count,
-            CreatedBy = benutzer,
-            CreatedOn = DateTime.UtcNow,
-            LastModifiedBy = benutzer,
-            LastModifiedOn = DateTime.UtcNow
+            ErstelltVon = benutzer,
+            ErstelltAm = DateTime.UtcNow,
+            BearbeitetVon = benutzer,
+            BearbeitetAm = DateTime.UtcNow
         };
 
         _dbContext.InventurBerichte.Add(bericht);
@@ -396,10 +396,10 @@ public class InventurService : IInventurService
                 Differenz = p.Differenz,
                 DifferenzWert = p.DifferenzWert,
                 Bemerkung = p.Bemerkung,
-                CreatedBy = p.CreatedBy,
-                CreatedOn = p.CreatedOn,
-                LastModifiedBy = p.LastModifiedBy,
-                LastModifiedOn = p.LastModifiedOn
+                ErstelltVon = p.ErstelltVon,
+                ErstelltAm = p.ErstelltAm,
+                BearbeitetVon = p.BearbeitetVon,
+                BearbeitetAm = p.BearbeitetAm
             }).ToList() ?? new List<InventurPositionDto>()
         };
 
@@ -469,16 +469,16 @@ public class InventurService : IInventurService
                     if (differenz != 0)
                     {
                         artikel.Menge = neueBestandsmenge;
-                        artikel.LastModifiedOn = DateTime.UtcNow;
-                        artikel.LastModifiedBy = inventur.LastModifiedBy;
+                        artikel.BearbeitetAm = DateTime.UtcNow;
+                        artikel.BearbeitetVon = inventur.BearbeitetVon;
 
                         // Auch die ArtikelStatistik aktualisieren, falls vorhanden
                         if (artikel.ArtikelStatistik != null)
                         {
                             artikel.ArtikelStatistik.Gesamtmenge = neueBestandsmenge;
                             artikel.ArtikelStatistik.Lagerwert = neueBestandsmenge * artikel.ArtikelStatistik.DurchschnittlicherEinzelpreis;
-                            artikel.ArtikelStatistik.LastModifiedOn = DateTime.UtcNow;
-                            artikel.ArtikelStatistik.LastModifiedBy = inventur.LastModifiedBy;
+                            artikel.ArtikelStatistik.BearbeitetAm = DateTime.UtcNow;
+                            artikel.ArtikelStatistik.BearbeitetVon = inventur.BearbeitetVon;
                         }
 
                         // Historischen Eintrag erstellen
@@ -506,10 +506,10 @@ public class InventurService : IInventurService
             // Inventur abschließen
             inventur.Status = InventurStatus.Abgeschlossen;
             inventur.AbschlussDatum = DateTime.UtcNow;
-            inventur.LastModifiedOn = DateTime.UtcNow;
+            inventur.BearbeitetAm = DateTime.UtcNow;
 
             // Inventurbericht erstellen
-            await GenerateInventurBericht(inventurId, inventur.LastModifiedBy ?? "System");
+            await GenerateInventurBericht(inventurId, inventur.BearbeitetVon ?? "System");
 
             _dbContext.Entry(inventur).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
@@ -539,10 +539,10 @@ public class InventurService : IInventurService
             InventurBezeichnung = bericht.Inventur?.Bezeichnung,
             InventurStartDatum = bericht.Inventur?.StartDatum ?? DateTime.MinValue,
             InventurAbschlussDatum = bericht.Inventur?.AbschlussDatum,
-            CreatedBy = bericht.CreatedBy,
-            CreatedOn = bericht.CreatedOn,
-            LastModifiedBy = bericht.LastModifiedBy,
-            LastModifiedOn = bericht.LastModifiedOn
+            ErstelltVon = bericht.ErstelltVon,
+            ErstelltAm = bericht.ErstelltAm,
+            BearbeitetVon = bericht.BearbeitetVon,
+            BearbeitetAm = bericht.BearbeitetAm
         };
     }
 
@@ -560,10 +560,10 @@ public class InventurService : IInventurService
             Differenz = position.Differenz,
             DifferenzWert = position.DifferenzWert,
             Bemerkung = position.Bemerkung,
-            CreatedBy = position.CreatedBy,
-            CreatedOn = position.CreatedOn,
-            LastModifiedBy = position.LastModifiedBy,
-            LastModifiedOn = position.LastModifiedOn
+            ErstelltVon = position.ErstelltVon,
+            ErstelltAm = position.ErstelltAm,
+            BearbeitetVon = position.BearbeitetVon,
+            BearbeitetAm = position.BearbeitetAm
         };
     }
 }

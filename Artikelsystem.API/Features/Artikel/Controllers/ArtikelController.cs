@@ -171,10 +171,10 @@ public class ArtikelController : BaseController
             {
                 Id = w.Warenausgang.Id,
                 AllgemeineBemerkungen = w.Warenausgang.AllgemeineBemerkungen ?? "",
-                CreatedOn = w.Warenausgang.CreatedOn,
-                UpdatedOn = w.Warenausgang.LastModifiedOn,
-                CreatedBy = w.Warenausgang.CreatedBy,
-                UpdatedBy = w.Warenausgang.LastModifiedBy,
+                ErstelltAm = w.Warenausgang.ErstelltAm,
+                BearbeitetAm = w.Warenausgang.BearbeitetAm,
+                ErstelltVon = w.Warenausgang.ErstelltVon,
+                BearbeitetVon = w.Warenausgang.BearbeitetVon,
                 Zweck = w.Warenausgang.Zweck
             } : null
         });
@@ -397,10 +397,10 @@ public class ArtikelController : BaseController
                     {
                         Id = w.Warenausgang.Id,
                         AllgemeineBemerkungen = w.Warenausgang.AllgemeineBemerkungen ?? "",
-                        CreatedOn = w.Warenausgang.CreatedOn,
-                        UpdatedOn = w.Warenausgang.LastModifiedOn,
-                        CreatedBy = w.Warenausgang.CreatedBy,
-                        UpdatedBy = w.Warenausgang.LastModifiedBy,
+                        ErstelltAm = w.Warenausgang.ErstelltAm,
+                        BearbeitetAm = w.Warenausgang.BearbeitetAm,
+                        ErstelltVon = w.Warenausgang.ErstelltVon,
+                        BearbeitetVon = w.Warenausgang.BearbeitetVon,
                         Zweck = w.Warenausgang.Zweck
                     } : null
                 }).ToList();

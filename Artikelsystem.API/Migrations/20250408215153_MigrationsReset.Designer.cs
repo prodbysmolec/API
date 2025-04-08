@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
+namespace Artikelsystem.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250407232758_UserGruppen")]
-    partial class UserGruppen
+    [Migration("20250408215153_MigrationsReset")]
+    partial class MigrationsReset
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,8 +49,11 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UserGruppenId")
-                        .HasColumnType("integer");
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -101,24 +104,24 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("BearbeitetAm")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("BearbeitetVon")
+                        .HasColumnType("text");
+
                     b.Property<byte[]>("Bild")
                         .IsRequired()
                         .HasColumnType("bytea");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("ErstelltAm")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ErstelltVon")
+                        .HasColumnType("text");
 
                     b.Property<bool>("HistorischGesetzt")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Maximalbestand")
                         .HasColumnType("integer");
@@ -193,17 +196,23 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<int>("ArtikelId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("BearbeitetAm")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("BearbeitetVon")
+                        .HasColumnType("text");
 
                     b.Property<decimal>("DurchschnittlicherEinzelpreis")
                         .HasColumnType("numeric");
 
                     b.Property<decimal>("DurchschnittlicherVerkaufspreis")
                         .HasColumnType("numeric");
+
+                    b.Property<DateTime>("ErstelltAm")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ErstelltVon")
+                        .HasColumnType("text");
 
                     b.Property<decimal>("GesamtVerkaufswert")
                         .ValueGeneratedOnAddOrUpdate()
@@ -217,12 +226,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("numeric")
                         .HasComputedColumnSql("\"Gesamtmenge\" * \"DurchschnittlicherEinzelpreis\"", true);
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("VerkaufsMenge")
                         .HasColumnType("integer");
@@ -243,12 +246,7 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<int>("ZusatzwertId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ArtikelId1")
-                        .HasColumnType("integer");
-
                     b.HasKey("ArtikelId", "ZusatzwertId");
-
-                    b.HasIndex("ArtikelId1");
 
                     b.HasIndex("ZusatzwertId");
 
@@ -397,27 +395,27 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<string>("Address2")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("BearbeitetAm")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("BearbeitetVon")
+                        .HasColumnType("text");
+
                     b.Property<string>("City")
                         .HasColumnType("text");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("ErstelltAm")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("ErstelltVon")
                         .HasColumnType("text");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -478,6 +476,12 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("AbschlussDatum")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime>("BearbeitetAm")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("BearbeitetVon")
+                        .HasColumnType("text");
+
                     b.Property<string>("Bemerkung")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
@@ -487,17 +491,11 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("ErstelltAm")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("LastModifiedBy")
+                    b.Property<string>("ErstelltVon")
                         .HasColumnType("text");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("StartDatum")
                         .HasColumnType("timestamp with time zone");
@@ -521,11 +519,17 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<int>("AnzahlPositionenMitDifferenz")
                         .HasColumnType("integer");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<DateTime>("BearbeitetAm")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("BearbeitetVon")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("ErstelltAm")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ErstelltVon")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Erstellungsdatum")
                         .HasColumnType("timestamp with time zone");
@@ -539,12 +543,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("InventurId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Titel")
                         .IsRequired()
@@ -568,19 +566,25 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<int>("ArtikelId")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("BearbeitetAm")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("BearbeitetVon")
+                        .HasColumnType("text");
+
                     b.Property<string>("Bemerkung")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<decimal?>("DifferenzWert")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
+
+                    b.Property<DateTime>("ErstelltAm")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ErstelltVon")
+                        .HasColumnType("text");
 
                     b.Property<int?>("GezaehlteMenge")
                         .HasColumnType("integer");
@@ -590,12 +594,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
 
                     b.Property<bool>("IstGeprueft")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Menge")
                         .HasColumnType("integer");
@@ -623,14 +621,20 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<string>("ArtikelNrBeimLieferanten")
                         .HasColumnType("text");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("BearbeitetAm")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("BearbeitetVon")
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Einkaufspreis")
                         .HasColumnType("numeric");
+
+                    b.Property<DateTime>("ErstelltAm")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ErstelltVon")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("GueltigBis")
                         .HasColumnType("timestamp with time zone");
@@ -643,12 +647,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
 
                     b.Property<bool>("IstPrimaerLieferant")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("LieferantId")
                         .HasColumnType("integer");
@@ -735,22 +733,21 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("BearbeitetAm")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("LastModifiedBy")
+                    b.Property<string>("BearbeitetVon")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("LastModifiedOn")
+                    b.Property<DateTime>("ErstelltAm")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Mitarbeiter")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<string>("ErstelltVon")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Zweck")
+                        .HasColumnType("integer")
+                        .HasColumnName("Zweck");
 
                     b.HasKey("Id");
 
@@ -790,9 +787,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Property<int>("WarenausgangId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Zweck")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ArtikelId");
@@ -814,21 +808,21 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<DateTime>("BearbeitetAm")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("BearbeitetVon")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("ErstelltAm")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ErstelltVon")
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Gesamtpreis")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -922,21 +916,21 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelZusatzWert", b =>
                 {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", null)
-                        .WithMany()
+                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
+                        .WithMany("ArtikelZusatzWerte")
                         .HasForeignKey("ArtikelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", null)
-                        .WithMany("ArtikelZusatzWerte")
-                        .HasForeignKey("ArtikelId1");
-
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzwert", null)
-                        .WithMany()
+                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzwert", "Zusatzwert")
+                        .WithMany("ArtikelZusatzwerte")
                         .HasForeignKey("ZusatzwertId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Artikel");
+
+                    b.Navigation("Zusatzwert");
                 });
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikelgruppe", b =>
@@ -1122,6 +1116,11 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Navigation("ArtikelGruppeZusatzFelder");
 
                     b.Navigation("ZusatzWerte");
+                });
+
+            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzwert", b =>
+                {
+                    b.Navigation("ArtikelZusatzwerte");
                 });
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Employees.Models.Entitys.Employee", b =>

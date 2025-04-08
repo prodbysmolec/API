@@ -103,14 +103,14 @@ public class AppDbContext : DbContext
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedBy = "TheCreateUser";
-                entry.Entity.CreatedOn = _systemClock.UtcNow.UtcDateTime;
+                entry.Entity.ErstelltVon = "TheCreateUser";
+                entry.Entity.ErstelltAm = _systemClock.UtcNow.UtcDateTime;
             }
 
             if (entry.State == EntityState.Modified)
             {
-                entry.Entity.LastModifiedBy = "TheUpdateUser";
-                entry.Entity.LastModifiedOn = _systemClock.UtcNow.UtcDateTime;
+                entry.Entity.BearbeitetVon = "TheUpdateUser";
+                entry.Entity.BearbeitetAm = _systemClock.UtcNow.UtcDateTime;
             }
         }
     }

@@ -9,6 +9,7 @@ using Artikelsystem.Api.Infrastructure.Persistence.Seeding;
 using Artikelsystem.Api.Shared.Validators;
 using Artikelsystem.API.Features.Authentication.Services;
 using Artikelsystem.API.Features.Lieferant.Services;
+using Artikelsystem.API.Features.Warenausgang.Service;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +55,7 @@ builder.Services.AddScoped<IInventurService, InventurService>();
 builder.Services.AddScoped<IArtikelLieferantService, ArtikelLieferantService>();
 builder.Services.AddScoped<ILieferantService, LieferantService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IWarenausgangService, WarenausgangService>();
 #endregion
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddProblemDetails();

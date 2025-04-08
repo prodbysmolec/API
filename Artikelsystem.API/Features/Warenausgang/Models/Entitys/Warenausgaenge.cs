@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Artikelsystem.Api.Models;
 using Artikelsystem.Shared.DTOs.Warenausgang.Enums;
 
@@ -7,9 +8,8 @@ namespace Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
 public class Warenausgaenge : AuditableEntity
 {
     public int Id { get; set; }
-
-    // Allgemeine Bemerkungen zum Warenausgang
     public string? AllgemeineBemerkungen { get; set; }
+    [Column("Zweck")]
     public required WarenausgangZweckEnum Zweck { get; set; } = 0;
 
     // Navigation Property

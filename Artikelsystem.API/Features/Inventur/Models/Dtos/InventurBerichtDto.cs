@@ -19,8 +19,8 @@ public class InventurBerichtDto
     public DateTime? InventurAbschlussDatum { get; set; }
 
     // Audit-Informationen
-    public string? CreatedBy { get; set; }
-    public DateTime CreatedOn { get; set; }
-    public string? LastModifiedBy { get; set; }
-    public DateTime LastModifiedOn { get; set; }
+    public string? ErstelltVon { get; set; }
+    public DateTime ErstelltAm { get; set; }
+    public string? BearbeitetVon { get; set; }
+    public DateTime BearbeitetAm { get; set; }
 }

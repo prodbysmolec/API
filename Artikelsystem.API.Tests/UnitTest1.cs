@@ -117,7 +117,7 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var employee = await db.Employees.FindAsync(1);
         Assert.Equal("123 Main Smoot", employee?.Address1);
-        Assert.Equal("TheUpdateUser", employee?.LastModifiedBy);
+        Assert.Equal("TheUpdateUser", employee?.BearbeitetVon);
     }
 
     [Fact]
