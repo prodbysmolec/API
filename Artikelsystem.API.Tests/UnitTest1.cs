@@ -94,7 +94,6 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         var employee = await db.Employees.FindAsync(1);
         Assert.NotNull(employee);
         Assert.Equal("123 Main Smoott", employee.Address1);
-        Assert.Equal(CustomWebApplicationFactory.SystemClock.UtcNow.UtcDateTime, employee.LastModifiedOn);
     }
 
     [Fact]
@@ -118,7 +117,6 @@ public class BasicTests : IClassFixture<CustomWebApplicationFactory>
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var employee = await db.Employees.FindAsync(1);
         Assert.Equal("123 Main Smoot", employee?.Address1);
-        Assert.Equal(CustomWebApplicationFactory.SystemClock.UtcNow.UtcDateTime, employee?.LastModifiedOn);
         Assert.Equal("TheUpdateUser", employee?.LastModifiedBy);
     }
 

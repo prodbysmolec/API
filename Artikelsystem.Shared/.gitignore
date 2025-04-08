@@ -16,7 +16,10 @@
 # Build outputs
 /bin/*
 /obj/*
+/bin
+/obj
 
+*.dll
 # Rider / VS Code
 .idea/
 .vscode/

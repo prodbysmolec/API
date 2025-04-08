@@ -25,7 +25,6 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
             migrationBuilder.DropColumn(
                 name: "ArtikelId1",
                 table: "ArtikelZusatzWert");
-
         }
 
         /// <inheritdoc />
