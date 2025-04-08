@@ -13,6 +13,8 @@ using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
 using Artikelsystem.Api.Features.Warenausgang.Configurations;
 using Artikelsystem.Api.Features.Inventur.Models.Entitys;
 using Artikelsystem.Api.Features.Inventur.Configuration;
+using Artikelsystem.API.Features.Authentication.Models.Entitys;
+using Artikelsystem.API.Features.Authentication.Configuration;
 
 
 namespace Artikelsystem.Api.Infrastructure.Persistence.Context;
@@ -48,6 +50,9 @@ public class AppDbContext : DbContext
     public DbSet<InventurBerichte> InventurBerichte { get; set; }
     public DbSet<ArtikelInventurHistorie> ArtikelInventurHistorie { get; set; }
     public DbSet<ArtikelLieferant> ArtikelLieferanten { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<UserGruppen> UserGruppen { get; set; }
+    public DbSet<UserGruppenUser> UserGruppenUsers { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -73,12 +78,9 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ZusatzwertConfiguration());
         modelBuilder.ApplyConfiguration(new InventurConfiguration());
         modelBuilder.ApplyConfiguration(new InventurPositionConfiguration());
-
-
-
-
-
-
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new UserGruppenConfiguration());
+        modelBuilder.ApplyConfiguration(new UserGruppenUserConfiguration());
     }
 
     public override int SaveChanges()

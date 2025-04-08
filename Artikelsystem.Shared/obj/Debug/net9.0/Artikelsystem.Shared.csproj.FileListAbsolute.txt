@@ -10,3 +10,4 @@
 /Users/lukasschmolz/Repos/API/Artikelsystem.Shared/obj/Debug/net9.0/refint/Artikelsystem.Shared.dll
 /Users/lukasschmolz/Repos/API/Artikelsystem.Shared/obj/Debug/net9.0/Artikelsystem.Shared.pdb
 /Users/lukasschmolz/Repos/API/Artikelsystem.Shared/obj/Debug/net9.0/ref/Artikelsystem.Shared.dll
+/Users/lukasschmolz/Repos/API/Artikelsystem.Shared/obj/Debug/net9.0/Artikelsystem.Shared.csproj.AssemblyReference.cache

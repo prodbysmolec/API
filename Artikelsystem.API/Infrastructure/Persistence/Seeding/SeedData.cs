@@ -13,6 +13,7 @@ using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Artikelsystem.API.Features.Authentication.Models.Entitys;
 
 namespace Artikelsystem.Api.Infrastructure.Persistence.Seeding;
 
@@ -46,6 +47,118 @@ public static class SeedData
         SeedInventuren(context, currentDateTime, currentUser); 
         SeedLieferanten(context);
         SeedArtikelLieferant(context, currentDateTime, currentUser);
+        SeedUsers(context);
+    }
+
+    private static void SeedUsers(AppDbContext context)
+    {
+        // Wenn noch keine UserGruppen existieren, erstelle diese
+        if (!context.UserGruppen.Any())
+        {
+            var userGruppen = new List<UserGruppen>
+            {
+                new UserGruppen { Name = "Admin" },
+                new UserGruppen { Name = "User" },
+                new UserGruppen { Name = "Manager" }
+            };
+
+            context.UserGruppen.AddRange(userGruppen);
+            context.SaveChanges();
+        }
+
+        // Wenn noch keine User existieren, erstelle diese
+        if (!context.Users.Any())
+        {
+            var users = new List<User>
+            {
+                new User
+                {
+                    UserName = "admin",
+                    PasswordHash = "", // Wird später gesetzt
+                    Name = "Admin",
+                    Nachname = "User",
+                    Email = "admin@example.com"
+                },
+                new User
+                {
+                    UserName = "user",
+                    PasswordHash = "", // Wird später gesetzt
+                    Name = "Normal",
+                    Nachname = "Benutzer",
+                    Email = "benutzer@example.com"
+                },
+                new User
+                {
+                    UserName = "manager",
+                    PasswordHash = "", // Wird später gesetzt
+                    Name = "Manager",
+                    Nachname = "Nutzer",
+                    Email = "manager@example.com"
+                }
+            };
+
+            // Passwort für jeden Benutzer hashen
+            var passwordHasher = new Microsoft.AspNetCore.Identity.PasswordHasher<User>();
+            foreach (var user in users)
+            {
+                user.PasswordHash = passwordHasher.HashPassword(user, "12345");
+            }
+
+            context.Users.AddRange(users);
+            context.SaveChanges();
+        }
+
+        // Wenn noch keine UserGruppenUser existieren, erstelle diese
+        if (!context.Set<UserGruppenUser>().Any())
+        {
+            // Hole IDs für die vorhandenen UserGruppen
+            var adminGruppe = context.UserGruppen.FirstOrDefault(g => g.Name == "Admin");
+            var userGruppe = context.UserGruppen.FirstOrDefault(g => g.Name == "User");
+            var managerGruppe = context.UserGruppen.FirstOrDefault(g => g.Name == "Manager");
+
+            // Hole IDs für die vorhandenen User
+            var adminUser = context.Users.FirstOrDefault(u => u.UserName == "admin");
+            var normalUser = context.Users.FirstOrDefault(u => u.UserName == "benutzer");
+            var managerUser = context.Users.FirstOrDefault(u => u.UserName == "manager");
+
+            if (adminGruppe != null && userGruppe != null && managerGruppe != null &&
+                adminUser != null && normalUser != null && managerUser != null)
+            {
+                var userGruppenUsers = new List<UserGruppenUser>
+                {
+                    // Admin gehört zur Admin-Gruppe
+                    new UserGruppenUser
+                    {
+                        UserID = adminUser.Id,
+                        UserGruppenID = adminGruppe.Id
+                    },
+                    
+                    // Normaler Benutzer gehört zur User-Gruppe
+                    new UserGruppenUser
+                    {
+                        UserID = normalUser.Id,
+                        UserGruppenID = userGruppe.Id
+                    },
+                    
+                    // Manager gehört zur Manager-Gruppe
+                    new UserGruppenUser
+                    {
+                        UserID = managerUser.Id,
+                        UserGruppenID = managerGruppe.Id
+                    },
+                    
+                    // Admin gehört auch zur User-Gruppe
+                    new UserGruppenUser
+                    {
+                        UserID = adminUser.Id,
+                        UserGruppenID = userGruppe.Id
+                    }
+                };
+
+                context.Set<UserGruppenUser>().AddRange(userGruppenUsers);
+                context.SaveChanges();
+            }
+        }
     }
 
     private static void SeedEmployees(AppDbContext context)

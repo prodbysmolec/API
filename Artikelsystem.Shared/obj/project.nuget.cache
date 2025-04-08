@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "g+cDgcXXXSQ=",
+  "dgSpecHash": "pYr5O/TiDUs=",
   "success": true,
   "projectFilePath": "/Users/lukasschmolz/Repos/API/Artikelsystem.Shared/Artikelsystem.Shared.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/lukasschmolz/.nuget/packages/fluentvalidation/12.0.0-preview1/fluentvalidation.12.0.0-preview1.nupkg.sha512"
+  ],
   "logs": []
 }

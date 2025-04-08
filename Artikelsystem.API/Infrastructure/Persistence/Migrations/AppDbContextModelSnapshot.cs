@@ -17,10 +17,81 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.14")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Artikelsystem.API.Features.Authentication.Models.Entitys.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Nachname")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Artikelsystem.API.Features.Authentication.Models.Entitys.UserGruppen", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserGruppen");
+                });
+
+            modelBuilder.Entity("Artikelsystem.API.Features.Authentication.Models.Entitys.UserGruppenUser", b =>
+                {
+                    b.Property<int>("UserID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserGruppenID")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserID", "UserGruppenID");
+
+                    b.HasIndex("UserGruppenID");
+
+                    b.ToTable("UserGruppenUsers");
+                });
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", b =>
                 {
@@ -800,6 +871,25 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.ToTable("WareneingangArtikelPositionen", (string)null);
                 });
 
+            modelBuilder.Entity("Artikelsystem.API.Features.Authentication.Models.Entitys.UserGruppenUser", b =>
+                {
+                    b.HasOne("Artikelsystem.API.Features.Authentication.Models.Entitys.UserGruppen", "UserGruppen")
+                        .WithMany("UserGruppenUsers")
+                        .HasForeignKey("UserGruppenID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Artikelsystem.API.Features.Authentication.Models.Entitys.User", "User")
+                        .WithMany("UserGruppenUsers")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("UserGruppen");
+                });
+
             modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelInventurHistorie", b =>
                 {
                     b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
@@ -990,6 +1080,16 @@ namespace Artikelsystem.API.Infrastructure.Persistence.Migrations
                     b.Navigation("Artikel");
 
                     b.Navigation("Wareneingang");
+                });
+
+            modelBuilder.Entity("Artikelsystem.API.Features.Authentication.Models.Entitys.User", b =>
+                {
+                    b.Navigation("UserGruppenUsers");
+                });
+
+            modelBuilder.Entity("Artikelsystem.API.Features.Authentication.Models.Entitys.UserGruppen", b =>
+                {
+                    b.Navigation("UserGruppenUsers");
                 });
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", b =>
