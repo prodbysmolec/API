@@ -13,13 +13,13 @@ public class ArtikelZusatzWertConfiguration : IEntityTypeConfiguration<ArtikelZu
         builder.HasKey(azw => new { azw.ArtikelId, azw.ZusatzwertId });
 
         // Many zu Many zwischen Artikel und Zusatzwert
-        builder.HasOne<Models.Entitys.Artikel>()
-            .WithMany()
+        builder.HasOne(azw => azw.Artikel)
+            .WithMany(a => a.ArtikelZusatzWerte)
             .HasForeignKey(azw => azw.ArtikelId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne<Zusatzwert>()
-            .WithMany()
+        builder.HasOne(azw => azw.Zusatzwert)
+            .WithMany(a => a.ArtikelZusatzwerte)
             .HasForeignKey(az => az.ZusatzwertId)
             .OnDelete(DeleteBehavior.Cascade);
     }

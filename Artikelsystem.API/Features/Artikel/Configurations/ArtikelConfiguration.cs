@@ -18,7 +18,7 @@ public class ArtikelConfiguration : IEntityTypeConfiguration<Models.Entitys.Arti
 
         builder
             .HasMany(a => a.ArtikelZusatzWerte)
-            .WithOne()
+            .WithOne(azw => azw.Artikel)
             .HasForeignKey(az => az.ArtikelId);
     }
 }

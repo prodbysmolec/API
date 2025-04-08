@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../Artikelsystem.Api/Artikelsystem.Api.csproj" />
+    <ProjectReference Include="../Artikelsystem.Shared/Artikelsystem.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

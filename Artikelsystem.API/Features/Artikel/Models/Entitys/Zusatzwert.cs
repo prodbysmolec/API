@@ -9,4 +9,5 @@ public class Zusatzwert
     public int ZusatzFeldID { get; set; }
     public Zusatzfeld ZusatzFeld { get; set; } = null!;
     public bool IsChecked { get; set; }
+    public virtual ICollection<ArtikelZusatzWert> ArtikelZusatzwerte { get; set; } = new List<ArtikelZusatzWert>();
 }

@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Artikelsystem.Api.Features.Artikel.Models.DTOs;
 using Artikelsystem.Api.Features.Lieferant.Models.DTOs;
 using Artikelsystem.API.Features.Lieferant.Models.DTOs.Request;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
@@ -17,6 +16,7 @@ using System.Text;
 using Artikelsystem.Api.Features.Artikel.Models.Entitys;
 using Artikelsystem.Api.Features.Lieferant.Controllers;
 using Artikelsystem.API.Tests;
+using Artikelsystem.Shared.DTOs.Artikel.Response;
 
 namespace Artikelsystem.Tests.Integration
 {
@@ -148,11 +148,11 @@ namespace Artikelsystem.Tests.Integration
             // Get the existing artikel and lieferant to use for the update test
             var artikelResponse = await client.GetAsync("/Artikel");
             var artikelContent = await artikelResponse.Content.ReadFromJsonAsync<List<ArtikelDto>>();
-            var testArtikelId = artikelContent[0].Id;
+            var testArtikelId = artikelContent?[0].Id;
             
             var lieferantenResponse = await client.GetAsync("/Lieferanten");
             var lieferantenContent = await lieferantenResponse.Content.ReadFromJsonAsync<List<LieferantDto>>();
-            var lieferantId = lieferantenContent[0].Id;
+            var lieferantId = lieferantenContent?[0].Id;
             
             // Update the ArtikelLieferant relationship
             var updateRequest = new ArtikelLieferantUpdateDto
@@ -187,7 +187,7 @@ namespace Artikelsystem.Tests.Integration
             getResponse.EnsureSuccessStatusCode();
             
             var getContent = await getResponse.Content.ReadFromJsonAsync<List<ArtikelLieferantDto>>();
-            var updated = getContent.FirstOrDefault(l => l.LieferantId == lieferantId);
+            var updated = getContent?.FirstOrDefault(l => l.LieferantId == lieferantId);
             Assert.NotNull(updated);
             Assert.Equal(updateRequest.Einkaufspreis, updated.Einkaufspreis);
             Assert.Equal(updateRequest.ArtikelNrBeimLieferanten, updated.ArtikelNrBeimLieferanten);
@@ -203,11 +203,11 @@ namespace Artikelsystem.Tests.Integration
         // Get the existing artikel and lieferant IDs
         var artikelResponse = await client.GetAsync("/Artikel");
         var artikelContent = await artikelResponse.Content.ReadFromJsonAsync<List<ArtikelDto>>();
-        var testArtikelId = artikelContent[0].Id;
+        var testArtikelId = artikelContent?[0].Id;
         
         var lieferantenResponse = await client.GetAsync("/Lieferanten");
         var lieferantenContent = await lieferantenResponse.Content.ReadFromJsonAsync<List<LieferantDto>>();
-        var lieferantId = lieferantenContent[0].Id;
+        var lieferantId = lieferantenContent?[0].Id;
         
         // First deactivate the relationship
         var deactivateResponse = await client.PatchAsync(

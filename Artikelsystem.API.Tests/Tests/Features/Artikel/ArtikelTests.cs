@@ -1,10 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
-using Artikelsystem.Api.Features.Artikel.Models.DTOs;
-using Artikelsystem.Api.Features.Employees.Enums;
-using Artikelsystem.Api.Features.Warenausgang.Models.DTOs.Responses;
-using Artikelsystem.Api.Features.Wareneingang.Models.DTOs.Requests;
 using Artikelsystem.API.Tests;
+using Artikelsystem.Shared.DTOs.Artikel.Enums;
+using Artikelsystem.Shared.DTOs.Artikel.Request;
+using Artikelsystem.Shared.DTOs.Artikel.Response;
+using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Responses;
+using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Response;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
@@ -157,7 +158,7 @@ public class ArtikelTests : IClassFixture<CustomWebApplicationFactory>
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var warenausgaenge = await response.Content.ReadFromJsonAsync<IEnumerable<WarenausgangArtikelPositionDto>>();
+        var warenausgaenge = await response.Content.ReadFromJsonAsync<IEnumerable<WarenausgangArtikelPositionenDto>>();
         Assert.NotNull(warenausgaenge);
         foreach (var warenausgang in warenausgaenge)
         {
@@ -195,7 +196,7 @@ public class ArtikelTests : IClassFixture<CustomWebApplicationFactory>
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var statistik = await response.Content.ReadFromJsonAsync<GetArtikelResponse.ArtikelStatistikDto>();
+        var statistik = await response.Content.ReadFromJsonAsync<ArtikelStatistikDto>();
         Assert.NotNull(statistik);
     }
 
@@ -238,7 +239,7 @@ public class ArtikelTests : IClassFixture<CustomWebApplicationFactory>
             // Überprüfen, ob eine Nachricht bezüglich fehlender Statistik enthalten ist
             if (!string.IsNullOrEmpty(content) && !content.Contains("null"))
             {
-                var statistik = await response.Content.ReadFromJsonAsync<GetArtikelResponse.ArtikelStatistikDto>();
+                var statistik = await response.Content.ReadFromJsonAsync<ArtikelStatistikDto>();
                 // Hier könnte man prüfen, ob alle Werte 0 oder default sind
                 Assert.NotNull(statistik);
             }
@@ -264,7 +265,7 @@ public class ArtikelTests : IClassFixture<CustomWebApplicationFactory>
         // Dann separat die Statistik holen
         var statistikResponse = await client.GetAsync($"/artikel/{existingId}/statistik");
         statistikResponse.EnsureSuccessStatusCode();
-        var statistik = await statistikResponse.Content.ReadFromJsonAsync<GetArtikelResponse.ArtikelStatistikDto>();
+        var statistik = await statistikResponse.Content.ReadFromJsonAsync<ArtikelStatistikDto>();
 
         // Assert - Die Daten sollten konsistent sein
         Assert.NotNull(artikel?.Statistik);
