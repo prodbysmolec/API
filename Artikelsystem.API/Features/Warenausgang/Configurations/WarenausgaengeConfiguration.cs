@@ -16,10 +16,7 @@ public class WarenausgaengeConfiguration : IEntityTypeConfiguration<Warenausgaen
 
         builder.Property(w => w.AllgemeineBemerkungen)
             .HasMaxLength(500);
-
-        builder.Property(w => w.Mitarbeiter)
-            .HasMaxLength(100);
-
+            
         // Beziehung zu den Positionen (1-zu-n)
         builder.HasMany(w => w.ArtikelPositionen)
                .WithOne(wp => wp.Warenausgang)

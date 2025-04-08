@@ -1,9 +1,10 @@
 using System;
-using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
+using Artikelsystem.Shared.DTOs.Artikel.Response;
+using Artikelsystem.Shared.DTOs.Warenausgang.Enums;
 
-namespace Artikelsystem.Api.Features.Warenausgang.Models.DTOs.Responses;
+namespace Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Responses;
 
-public class WarenausgangArtikelPositionDto
+public class WarenausgangArtikelPositionenDto
 {
     public int Id { get; set; }
     public int WarenausgangId { get; set; }
@@ -17,4 +18,5 @@ public class WarenausgangArtikelPositionDto
     public string Rechnungsnummer { get; set; } = "";
     public decimal? Gesamtpreis { get; set; }
     public required WarenausgangDto? Warenausgang { get; set; }
+
 }

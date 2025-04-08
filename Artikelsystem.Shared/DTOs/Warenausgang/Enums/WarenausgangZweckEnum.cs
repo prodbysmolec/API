@@ -1,4 +1,6 @@
-namespace Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
+using System;
+
+namespace Artikelsystem.Shared.DTOs.Warenausgang.Enums;
 
 public enum WarenausgangZweckEnum
 {

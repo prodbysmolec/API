@@ -8,13 +8,15 @@
 
   <ItemGroup>
     <Folder Include="Constants/" />
-    <Folder Include="DTOs/Artikel/Request/" />
     <Folder Include="DTOs/User/Responses/" />
+    <Folder Include="DTOs/Warenausgang/Dtos/Request/" />
+    <Folder Include="DTOs/Wareneingang/Dtos/Request/" />
     <Folder Include="Enums/" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.0.0-preview1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
   </ItemGroup>
 
 </Project>

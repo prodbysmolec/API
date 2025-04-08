@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Artikelsystem.Api.Features.Artikel.Models.Entitys;
-using Artikelsystem.Api.Features.Employees.Enums;
 using Artikelsystem.Api.Features.Employees.Models.Entitys;
 using Artikelsystem.Api.Features.Lieferant.Models.Entitys;
 using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
@@ -14,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Artikelsystem.API.Features.Authentication.Models.Entitys;
+using Artikelsystem.Shared.DTOs.Artikel.Enums;
+using Artikelsystem.Shared.DTOs.Warenausgang.Enums;
 
 namespace Artikelsystem.Api.Infrastructure.Persistence.Seeding;
 
@@ -858,22 +859,22 @@ public static class SeedData
             // Erstelle zwei Warenausgänge
             var warenausgang1 = new Warenausgaenge
             {
-                Mitarbeiter = "John Doe",
                 AllgemeineBemerkungen = "Bestellung für IT-Abteilung",
                 CreatedOn = currentDateTime.AddDays(-10),
                 CreatedBy = currentUser,
                 LastModifiedOn = currentDateTime.AddDays(-10),
-                LastModifiedBy = currentUser
+                LastModifiedBy = currentUser,
+                Zweck = WarenausgangZweckEnum.Bestellung
             };
 
             var warenausgang2 = new Warenausgaenge
             {
-                Mitarbeiter = "Jane Smith",
                 AllgemeineBemerkungen = "Verkauf an externen Kunden",
                 CreatedOn = currentDateTime.AddDays(-3),
                 CreatedBy = currentUser,
                 LastModifiedOn = currentDateTime.AddDays(-3),
-                LastModifiedBy = currentUser
+                LastModifiedBy = currentUser,
+                Zweck = WarenausgangZweckEnum.KooperationspartnerOesterreich
             };
 
             context.Warenausgaenge.Add(warenausgang1);
@@ -887,7 +888,6 @@ public static class SeedData
                 {
                     WarenausgangId = warenausgang1.Id,
                     ArtikelId = artikelList[0].Id, // Business Laptop
-                    Zweck = WarenausgangZweckEnum.Ausbildungskurs,
                     Menge = 2,
                     Bemerkung = "Neue Laptops für Entwickler"
                 },
@@ -895,7 +895,6 @@ public static class SeedData
                 {
                     WarenausgangId = warenausgang1.Id,
                     ArtikelId = artikelList[2].Id, // Maus
-                    Zweck = WarenausgangZweckEnum.Bestellung,
                     Menge = 2,
                     Bemerkung = "Mäuse für neue Laptops"
                 }
@@ -908,7 +907,6 @@ public static class SeedData
                 {
                     WarenausgangId = warenausgang2.Id,
                     ArtikelId = artikelList[4].Id, // Monitor
-                    Zweck = WarenausgangZweckEnum.Bestellung,
                     Menge = 1,
                     Verkaufspreis = 249.99m,
                     Gesamtpreis = 249.99m,
@@ -918,7 +916,6 @@ public static class SeedData
                 {
                     WarenausgangId = warenausgang2.Id,
                     ArtikelId = artikelList[5].Id, // USB-Stick
-                    Zweck = WarenausgangZweckEnum.Ausbildungskurs,
                     Menge = 5,
                     Verkaufspreis = 14.99m,
                     Gesamtpreis = 74.95m,

@@ -1,6 +1,6 @@
 using System;
 
-namespace Artikelsystem.Api.Features.Wareneingang.Models.DTOs.Requests;
+namespace Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Response;
 
 public class WareneingangArtikelPositionenDto
 {

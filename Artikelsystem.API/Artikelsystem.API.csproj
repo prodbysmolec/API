@@ -26,10 +26,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features/Artikel/Models/DTOs/" />
     <Folder Include="Features/Artikel/Validators/" />
+    <Folder Include="Features/Employees/Models/Enums/" />
     <Folder Include="Features/Lieferant/Validators/" />
     <Folder Include="Features/Veranstaltung/" />
     <Folder Include="Features/Warenausgang/Controllers/" />
+    <Folder Include="Features/Warenausgang/Validators/" />
+    <Folder Include="Features/Wareneingang/Models/DTOs/Requests/" />
   </ItemGroup>
 
   <ItemGroup>

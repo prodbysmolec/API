@@ -14,9 +14,6 @@ public class WarenausgangArtikelConfiguration : IEntityTypeConfiguration<Warenau
         builder.HasKey(p => p.Id);
         builder.Property(p => p.Id).UseIdentityColumn();
 
-        builder.Property(p => p.Zweck)
-            .IsRequired();
-
         builder.Property(p => p.Menge)
             .IsRequired();
 

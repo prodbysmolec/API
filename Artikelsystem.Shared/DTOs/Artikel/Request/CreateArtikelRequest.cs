@@ -1,7 +1,9 @@
-using Artikelsystem.Api.Features.Employees.Enums;
+using System;
+using Artikelsystem.Shared.DTOs.Artikel.Enums;
 using Microsoft.AspNetCore.Http;
 
-namespace Artikelsystem.Api.Features.Artikel.Models.DTOs;
+
+namespace Artikelsystem.Shared.DTOs.Artikel.Request;
 
 public class CreateArtikelRequest
 {
@@ -11,5 +13,5 @@ public class CreateArtikelRequest
     public required int Maximalbestand { get; set; }
     public int Menge { get; set; } = 0;
     public ArtikelStatus Status { get; set; } = ArtikelStatus.Verfügbar;
-    public IFormFile? BildFile { get; set; }
+    public IFormFile? Bild { get; set;}
 }

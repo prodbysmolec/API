@@ -1,10 +1,10 @@
 using System.Runtime.CompilerServices;
-using Artikelsystem.Api.Features.Artikel.Models.DTOs;
-using Artikelsystem.Api.Features.Employees.Enums;
-using Artikelsystem.Api.Features.Warenausgang.Models.DTOs.Responses;
-using Artikelsystem.Api.Features.Wareneingang.Models.DTOs.Requests;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Artikelsystem.API.Shared.Controllers;
+using Artikelsystem.Shared.DTOs.Artikel.Request;
+using Artikelsystem.Shared.DTOs.Artikel.Response;
+using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Responses;
+using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -141,7 +141,7 @@ public class ArtikelController : BaseController
     /// <param name="artikelId">The ID of the article</param>
     /// <returns>List of warehouse issues for the article</returns>
     [HttpGet("{artikelId:int}/warenausgaenge")]
-    [ProducesResponseType(typeof(IEnumerable<WarenausgangArtikelPositionDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<WarenausgangArtikelPositionenDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetWarenausgaengeForArtikel(int artikelId)
@@ -156,14 +156,12 @@ public class ArtikelController : BaseController
             return NotFound();
         }
 
-        var warenausgaenge = artikel.Warenausgaenge.Select(w => new WarenausgangArtikelPositionDto
+        var warenausgaenge = artikel.Warenausgaenge.Select(w => new WarenausgangArtikelPositionenDto
         {
             Id = w.Id,
             WarenausgangId = w.WarenausgangId,
             ArtikelId = w.ArtikelId,
             ArtikelName = w.Artikel?.Name ?? "",
-            Zweck = w.Zweck,
-            ZweckBezeichnung = w.Zweck.ToString(),
             Menge = w.Menge,
             Bemerkung = w.Bemerkung ?? "",
             Verkaufspreis = w.Verkaufspreis,
@@ -172,12 +170,12 @@ public class ArtikelController : BaseController
             Warenausgang = w.Warenausgang != null ? new WarenausgangDto
             {
                 Id = w.Warenausgang.Id,
-                Mitarbeiter = w.Warenausgang.Mitarbeiter,
                 AllgemeineBemerkungen = w.Warenausgang.AllgemeineBemerkungen ?? "",
                 CreatedOn = w.Warenausgang.CreatedOn,
                 UpdatedOn = w.Warenausgang.LastModifiedOn,
                 CreatedBy = w.Warenausgang.CreatedBy,
-                UpdatedBy = w.Warenausgang.LastModifiedBy
+                UpdatedBy = w.Warenausgang.LastModifiedBy,
+                Zweck = w.Warenausgang.Zweck
             } : null
         });
         return Ok(warenausgaenge);
@@ -189,7 +187,7 @@ public class ArtikelController : BaseController
     /// <param name="artikelId">The ID of the article</param>
     /// <returns>Statistics for the specified article</returns>
     [HttpGet("{artikelId:int}/statistik")]
-    [ProducesResponseType(typeof(GetArtikelResponse.ArtikelStatistikDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ArtikelStatistikDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetArtikelStatistik(int artikelId)
@@ -208,7 +206,7 @@ public class ArtikelController : BaseController
             return NotFound("No statistics available for this article");
         }
 
-        var statistik = new GetArtikelResponse.ArtikelStatistikDto
+        var statistik = new ArtikelStatistikDto
         {
             Gesamtmenge = artikel.ArtikelStatistik.Gesamtmenge,
             DurchschnittlicherEinzelpreis = artikel.ArtikelStatistik.DurchschnittlicherEinzelpreis,
@@ -367,7 +365,7 @@ public class ArtikelController : BaseController
     {
         if (artikel.ArtikelStatistik != null)
         {
-            response.Statistik = new GetArtikelResponse.ArtikelStatistikDto
+            response.Statistik = new ArtikelStatistikDto
             {
                 Gesamtmenge = artikel.ArtikelStatistik.Gesamtmenge,
                 DurchschnittlicherEinzelpreis = artikel.ArtikelStatistik.DurchschnittlicherEinzelpreis,
@@ -384,14 +382,12 @@ public class ArtikelController : BaseController
         if (artikel.Warenausgaenge != null)
         {
             response.WarenausgangArtikelPosition = artikel.Warenausgaenge
-                .Select(w => new WarenausgangArtikelPositionDto
+                .Select(w => new WarenausgangArtikelPositionenDto
                 {
                     Id = w.Id,
                     WarenausgangId = w.WarenausgangId,
                     ArtikelId = w.ArtikelId,
                     ArtikelName = w.Artikel?.Name ?? "",
-                    Zweck = w.Zweck,
-                    ZweckBezeichnung = w.Zweck.ToString(),
                     Menge = w.Menge,
                     Bemerkung = w.Bemerkung ?? "",
                     Verkaufspreis = w.Verkaufspreis,
@@ -400,12 +396,12 @@ public class ArtikelController : BaseController
                     Warenausgang = w.Warenausgang != null ? new WarenausgangDto
                     {
                         Id = w.Warenausgang.Id,
-                        Mitarbeiter = w.Warenausgang.Mitarbeiter,
                         AllgemeineBemerkungen = w.Warenausgang.AllgemeineBemerkungen ?? "",
                         CreatedOn = w.Warenausgang.CreatedOn,
                         UpdatedOn = w.Warenausgang.LastModifiedOn,
                         CreatedBy = w.Warenausgang.CreatedBy,
-                        UpdatedBy = w.Warenausgang.LastModifiedBy
+                        UpdatedBy = w.Warenausgang.LastModifiedBy,
+                        Zweck = w.Warenausgang.Zweck
                     } : null
                 }).ToList();
         }

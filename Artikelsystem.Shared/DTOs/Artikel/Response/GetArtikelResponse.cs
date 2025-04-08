@@ -1,11 +1,10 @@
 using System;
-using Artikelsystem.Api.Features.Employees.Enums;
-using Artikelsystem.Api.Features.Warenausgang.Models.DTOs.Responses;
-using Artikelsystem.Api.Features.Wareneingang.Models.DTOs.Requests;
-using Artikelsystem.Api.Features.Wareneingang.Models.Entitys;
+using Artikelsystem.Shared.DTOs.Artikel.Enums;
+using Artikelsystem.Shared.DTOs.Artikel.Response;
+using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Responses;
+using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Response;
 
-namespace Artikelsystem.Api.Features.Artikel.Models.DTOs;
-
+namespace Artikelsystem.Shared.DTOs.Artikel.Request;
 
 public class GetArtikelResponse
 {
@@ -35,18 +34,7 @@ public class GetArtikelResponse
     // Optional: Statistik-Informationen
     public ArtikelStatistikDto? Statistik { get; set; }
 
-    public List<WarenausgangArtikelPositionDto>? WarenausgangArtikelPosition { get; set; }
+    public List<WarenausgangArtikelPositionenDto>? WarenausgangArtikelPosition { get; set; }
     public List<WareneingangArtikelPositionenDto>? WareneingangArtikelPosition { get; set; }
 
-
-
-    public class ArtikelStatistikDto
-    {
-        public decimal Gesamtmenge { get; set; }
-        public decimal DurchschnittlicherEinzelpreis { get; set; }
-        public decimal DurchschnittlicherVerkaufspreis { get; set; }
-        public int VerkaufsMenge { get; set; }
-        public decimal Lagerwert { get; set; }
-        public decimal GesamtVerkaufswert { get; set; }
-    }
 }

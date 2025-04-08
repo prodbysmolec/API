@@ -1,4 +1,6 @@
-namespace Artikelsystem.Api.Features.Artikel.Models.DTOs;
+using System;
+
+namespace Artikelsystem.Shared.DTOs.Artikel.Request;
 
 public class GetAllArtikelRequest
 {

@@ -1,10 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Artikelsystem.Api.Features.Employees.Enums;
 using Artikelsystem.Api.Features.Wareneingang.Models.Entitys;
 using Artikelsystem.Api.Models;
 using Artikelsystem.Api.Features.Lieferant.Models.Entitys;
-using Artikelsystem.Api.Features.Warenausgang.Models.DTOs.Responses;
 using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
+using Artikelsystem.Shared.DTOs.Artikel.Enums;
 namespace Artikelsystem.Api.Features.Artikel.Models.Entitys;
 public class Artikel : AuditableEntity
 {

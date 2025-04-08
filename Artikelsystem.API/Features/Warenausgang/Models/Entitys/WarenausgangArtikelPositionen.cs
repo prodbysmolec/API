@@ -15,7 +15,6 @@ public class WarenausgangArtikelPositionen
     //Fremdschlüssel
     public int WarenausgangId { get; set; }
     public int ArtikelId { get; set; }
-    public required WarenausgangZweckEnum Zweck { get; set; } = 0;
 
     // Standardfelder
     public required int Menge { get; set; }
