@@ -1,6 +1,7 @@
 using System;
 using Artikelsystem.Shared.DTOs;
 using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Filter;
+using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Request;
 using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Responses;
 
 namespace Artikelsystem.API.Features.Warenausgang.Service;
@@ -12,4 +13,7 @@ public interface IWarenausgangService
 
     // GetWarenausgangByIdAsync
     Task<WarenausgangDto?> GetWarenausgangByIdAsync(int id);
+    Task<WarenausgangDto> CreateWarenausgangAsync(CreateWarenausgangDto dto);
+    Task<List<WarenausgangArtikelPositionenDto>> GetWarenausgangArtikelPositionenByWarenausgangIdAsync(int warenausgangId);
+    Task<bool> DeleteWarenausgangAsync(int id);
 }

@@ -17,13 +17,13 @@ public class WarenausgangArtikelPositionen
     public int ArtikelId { get; set; }
 
     // Standardfelder
-    public required int Menge { get; set; }
-    public string Bemerkung { get; set; } = string.Empty;
+    public required int Menge { get; set; } = 0;
+    public string Bemerkung { get; set; } = "";
     public decimal? Verkaufspreis { get; set; }
 
     // Spezifische Referenzfelder je nach Zweck
     //public int? VeranstaltungsId { get; set; }
-    public string Rechnungsnummer { get; set; } = string.Empty;
+    public string? Rechnungsnummer { get; set; } = "";
     public decimal? Gesamtpreis { get; set; }
 
     // Navigation Properties

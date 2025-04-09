@@ -13,7 +13,7 @@ public class WarenausgangArtikelPositionenDto
     public int Menge { get; set; }
     public string Bemerkung { get; set; } = "";
     public decimal? Verkaufspreis { get; set; }
-    public string Rechnungsnummer { get; set; } = "";
+    public string? Rechnungsnummer { get; set; } = "";
     public decimal? Gesamtpreis { get; set; }
     public WarenausgangDto? Warenausgang { get; set; }
     public ArtikelDto? Artikel { get; set; }

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Internal;
 using Artikelsystem.Api;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Testcontainers.PostgreSql;
+using System.Net.Http.Json;
 
 namespace Artikelsystem.API.Tests;
 
@@ -26,6 +27,44 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
             .Build();
         
         _dbContainer.StartAsync().GetAwaiter().GetResult();
+    }
+
+    public async Task DeleteAllEntities<T>(HttpClient client, string endpoint) where T : class
+        {
+    // Fetch all entities from the specified endpoint
+    var response = await client.GetAsync(endpoint);
+    response.EnsureSuccessStatusCode();
+    var entities = await response.Content.ReadFromJsonAsync<List<T>>();
+
+    // Iterate through each entity and delete it
+    foreach (var entity in entities!)
+        {
+        try
+            {
+            // Assuming the entity has an "Id" property
+            var idProperty = entity.GetType().GetProperty("Id");
+            if (idProperty == null)
+                {
+                throw new InvalidOperationException("Entity does not have an 'Id' property.");
+                }
+
+            var id = idProperty.GetValue(entity);
+            var deleteResponse = await client.DeleteAsync($"{endpoint}/{id}");
+
+            if (deleteResponse.IsSuccessStatusCode)
+                {
+                Console.WriteLine($"Entity with ID {id} was successfully deleted.");
+                }
+            else
+                {
+                Console.WriteLine($"Failed to delete entity with ID {id}. Status code: {deleteResponse.StatusCode}");
+                }
+            }
+        catch (Exception ex)
+            {
+            Console.WriteLine($"Error deleting entity: {ex.Message}");
+            }
+        } 
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)

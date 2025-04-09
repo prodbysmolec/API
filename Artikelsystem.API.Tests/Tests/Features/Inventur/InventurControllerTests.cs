@@ -228,7 +228,7 @@ public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory
                 PositionId = position.Id,
                 ArtikelId = position.ArtikelId,
                 InventurID = startedInventur.Id,
-                GezaehlteMenge = position.SystemMenge + (position.Id % 2 == 0 ? 2 : -2), // Abwechselnd +2 oder -2
+                GezaehlteMenge = 2,//position.SystemMenge + (position.Id % 2 == 0 ? 2 : -2), // Abwechselnd +2 oder -2
                 Bemerkung = "Erfasst im vollständigen Workflow-Test",
                 BearbeitetVon = "prodbysmolec",
                 IstGeprueft = true
