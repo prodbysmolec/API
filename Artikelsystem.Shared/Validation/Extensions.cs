@@ -3,7 +3,7 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Artikelsystem.Api.Shared.Validators;
+namespace Artikelsystem.Api.Shared.Validation;
 
 public static class Extensions
 {

@@ -34,6 +34,7 @@
     <Folder Include="Features/Wareneingang/Models/DTOs/Requests/" />
     <Folder Include="Infrastructure/Persistence/Migrations/" />
     <Folder Include="Migrations/" />
+    <Folder Include="Shared/Validators/" />
   </ItemGroup>
 
   <ItemGroup>

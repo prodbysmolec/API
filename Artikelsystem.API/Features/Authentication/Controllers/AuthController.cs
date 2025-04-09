@@ -63,5 +63,14 @@ namespace Artikelsystem.API.Features.Authentication.Controllers
         {
             return Ok("du bist admin!");
         }
+
+        [Authorize]
+        [HttpGet("current-user")]
+        public IActionResult GetCurrentUser()
+        {
+            var userId = GetCurrentUserId();
+            var userName = GetCurrentUserName();
+            return Ok(new { UserId = userId, UserName = userName });
+        }
     }
 }

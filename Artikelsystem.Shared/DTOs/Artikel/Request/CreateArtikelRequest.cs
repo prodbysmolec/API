@@ -15,3 +15,5 @@ public class CreateArtikelRequest
     public ArtikelStatus Status { get; set; } = ArtikelStatus.Verfügbar;
     public IFormFile? Bild { get; set;}
 }
+
+
