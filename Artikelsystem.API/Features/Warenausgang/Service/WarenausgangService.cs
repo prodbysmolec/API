@@ -10,6 +10,7 @@ using Artikelsystem.Shared.DTOs.Warenausgang.Enums;
 using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
 using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Request;
 using Artikelsystem.Api.Features.Inventur.Models.Enums;
+using Artikelsystem.Domain.Entities.Warenausgang;
 
 namespace Artikelsystem.API.Features.Warenausgang.Service;
 
@@ -149,7 +150,7 @@ public class WarenausgangService : IWarenausgangService
         };
     }
     
-    public async Task<WarenausgangDto> CreateWarenausgangAsync(CreateWarenausgangDto dto)
+    public async Task<WarenausgangDto> CreateWarenausgangAsync(WarenausgangRequestDto dto)
     {
         // Check if an active Inventur exists
         var activeInventur = await _context.Inventuren
@@ -176,7 +177,6 @@ public class WarenausgangService : IWarenausgangService
             Zweck = dto.Zweck,
             AllgemeineBemerkungen = dto.AllgemeineBemerkungen,
             ErstelltAm = DateTime.UtcNow,
-            ErstelltVon = dto.ErstelltVon
         };
 
         _context.Warenausgaenge.Add(warenausgang);
@@ -303,7 +303,7 @@ public class WarenausgangService : IWarenausgangService
         return isAdmin || warenausgang.ErstelltVon == userId;
     }
 
-    public async Task UpdateWarenausgangAsync(int id, UpdateWarenausgangDto dto, string userId, bool isAdmin)
+    public async Task UpdateWarenausgangAsync(int id, WarenausgangRequestDto dto, string userId, bool isAdmin)
     {
         var warenausgang = await _context.Warenausgaenge
             .Include(w => w.ArtikelPositionen)

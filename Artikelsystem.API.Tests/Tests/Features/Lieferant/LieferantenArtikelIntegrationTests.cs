@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Newtonsoft.Json;
 using System.Text;
-using Artikelsystem.Api.Features.Artikel.Models.Entitys;
+using Artikelsystem.Domain.Entities.Artikel;
 using Artikelsystem.Api.Features.Lieferant.Controllers;
 using Artikelsystem.API.Tests;
 using Artikelsystem.Shared.DTOs.Artikel.Response;

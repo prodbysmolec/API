@@ -7,6 +7,7 @@ using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Responses;
 using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Artikelsystem.Domain.Entities.Artikel;
 
 namespace Artikelsystem.Api.Features.Artikel.Controllers;
 
@@ -38,7 +39,7 @@ public class ArtikelController : BaseController
         int recordsPerPage = request?.RecordsPerPage ?? 100;
 
         // Start with base query including related data
-        IQueryable<Models.Entitys.Artikel> query = _dbContext.Artikel
+        IQueryable<Domain.Entities.Artikel.Artikel> query = _dbContext.Artikel
             .Include(a => a.ArtikelStatistik);
 
         // Apply filters if request is not null
@@ -77,7 +78,7 @@ public class ArtikelController : BaseController
         request ??= new GetArtikelByIdRequest();
 
         // Start with base query
-        IQueryable<Models.Entitys.Artikel> query = _dbContext.Artikel;
+        IQueryable<Domain.Entities.Artikel.Artikel> query = _dbContext.Artikel;
 
         // Include related data based on request
         IncludeRelatedData(ref query, request);
@@ -221,7 +222,7 @@ public class ArtikelController : BaseController
 
     #region Helper Methods
 
-    private static void ApplyFilters(ref IQueryable<Models.Entitys.Artikel> query, GetAllArtikelRequest request)
+    private static void ApplyFilters(ref IQueryable<Domain.Entities.Artikel.Artikel> query, GetAllArtikelRequest request)
     {
         // Filter by name
         if (!string.IsNullOrWhiteSpace(request.NameContains))
@@ -294,7 +295,7 @@ public class ArtikelController : BaseController
         }
     }
 
-    private static void ApplySorting(ref IQueryable<Models.Entitys.Artikel> query, GetAllArtikelRequest request)
+    private static void ApplySorting(ref IQueryable<Domain.Entities.Artikel.Artikel> query, GetAllArtikelRequest request)
     {
         if (!string.IsNullOrWhiteSpace(request.SortBy))
         {
@@ -319,7 +320,7 @@ public class ArtikelController : BaseController
         }
     }
 
-    private static void IncludeRelatedData(ref IQueryable<Models.Entitys.Artikel> query, GetArtikelByIdRequest request)
+    private static void IncludeRelatedData(ref IQueryable<Domain.Entities.Artikel.Artikel> query, GetArtikelByIdRequest request)
     {
         // Conditionally include related data based on request
         if (request.IncludeArtikelStatistik)
@@ -340,7 +341,7 @@ public class ArtikelController : BaseController
         }
     }
 
-    private static GetArtikelResponse ArtikelToGetArtikelResponse(Models.Entitys.Artikel artikel)
+    private static GetArtikelResponse ArtikelToGetArtikelResponse(Domain.Entities.Artikel.Artikel artikel)
     {
         var response = new GetArtikelResponse
         {
@@ -361,7 +362,7 @@ public class ArtikelController : BaseController
         return response;
     }
 
-    private static void MapArtikelStatistik(Models.Entitys.Artikel artikel, GetArtikelResponse response)
+    private static void MapArtikelStatistik(Domain.Entities.Artikel.Artikel artikel, GetArtikelResponse response)
     {
         if (artikel.ArtikelStatistik != null)
         {
@@ -377,7 +378,7 @@ public class ArtikelController : BaseController
         }
     }
 
-    private static void MapWarenausgaenge(Models.Entitys.Artikel artikel, GetArtikelResponse response)
+    private static void MapWarenausgaenge(Domain.Entities.Artikel.Artikel artikel, GetArtikelResponse response)
     {
         if (artikel.Warenausgaenge != null)
         {
@@ -407,7 +408,7 @@ public class ArtikelController : BaseController
         }
     }
 
-    private static void MapWareneingaenge(Models.Entitys.Artikel artikel, GetArtikelResponse response)
+    private static void MapWareneingaenge(Domain.Entities.Artikel.Artikel artikel, GetArtikelResponse response)
     {
         if (artikel.Wareneingaenge != null)
         {

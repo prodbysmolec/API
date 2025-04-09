@@ -34,11 +34,13 @@
     <Folder Include="Features/Wareneingang/Models/DTOs/Requests/" />
     <Folder Include="Infrastructure/Persistence/Migrations/" />
     <Folder Include="Migrations/" />
+    <Folder Include="Models/" />
     <Folder Include="Shared/Validators/" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="../Artikelsystem.Shared/Artikelsystem.Shared.csproj" />
+    <ProjectReference Include="../Server/Artikelsystem.Domain/Artikelsystem.Domain.csproj" />
   </ItemGroup>
 
 </Project>

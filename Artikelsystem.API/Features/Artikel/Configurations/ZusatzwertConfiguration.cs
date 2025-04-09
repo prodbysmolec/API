@@ -1,5 +1,5 @@
 using System;
-using Artikelsystem.Api.Features.Artikel.Models.Entitys;
+using Artikelsystem.Domain.Entities.Artikel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -3,14 +3,14 @@ using FluentValidation;
 
 namespace Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Request;
 
-public class CreateWarenausgangDto
+public class WarenausgangRequestDto
 {
     public WarenausgangZweckEnum Zweck { get; set; }
     public string? AllgemeineBemerkungen { get; set; }
     public List<CreateWarenausgangArtikelPositionDto> ArtikelPositionen { get; set; } = new();
 }
 
-public class CreateWarenausgangDtoValidation : AbstractValidator<CreateWarenausgangDto>
+public class CreateWarenausgangDtoValidation : AbstractValidator<WarenausgangRequestDto>
 {
     public CreateWarenausgangDtoValidation()
     {

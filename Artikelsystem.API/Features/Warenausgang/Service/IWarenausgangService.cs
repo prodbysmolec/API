@@ -13,7 +13,7 @@ public interface IWarenausgangService
 
     // GetWarenausgangByIdAsync
     Task<WarenausgangDto?> GetWarenausgangByIdAsync(int id);
-    Task<WarenausgangDto> CreateWarenausgangAsync(CreateWarenausgangDto dto);
+    Task<WarenausgangDto> CreateWarenausgangAsync(WarenausgangRequestDto dto);
     Task<List<WarenausgangArtikelPositionenDto>> GetWarenausgangArtikelPositionenByWarenausgangIdAsync(int warenausgangId);
     Task<bool> DeleteWarenausgangAsync(int id);
 }

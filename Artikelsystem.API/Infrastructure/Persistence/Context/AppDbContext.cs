@@ -1,9 +1,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Internal;
-using Artikelsystem.Api.Models;
 using Artikelsystem.Api.Features.Employees.Models.Entitys;
-using Artikelsystem.Api.Features.Artikel.Models.Entitys;
+using Artikelsystem.Domain.Entities.Artikel;
 using Artikelsystem.Api.Features.Lieferant.Models.Entitys;
 using Artikelsystem.Api.Features.Wareneingang.Models.Entitys;
 using Artikelsystem.Api.Features.Wareneingang.Configurations;
@@ -11,10 +10,12 @@ using Artikelsystem.Api.Features.Employees.Configurations;
 using Artikelsystem.Api.Features.Artikel.Configurations;
 using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
 using Artikelsystem.Api.Features.Warenausgang.Configurations;
-using Artikelsystem.Api.Features.Inventur.Models.Entitys;
+using Artikelsystem.Domain.Entities.Inventur;
 using Artikelsystem.Api.Features.Inventur.Configuration;
 using Artikelsystem.API.Features.Authentication.Models.Entitys;
 using Artikelsystem.API.Features.Authentication.Configuration;
+using Artikelsystem.Domain.Entities.Warenausgang;
+using Artikelsystem.Domain.Common;
 
 
 namespace Artikelsystem.Api.Infrastructure.Persistence.Context;

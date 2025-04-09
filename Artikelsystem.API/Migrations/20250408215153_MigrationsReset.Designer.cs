@@ -96,7 +96,7 @@ namespace Artikelsystem.API.Migrations
                     b.ToTable("UserGruppenUsers");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.Artikel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -147,7 +147,7 @@ namespace Artikelsystem.API.Migrations
                     b.ToTable("Artikel");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelInventurHistorie", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.ArtikelInventurHistorie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -185,7 +185,7 @@ namespace Artikelsystem.API.Migrations
                     b.ToTable("ArtikelInventurHistorie");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelStatistik", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.ArtikelStatistik", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -238,7 +238,7 @@ namespace Artikelsystem.API.Migrations
                     b.ToTable("ArtikelStatistiken");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelZusatzWert", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.ArtikelZusatzWert", b =>
                 {
                     b.Property<int>("ArtikelId")
                         .HasColumnType("integer");
@@ -253,7 +253,7 @@ namespace Artikelsystem.API.Migrations
                     b.ToTable("ArtikelZusatzWert");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikelgruppe", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.Artikelgruppe", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -276,7 +276,7 @@ namespace Artikelsystem.API.Migrations
                     b.ToTable("Artikelgruppe");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelgruppeZusatzfelder", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.ArtikelgruppeZusatzfelder", b =>
                 {
                     b.Property<int>("ArtikelgruppeID")
                         .HasColumnType("integer");
@@ -291,7 +291,7 @@ namespace Artikelsystem.API.Migrations
                     b.ToTable("ArtikelgruppeZusatzfelder");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Produktkategorie", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.Produktkategorie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -313,7 +313,7 @@ namespace Artikelsystem.API.Migrations
                     b.ToTable("Produktkategorie");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzfeld", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.Zusatzfeld", b =>
                 {
                     b.Property<int>("ZusatzfeldID")
                         .ValueGeneratedOnAdd()
@@ -331,7 +331,7 @@ namespace Artikelsystem.API.Migrations
                     b.ToTable("Zusatzfeld");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzwert", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.Zusatzwert", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -465,7 +465,7 @@ namespace Artikelsystem.API.Migrations
                     b.ToTable("EmployeeBenefits");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Inventur.Models.Entitys.Inventur", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Inventur.Inventur", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -508,7 +508,7 @@ namespace Artikelsystem.API.Migrations
                     b.ToTable("Inventuren");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Inventur.Models.Entitys.InventurBerichte", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Inventur.InventurBerichte", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -555,7 +555,7 @@ namespace Artikelsystem.API.Migrations
                     b.ToTable("InventurBerichte");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Inventur.Models.Entitys.InventurPosition", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Inventur.InventurPosition", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -884,15 +884,15 @@ namespace Artikelsystem.API.Migrations
                     b.Navigation("UserGruppen");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelInventurHistorie", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.ArtikelInventurHistorie", b =>
                 {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
+                    b.HasOne("Artikelsystem.Domain.Entities.Artikel.Artikel", "Artikel")
                         .WithMany("InventurHistorie")
                         .HasForeignKey("ArtikelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Artikelsystem.Api.Features.Inventur.Models.Entitys.Inventur", "Inventur")
+                    b.HasOne("Artikelsystem.Domain.Entities.Inventur.Inventur", "Inventur")
                         .WithMany()
                         .HasForeignKey("InventurId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -903,26 +903,26 @@ namespace Artikelsystem.API.Migrations
                     b.Navigation("Inventur");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelStatistik", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.ArtikelStatistik", b =>
                 {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
+                    b.HasOne("Artikelsystem.Domain.Entities.Artikel.Artikel", "Artikel")
                         .WithOne("ArtikelStatistik")
-                        .HasForeignKey("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelStatistik", "ArtikelId")
+                        .HasForeignKey("Artikelsystem.Domain.Entities.Artikel.ArtikelStatistik", "ArtikelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Artikel");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelZusatzWert", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.ArtikelZusatzWert", b =>
                 {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
+                    b.HasOne("Artikelsystem.Domain.Entities.Artikel.Artikel", "Artikel")
                         .WithMany("ArtikelZusatzWerte")
                         .HasForeignKey("ArtikelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzwert", "Zusatzwert")
+                    b.HasOne("Artikelsystem.Domain.Entities.Artikel.Zusatzwert", "Zusatzwert")
                         .WithMany("ArtikelZusatzwerte")
                         .HasForeignKey("ZusatzwertId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -933,9 +933,9 @@ namespace Artikelsystem.API.Migrations
                     b.Navigation("Zusatzwert");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikelgruppe", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.Artikelgruppe", b =>
                 {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Produktkategorie", "Produktkategorie")
+                    b.HasOne("Artikelsystem.Domain.Entities.Artikel.Produktkategorie", "Produktkategorie")
                         .WithMany("ArtikelGruppen")
                         .HasForeignKey("ProduktkategorieId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -944,24 +944,24 @@ namespace Artikelsystem.API.Migrations
                     b.Navigation("Produktkategorie");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.ArtikelgruppeZusatzfelder", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.ArtikelgruppeZusatzfelder", b =>
                 {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikelgruppe", null)
+                    b.HasOne("Artikelsystem.Domain.Entities.Artikel.Artikelgruppe", null)
                         .WithMany("ArtikelgruppeZusatzfelder")
                         .HasForeignKey("ArtikelgruppeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzfeld", null)
+                    b.HasOne("Artikelsystem.Domain.Entities.Artikel.Zusatzfeld", null)
                         .WithMany("ArtikelGruppeZusatzFelder")
                         .HasForeignKey("ZusatzfelderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzwert", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.Zusatzwert", b =>
                 {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzfeld", "ZusatzFeld")
+                    b.HasOne("Artikelsystem.Domain.Entities.Artikel.Zusatzfeld", "ZusatzFeld")
                         .WithMany("ZusatzWerte")
                         .HasForeignKey("ZusatzFeldID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -989,9 +989,9 @@ namespace Artikelsystem.API.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Inventur.Models.Entitys.InventurBerichte", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Inventur.InventurBerichte", b =>
                 {
-                    b.HasOne("Artikelsystem.Api.Features.Inventur.Models.Entitys.Inventur", "Inventur")
+                    b.HasOne("Artikelsystem.Domain.Entities.Inventur.Inventur", "Inventur")
                         .WithMany("Berichte")
                         .HasForeignKey("InventurId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1000,15 +1000,15 @@ namespace Artikelsystem.API.Migrations
                     b.Navigation("Inventur");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Inventur.Models.Entitys.InventurPosition", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Inventur.InventurPosition", b =>
                 {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
+                    b.HasOne("Artikelsystem.Domain.Entities.Artikel.Artikel", "Artikel")
                         .WithMany()
                         .HasForeignKey("ArtikelId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Artikelsystem.Api.Features.Inventur.Models.Entitys.Inventur", "Inventur")
+                    b.HasOne("Artikelsystem.Domain.Entities.Inventur.Inventur", "Inventur")
                         .WithMany("Positionen")
                         .HasForeignKey("InventurId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1021,7 +1021,7 @@ namespace Artikelsystem.API.Migrations
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Lieferant.Models.Entitys.ArtikelLieferant", b =>
                 {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
+                    b.HasOne("Artikelsystem.Domain.Entities.Artikel.Artikel", "Artikel")
                         .WithMany("ArtikelLieferanten")
                         .HasForeignKey("ArtikelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1040,7 +1040,7 @@ namespace Artikelsystem.API.Migrations
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Warenausgang.Models.Entitys.WarenausgangArtikelPositionen", b =>
                 {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
+                    b.HasOne("Artikelsystem.Domain.Entities.Artikel.Artikel", "Artikel")
                         .WithMany("Warenausgaenge")
                         .HasForeignKey("ArtikelId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1059,7 +1059,7 @@ namespace Artikelsystem.API.Migrations
 
             modelBuilder.Entity("Artikelsystem.Api.Features.Wareneingang.Models.Entitys.WareneingangArtikelPositionen", b =>
                 {
-                    b.HasOne("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", "Artikel")
+                    b.HasOne("Artikelsystem.Domain.Entities.Artikel.Artikel", "Artikel")
                         .WithMany("Wareneingaenge")
                         .HasForeignKey("ArtikelId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1086,7 +1086,7 @@ namespace Artikelsystem.API.Migrations
                     b.Navigation("UserGruppenUsers");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikel", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.Artikel", b =>
                 {
                     b.Navigation("ArtikelLieferanten");
 
@@ -1101,24 +1101,24 @@ namespace Artikelsystem.API.Migrations
                     b.Navigation("Wareneingaenge");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Artikelgruppe", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.Artikelgruppe", b =>
                 {
                     b.Navigation("ArtikelgruppeZusatzfelder");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Produktkategorie", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.Produktkategorie", b =>
                 {
                     b.Navigation("ArtikelGruppen");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzfeld", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.Zusatzfeld", b =>
                 {
                     b.Navigation("ArtikelGruppeZusatzFelder");
 
                     b.Navigation("ZusatzWerte");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Artikel.Models.Entitys.Zusatzwert", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Artikel.Zusatzwert", b =>
                 {
                     b.Navigation("ArtikelZusatzwerte");
                 });
@@ -1128,7 +1128,7 @@ namespace Artikelsystem.API.Migrations
                     b.Navigation("Benefits");
                 });
 
-            modelBuilder.Entity("Artikelsystem.Api.Features.Inventur.Models.Entitys.Inventur", b =>
+            modelBuilder.Entity("Artikelsystem.Domain.Entities.Inventur.Inventur", b =>
                 {
                     b.Navigation("Berichte");
 

@@ -1,0 +1,16 @@
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/bin/Debug/net9.0/Artikelsystem.Domain.deps.json
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/bin/Debug/net9.0/Artikelsystem.Domain.dll
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/bin/Debug/net9.0/Artikelsystem.Domain.pdb
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/bin/Debug/net9.0/Artikelsystem.Shared.dll
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/bin/Debug/net9.0/Artikelsystem.Shared.pdb
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/obj/Debug/net9.0/Artikelsystem.Domain.csproj.AssemblyReference.cache
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/obj/Debug/net9.0/Artikelsystem.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/obj/Debug/net9.0/Artikelsystem.Domain.AssemblyInfoInputs.cache
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/obj/Debug/net9.0/Artikelsystem.Domain.AssemblyInfo.cs
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/obj/Debug/net9.0/Artikelsystem.Domain.csproj.CoreCompileInputs.cache
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/obj/Debug/net9.0/Artikelsystem.Domain.sourcelink.json
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/obj/Debug/net9.0/Artikels.6F1FA387.Up2Date
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/obj/Debug/net9.0/Artikelsystem.Domain.dll
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/obj/Debug/net9.0/refint/Artikelsystem.Domain.dll
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/obj/Debug/net9.0/Artikelsystem.Domain.pdb
+/Users/lukasschmolz/Repos/API/Server/Artikelsystem.Domain/obj/Debug/net9.0/ref/Artikelsystem.Domain.dll

@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Artikelsystem.Api.Features.Artikel.Models.Entitys;
+using Artikelsystem.Domain.Entities.Artikel;
 using Artikelsystem.Api.Features.Inventur.Models.Dtos;
-using Artikelsystem.Api.Features.Inventur.Models.Entitys;
+using Artikelsystem.Domain.Entities.Inventur;
 using Artikelsystem.Api.Features.Inventur.Models.Enums;
-using Artikelsystem.Api.Features.Inventur.Validators;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -36,14 +35,8 @@ public class InventurService : IInventurService
 
     public async Task<InventurDto> ErstelleInventur(CreateInventurRequest request)
     {
-        // Validiere die Anfrage
-        var validationResult = await _createInventurValidator.ValidateAsync(request);
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
 
-        var inventur = new Models.Entitys.Inventur
+        var inventur = new Domain.Entities.Inventur.Inventur
         {
             Bezeichnung = request.Bezeichnung,
             StartDatum = DateTime.UtcNow,
@@ -372,7 +365,7 @@ public class InventurService : IInventurService
     }
 
     // Hilfsmethoden für das Mapping
-    private InventurDto MapToInventurDto(Models.Entitys.Inventur inventur)
+    private InventurDto MapToInventurDto(Domain.Entities.Inventur.Inventur inventur)
     {
         var dto = new InventurDto
         {

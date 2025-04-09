@@ -57,7 +57,7 @@ namespace Artikelsystem.API.Features.Warenausgang.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(WarenausgangDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<WarenausgangDto>> CreateWarenausgangAsync([FromBody] CreateWarenausgangDto dto)
+        public async Task<ActionResult<WarenausgangDto>> CreateWarenausgangAsync([FromBody] WarenausgangRequestDto dto)
         {
             try 
             {

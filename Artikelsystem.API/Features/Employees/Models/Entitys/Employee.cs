@@ -1,4 +1,4 @@
-using Artikelsystem.Api.Models;
+using Artikelsystem.Domain.Common;
 
 namespace Artikelsystem.Api.Features.Employees.Models.Entitys;
 

@@ -2,7 +2,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Artikelsystem.Api.Features.Inventur.Models.Entitys;
+namespace Artikelsystem.Domain.Entities.Inventur;
 
 public class InventurPositionConfiguration : IEntityTypeConfiguration<InventurPosition>
 {

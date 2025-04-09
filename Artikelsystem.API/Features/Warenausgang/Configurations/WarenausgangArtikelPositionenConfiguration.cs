@@ -1,5 +1,6 @@
 using System;
 using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
+using Artikelsystem.Domain.Entities.Warenausgang;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

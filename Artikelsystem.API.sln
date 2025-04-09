@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Artikelsystem.API", "Artike
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Artikelsystem.Shared", "Artikelsystem.Shared\Artikelsystem.Shared.csproj", "{70525EEB-E661-4DF4-B4F8-82A8A5919033}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Artikelsystem.Domain", "Server\Artikelsystem.Domain\Artikelsystem.Domain.csproj", "{32822374-E4B0-43DA-BB48-71BF1D81FE83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,18 @@ Global
 		{70525EEB-E661-4DF4-B4F8-82A8A5919033}.Release|x64.Build.0 = Release|Any CPU
 		{70525EEB-E661-4DF4-B4F8-82A8A5919033}.Release|x86.ActiveCfg = Release|Any CPU
 		{70525EEB-E661-4DF4-B4F8-82A8A5919033}.Release|x86.Build.0 = Release|Any CPU
+		{32822374-E4B0-43DA-BB48-71BF1D81FE83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32822374-E4B0-43DA-BB48-71BF1D81FE83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32822374-E4B0-43DA-BB48-71BF1D81FE83}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{32822374-E4B0-43DA-BB48-71BF1D81FE83}.Debug|x64.Build.0 = Debug|Any CPU
+		{32822374-E4B0-43DA-BB48-71BF1D81FE83}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{32822374-E4B0-43DA-BB48-71BF1D81FE83}.Debug|x86.Build.0 = Debug|Any CPU
+		{32822374-E4B0-43DA-BB48-71BF1D81FE83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32822374-E4B0-43DA-BB48-71BF1D81FE83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32822374-E4B0-43DA-BB48-71BF1D81FE83}.Release|x64.ActiveCfg = Release|Any CPU
+		{32822374-E4B0-43DA-BB48-71BF1D81FE83}.Release|x64.Build.0 = Release|Any CPU
+		{32822374-E4B0-43DA-BB48-71BF1D81FE83}.Release|x86.ActiveCfg = Release|Any CPU
+		{32822374-E4B0-43DA-BB48-71BF1D81FE83}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,5 +110,6 @@ Global
 		{79B53EBE-AE97-4BDF-9C75-BB258750A5B3} = {2CB42F12-E813-91B3-7D11-3220E40BEF4A}
 		{4E35922E-2338-40D1-9370-D461B4F8E398} = {DAD03CFC-D5FA-AC94-41C7-9ABAB326F09E}
 		{859FB62B-EB96-4D35-B57F-EBD12E26EE8C} = {DAD03CFC-D5FA-AC94-41C7-9ABAB326F09E}
+		{32822374-E4B0-43DA-BB48-71BF1D81FE83} = {DAD03CFC-D5FA-AC94-41C7-9ABAB326F09E}
 	EndGlobalSection
 EndGlobal

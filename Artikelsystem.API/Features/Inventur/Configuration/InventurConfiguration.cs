@@ -1,12 +1,12 @@
 using System;
-using Artikelsystem.Api.Features.Inventur.Models.Entitys;
+using Artikelsystem.Domain.Entities.Inventur;
 using Microsoft.EntityFrameworkCore;
 
 namespace Artikelsystem.Api.Features.Inventur.Configuration;
 
-public class InventurConfiguration : IEntityTypeConfiguration<Models.Entitys.Inventur>
+public class InventurConfiguration : IEntityTypeConfiguration<Domain.Entities.Inventur.Inventur>
 {
-    public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Models.Entitys.Inventur> builder)
+    public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Domain.Entities.Inventur.Inventur> builder)
     {
         builder.HasKey(i => i.Id);
 

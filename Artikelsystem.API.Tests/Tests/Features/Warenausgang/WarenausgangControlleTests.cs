@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using Artikelsystem.Api.Features.Inventur.Models.Entitys;
+using Artikelsystem.Domain.Entities.Inventur;
 using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
 using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Request;
 using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Responses;
@@ -57,7 +57,7 @@ public class WarenausgangControllerTests : IClassFixture<CustomWebApplicationFac
         var request = "/Warenausgang";
         await _factory.DeleteAllEntities<Inventur>(client, "/Inventur");
 
-        var createDto = new CreateWarenausgangDto
+        var createDto = new WarenausgangRequestDto
         {
             AllgemeineBemerkungen = "Test Bemerkung",
             Zweck = Artikelsystem.Shared.DTOs.Warenausgang.Enums.WarenausgangZweckEnum.Bestellung,
@@ -104,7 +104,7 @@ public class WarenausgangControllerTests : IClassFixture<CustomWebApplicationFac
         var request = "/Warenausgang";
         await _factory.DeleteAllEntities<Inventur>(client, "/Inventur");
 
-        var createDto = new CreateWarenausgangDto(); // Missing required fields
+        var createDto = new WarenausgangRequestDto(); // Missing required fields
 
         // Act
         var response = await client.PostAsJsonAsync(request, createDto);

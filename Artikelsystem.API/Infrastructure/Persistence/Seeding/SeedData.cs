@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Artikelsystem.Api.Features.Artikel.Models.Entitys;
+using Artikelsystem.Domain.Entities.Artikel;
 using Artikelsystem.Api.Features.Employees.Models.Entitys;
 using Artikelsystem.Api.Features.Lieferant.Models.Entitys;
 using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
 using Artikelsystem.Api.Features.Wareneingang.Models.Entitys;
-using Artikelsystem.Api.Features.Inventur.Models.Entitys;
+using Artikelsystem.Domain.Entities.Inventur;
 using Artikelsystem.Api.Features.Inventur.Models.Enums;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +15,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Artikelsystem.API.Features.Authentication.Models.Entitys;
 using Artikelsystem.Shared.DTOs.Artikel.Enums;
 using Artikelsystem.Shared.DTOs.Warenausgang.Enums;
+using Artikelsystem.Domain.Entities.Warenausgang;
 
 namespace Artikelsystem.Api.Infrastructure.Persistence.Seeding;
 

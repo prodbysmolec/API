@@ -1,14 +1,14 @@
 using System;
-using Artikelsystem.Api.Features.Artikel.Models.Entitys;
+using Artikelsystem.Domain.Entities.Artikel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Artikelsystem.Api.Features.Artikel.Configurations;
 
-public class ArtikelConfiguration : IEntityTypeConfiguration<Models.Entitys.Artikel>
+public class ArtikelConfiguration : IEntityTypeConfiguration<Domain.Entities.Artikel.Artikel>
 {
-    public void Configure(EntityTypeBuilder<Models.Entitys.Artikel> builder)
+    public void Configure(EntityTypeBuilder<Domain.Entities.Artikel.Artikel> builder)
     {
         // Artikel - ArtikelStatistik (1:1)
         builder

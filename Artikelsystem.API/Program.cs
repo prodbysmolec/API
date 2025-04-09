@@ -1,12 +1,13 @@
 using System.Security.Claims;
 using System.Text;
 using Artikelsystem.Api.Features.Employees.Models.Entitys;
+using Artikelsystem.Api.Features.Inventur.Models.Dtos;
 using Artikelsystem.Api.Features.Inventur.Services;
 using Artikelsystem.Api.Features.Lieferant.Services;
 using Artikelsystem.Api.Infrastructure.Persistence.Context;
 using Artikelsystem.Api.Infrastructure.Persistence.Repositories;
 using Artikelsystem.Api.Infrastructure.Persistence.Seeding;
-using Artikelsystem.Api.Shared.Validators;
+using Artikelsystem.Api.Shared.Validation;
 using Artikelsystem.API.Features.Authentication.Services;
 using Artikelsystem.API.Features.Lieferant.Services;
 using Artikelsystem.API.Features.Warenausgang.Service;
@@ -56,6 +57,10 @@ builder.Services.AddScoped<IArtikelLieferantService, ArtikelLieferantService>();
 builder.Services.AddScoped<ILieferantService, LieferantService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IWarenausgangService, WarenausgangService>();
+builder.Services.AddScoped<CreateInventurRequestValidator>();
+builder.Services.AddScoped<UpdateInventurPositionRequestValidator>();
+
+
 #endregion
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddProblemDetails();
