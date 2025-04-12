@@ -53,9 +53,9 @@ public class ArtikelMapping : Profile
             .ForMember(dest => dest.Artikel, opt => opt.Ignore());
         
         // Wareneingang mappings
-        CreateMap<Domain.Entities.Wareneingang.Wareneingaenge, WarenedoingangDto>()
+        CreateMap<Domain.Entities.Wareneingang.Wareneingaenge, WarenausgangDto>()
             // Vermeidung von Zirkelreferenzen beim Mapping
-            .ForMember(dest => dest.WareneingangPositionen, opt => opt.Ignore()); 
+            .ForMember(dest => dest.ArtikelPositionen, opt => opt.Ignore()); 
         
         // Warenausgang mappings
         CreateMap<Domain.Entities.Warenausgang.Warenausgaenge, WarenausgangDto>()
