@@ -1,7 +1,7 @@
 using System;
-using Artikelsystem.Api.Features.Inventur.Models.Enums;
+using API.Features.Inventur.Models.Enums;
 
-namespace Artikelsystem.Api.Features.Inventur.Models.Dtos;
+namespace Artikelsystem.Shared.DTOs.Inventur;
 
 
 public class InventurDto

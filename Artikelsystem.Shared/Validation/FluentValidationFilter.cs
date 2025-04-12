@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Artikelsystem.Api.Shared.Validation;
+namespace API.Shared.Validation;
 
 
 public class FluentValidationFilter : IAsyncActionFilter

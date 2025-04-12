@@ -1,10 +1,10 @@
 using System;
 using System.Net;
 using System.Net.Http.Json;
-using Artikelsystem.Api.Features.Lieferant.Models.DTOs;
-using Artikelsystem.API.Tests;
+using Artikelsystem.Shared.DTOs.Lieferant;
+using API.Tests;
 
-namespace Artikelsystem.Api.Tests.Tests.Features.Lieferant;
+namespace API.Tests.Tests.Features.Lieferant;
 
 public class LieferantenControllerTests : IClassFixture<CustomWebApplicationFactory>
 {

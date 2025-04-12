@@ -1,5 +1,5 @@
 {
-  "dotnet.defaultSolution": "Artikelsystem.Api.sln",
+  "dotnet.defaultSolution": "API.sln",
   "sqltools.connections": [
     {
       "previewLimit": 50,

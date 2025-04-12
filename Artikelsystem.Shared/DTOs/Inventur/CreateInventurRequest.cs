@@ -1,7 +1,7 @@
 using System;
 using FluentValidation;
 
-namespace Artikelsystem.Api.Features.Inventur.Models.Dtos;
+namespace Artikelsystem.Shared.DTOs.Inventur;
 
 public class CreateInventurRequest
 {

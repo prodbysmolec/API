@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
-using Artikelsystem.API.Tests;
+using API.Tests;
 using Artikelsystem.Shared.DTOs.Artikel.Enums;
 using Artikelsystem.Shared.DTOs.Artikel.Request;
 using Artikelsystem.Shared.DTOs.Artikel.Response;
@@ -9,7 +9,7 @@ using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Response;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
-namespace Artikelsystem.Api.Tests.Tests.Features.Artikel;
+namespace API.Tests.Tests.Features.Artikel;
 
 public class ArtikelTests : IClassFixture<CustomWebApplicationFactory>
 {

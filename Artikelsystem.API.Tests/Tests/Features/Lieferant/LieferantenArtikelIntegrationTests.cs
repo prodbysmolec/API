@@ -4,18 +4,18 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Artikelsystem.Api.Features.Lieferant.Models.DTOs;
-using Artikelsystem.API.Features.Lieferant.Models.DTOs.Request;
-using Artikelsystem.Api.Infrastructure.Persistence.Context;
+using Artikelsystem.Shared.DTOs.Lieferant;
+using Artikelsystem.Shared.DTOs.Lieferant.Request;
+using API.Infrastructure.Persistence.Context;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Newtonsoft.Json;
 using System.Text;
-using Artikelsystem.Domain.Entities.Artikel;
-using Artikelsystem.Api.Features.Lieferant.Controllers;
-using Artikelsystem.API.Tests;
+using Domain.Entities.Artikel;
+using Infrastructure.Configurations.Lieferant.Controllers;
+using API.Tests;
 using Artikelsystem.Shared.DTOs.Artikel.Response;
 
 namespace Artikelsystem.Tests.Integration

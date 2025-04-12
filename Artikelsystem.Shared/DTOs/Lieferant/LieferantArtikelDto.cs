@@ -1,6 +1,6 @@
 using System;
 
-namespace Artikelsystem.Api.Features.Lieferant.Models.DTOs;
+namespace Artikelsystem.Shared.DTOs.Lieferant;
 
 public class LieferantArtikelDto
 {

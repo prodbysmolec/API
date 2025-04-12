@@ -10,5 +10,5 @@ public class WareneingangArtikelPositionenDto
     public int Menge { get; set; }
     public decimal Einzelpreis { get; set; }
     public decimal Gesamtpreis { get; set; }
-    public required WareneingangDto? Wareneingang { get; set; }
+    public WareneingangDto? Wareneingang { get; set; }
 }

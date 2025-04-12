@@ -8,5 +8,5 @@ public class WareneingangDto
     public decimal Gesamtpreis { get; set; }
     public string AllgemeineBemerkungen { get; set; } = string.Empty;
 
-    public List<WareneingangArtikelPositionenDto> WareneingangsPositionen { get; set; } = new List<WareneingangArtikelPositionenDto>();
+    public List<WareneingangArtikelPositionenDto> WareneingangPositionen { get; set; } = new List<WareneingangArtikelPositionenDto>();
 }

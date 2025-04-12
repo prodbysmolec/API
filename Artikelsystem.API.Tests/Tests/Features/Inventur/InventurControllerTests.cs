@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Artikelsystem.Api.Features.Inventur.Models.Dtos;
-using Artikelsystem.Api.Features.Inventur.Models.Enums;
-using Artikelsystem.API.Tests;
+using Artikelsystem.Shared.DTOs.Inventur;
+using API.Features.Inventur.Models.Enums;
+using API.Tests;
 using Xunit;
 
-namespace Artikelsystem.Api.Tests.Features.Inventur;
+namespace API.Tests.Features.Inventur;
 
 public class InventurControllerTests : IClassFixture<CustomWebApplicationFactory>
 {

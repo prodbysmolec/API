@@ -1,6 +1,6 @@
 using System;
 
-namespace Artikelsystem.API.Features.Lieferant.Models.DTOs.Request;
+namespace Artikelsystem.Shared.DTOs.Lieferant.Request;
 
 public class GetLieferantByIdRequest
 {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Artikelsystem.Api.Features.Inventur.Models.Enums;
+namespace API.Features.Inventur.Models.Enums;
 
 public enum InventurStatus
 {

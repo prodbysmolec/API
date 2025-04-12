@@ -3,12 +3,12 @@ using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Artikelsystem.Api;
-using Artikelsystem.Api.Employees;
-using Artikelsystem.Api.Features.Employees.Models.DTOs;
-using Artikelsystem.Api.Features.Employees.Models.Entitys;
-using Artikelsystem.Api.Infrastructure.Persistence.Context;
-namespace Artikelsystem.API.Tests;
+using API;
+using API.Employees;
+using API.Features.Employees.Models.DTOs;
+using API.Features.Employees.Models.Entitys;
+using API.Infrastructure.Persistence.Context;
+namespace API.Tests;
 
 public class BasicTests : IClassFixture<CustomWebApplicationFactory>
 {

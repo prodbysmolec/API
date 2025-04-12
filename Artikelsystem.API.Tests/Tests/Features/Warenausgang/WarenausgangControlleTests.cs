@@ -3,12 +3,12 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using Artikelsystem.Domain.Entities.Inventur;
-using Artikelsystem.Api.Features.Warenausgang.Models.Entitys;
+using Domain.Entities.Inventur;
+using Domain.Entities.Warenausgang;
 using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Request;
 using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Responses;
 
-namespace Artikelsystem.API.Tests.Tests.Features.Warenausgang;
+namespace API.Tests.Tests.Features.Warenausgang;
 
 public class WarenausgangControllerTests : IClassFixture<CustomWebApplicationFactory>
 { 

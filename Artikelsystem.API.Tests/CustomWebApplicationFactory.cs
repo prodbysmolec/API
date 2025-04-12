@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Internal;
-using Artikelsystem.Api;
-using Artikelsystem.Api.Infrastructure.Persistence.Context;
+using API;
+using API.Infrastructure.Persistence.Context;
 using Testcontainers.PostgreSql;
 using System.Net.Http.Json;
 
-namespace Artikelsystem.API.Tests;
+namespace API.Tests;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncDisposable
 {
