@@ -1,14 +1,14 @@
+using System.Text.Json.Serialization;
+using API.Features.Employees.Models.DTOs;
 using Domain.Common.ResultPattern;
 using MediatR;
 
 namespace Application.Commands;
 
-public class UpdateEmployeeCommand : IRequest<Result<bool>>
+public class UpdateEmployeeCommand() : IRequest<Result<bool>>
 {
-    public int Id { get; init; }
-    public string? NewFirstName { get; init; }
-    public string? NewLastName { get; init; }
-    public string? NewSocialSecurityNumber { get; init; }
+    [JsonIgnore]
+    public int Id { get; set; }
     public string? NewAddress1 { get; init; }
     public string? NewAddress2 { get; init; }
     public string? NewCity { get; init; }

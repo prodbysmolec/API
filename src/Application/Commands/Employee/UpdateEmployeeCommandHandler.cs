@@ -1,4 +1,6 @@
 using System;
+using API.Features.Employees.Models.DTOs;
+using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
 using AutoMapper;
 using Domain.Common.ResultPattern;
@@ -7,27 +9,35 @@ using MediatR;
 
 namespace Application.Commands.Employee;
 
-public class UpdateEmployeeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<UpdateEmployeeCommand, Result<bool>>
+public class UpdateEmployeeCommandHandler(IEmployeeService service, IMapper mapper) : IRequestHandler<UpdateEmployeeCommand, Result<bool>>
 {
-    private readonly IUnitOfWork _unitofwork = unitOfWork;
+    private readonly IEmployeeService _service = service;
     private readonly IMapper _mapper = mapper;
     public async Task<Result<bool>> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
     {
         // 1. Bestehenden Employee aus der Datenbank laden
-        var existingEmployee = await _unitofwork.EmployeeRepository.GetByIdAsync(request.Id);
+        var existingEmployee = await _service.GetEmployeeByIdAsync(request.Id);
         if (existingEmployee == null)
         {
             return Result<bool>.Failure(EmployeeErrors.EmployeeNotFound(request.Id));
         }
 
         // 2. Nur die geänderten Felder aktualisieren
-        _mapper.Map(request, existingEmployee);
+        var changedEmployee = _service.UpdateEmployeeAsync(existingEmployee.Id, new UpdateEmployeeRequest
+        {
+            Address1 = request.NewAddress1,
+            Address2 = request.NewAddress2,
+            City = request.NewCity,
+            State = request.NewState,
+            ZipCode = request.NewZipCode,
+            PhoneNumber = request.NewPhoneNumber,
+            Email = request.NewEmail
+        });
 
-        // 3. Entity in DbContext speichern
-        await _unitofwork.EmployeeRepository.UpdateAsync(existingEmployee);
-
-        // 4. UnitOfWork speichern
-        await _unitofwork.CommitAsync(cancellationToken);
+        if(changedEmployee == null)
+        {
+            return Result<bool>.Failure(EmployeeErrors.EmployeeNotFound(request.Id));
+        }
 
         // 5. Bool zurückgeben
         return Result<bool>.Success(true);

@@ -22,7 +22,7 @@ public class GetEmployeesQueryHandler(IEmployeeService service, IMapper mapper) 
                 request.RecordsPerPage,
                 request.FirstNameContains,
                 request.LastNameContains
-            );
+            );  
             // 2. Prüfen, ob Ergebnisse vorhanden sind
             if(pagedResult.Items == null || !pagedResult.Items.Any())
             {

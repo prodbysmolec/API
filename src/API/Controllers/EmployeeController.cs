@@ -66,6 +66,36 @@ public class EmployeeController(IMediator mediator, ILogger<EmployeeController> 
             });
     }
 
+    /// <summary>
+    /// Aktualisiert einen Employee.
+    /// </summary>
+    /// <param name="id">Die ID des zu aktualisierenden Employees.</param>
+    /// <param name="command">Die neuen Daten für den Employee.</param>
+    /// <returns>Ein Erfolg oder ein Fehler.</returns>
+    [HttpPut("{id:int}")]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> UpdateEmployee(int id, [FromBody] UpdateEmployeeCommand command)
+    {
+        command.Id = id;
+        _logger.LogInformation("Aktualisiere Employee mit ID: {EmployeeId}", id);
+        var result = await _mediator.Send(command);
+
+        return result.Match(
+            success =>
+            {
+                _logger.LogInformation("Employee mit ID {Id} erfolgreich aktualisiert.", id);
+                return Ok(new { message = "Employee erfolgreich aktualisiert." });
+            },
+            error =>
+            {
+                _logger.LogError("Fehler beim Aktualisieren des Employees mit ID {Id}: {Error}", id, error);
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            });
+    }
+
     // /// <summary>
     // /// Ruft einen Employee anhand der ID ab.
     // /// </summary>

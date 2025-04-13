@@ -14,4 +14,6 @@ public interface IEmployeeService
         string? firstNameContains = null,
         string? lastNameContains = null);
     Task<Employee> AddEmployeeAsync(Employee employee);
+
+    Task<Employee?> UpdateEmployeeAsync(int id, UpdateEmployeeRequest employeeRequest);
 }
