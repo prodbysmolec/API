@@ -1,6 +1,6 @@
 using Domain.Common;
 
-namespace API.Features.Employees.Models.Entitys;
+namespace Domain.Entities.Employees;
 
 public class Employee : AuditableEntity
 {

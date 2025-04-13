@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 namespace API.Features.Employees.Models.DTOs;
 
 public class CreateEmployeeRequest
@@ -16,3 +17,14 @@ public class CreateEmployeeRequest
     public string? Email { get; set; }
 }
 
+public class CreateEmployeeRequestValidator : AbstractValidator<CreateEmployeeRequest>
+{
+    public CreateEmployeeRequestValidator()
+    {
+        RuleFor(x => x.FirstName)
+            .NotEmpty();
+
+        RuleFor(x => x.LastName)
+            .NotEmpty();
+    }
+}

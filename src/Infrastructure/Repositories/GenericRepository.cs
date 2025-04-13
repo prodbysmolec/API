@@ -1,5 +1,5 @@
 using System;
-using Domain.Interfaces;
+using Application.Interfaces.Repositories;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,7 +40,6 @@ internal abstract class GenericRepository<T>(AppDbContext context)
     //         .AsNoTracking()
     //         .FirstOrDefaultAsync(e => e.UserId == userId && e.Id == id);
     // }
-
     public Task<bool> UpdateAsync(T entity)
     {
         var entry = context.Set<T>().Update(entity);

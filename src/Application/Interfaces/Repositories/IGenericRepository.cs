@@ -1,5 +1,5 @@
 using System;
-namespace Domain.Interfaces;
+namespace Application.Interfaces.Repositories;
 
 public interface IGenericRepository<T> where T : class
 {

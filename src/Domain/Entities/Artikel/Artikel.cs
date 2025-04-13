@@ -4,7 +4,6 @@ using Domain.Entities.Lieferant;
 using Domain.Entities.Warenausgang;
 using Domain.Common;
 using Artikelsystem.Shared.DTOs.Artikel.Enums;
-using Domain.Entities.Warenausgang;
 using Domain.Entities.Artikel;
 namespace Domain.Entities.Artikel;
 public class Artikel : AuditableEntity

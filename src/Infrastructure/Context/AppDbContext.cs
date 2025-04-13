@@ -14,6 +14,8 @@ using Infrastructure.Configurations.Lieferant;
 using Infrastructure.Configurations.Wareneingang;
 using Infrastructure.Configurations.Warenausgang;
 using Domain.Common;
+using Domain.Entities.Employees;
+using Infrastructure.Configurations.Employees;
 
 namespace Infrastructure.Context;
 
@@ -26,9 +28,9 @@ public class AppDbContext : DbContext
         this._systemClock = systemClock;
     }
 
-    // public DbSet<Employee> Employees { get; set; }
-    // public DbSet<Benefit> Benefits { get; set; }
-    // public DbSet<EmployeeBenefit> EmployeeBenefits { get; set; }
+     public DbSet<Employee> Employees { get; set; }
+     public DbSet<Benefit> Benefits { get; set; }
+     public DbSet<EmployeeBenefit> EmployeeBenefits { get; set; }
 
     // Neue DbSets für Artikel, Lieferant und Wareneingang
     public DbSet<Artikel> Artikel { get; set; }
@@ -56,7 +58,7 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //modelBuilder.ApplyConfiguration(new EmployeeBenefitConfiguration());
+        modelBuilder.ApplyConfiguration(new EmployeeBenefitConfiguration());
 
         // Wareneingang - Lieferant (N:1)
         modelBuilder.ApplyConfiguration(new WareneingaengeConfiguration());

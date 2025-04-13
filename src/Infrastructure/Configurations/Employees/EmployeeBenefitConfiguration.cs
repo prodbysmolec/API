@@ -1,9 +1,8 @@
-using System;
-using API.Features.Employees.Models.Entitys;
+using Domain.Entities.Employees;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace API.Features.Employees.Configurations;
+namespace Infrastructure.Configurations.Employees;
 
 public class EmployeeBenefitConfiguration : IEntityTypeConfiguration<EmployeeBenefit>
 {
