@@ -7,7 +7,7 @@ public abstract class BaseError(string title, string description, StatusCode sta
 {
     public string Title { get; } = title;
     public string Description { get; } = description;
-    public StatusCode StatusCode { get; } = statusCode;
+    public StatusCode Status { get; } = statusCode;
 
     public static BaseError None()
     {

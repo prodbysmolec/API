@@ -21,4 +21,11 @@ public static class EmployeeErrors
         );
     }
 
+    public static BaseError EMailAlreadyExists(string email) 
+    {
+        return BaseError.Conflict(
+            "Employee.EmailAlreadyExists",
+            $"Die E-Mail-Adresse {email} existiert bereits."
+        );
+    }
 }

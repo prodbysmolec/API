@@ -8,6 +8,7 @@ using Application.Queries.Employee;
 using Domain.Common.ResultPattern;
 using Application.DTOs.Employee;
 using Application.Queries;
+using Application.Commands;
 namespace API.Controllers;
 
 public class EmployeeController(IMediator mediator, ILogger<EmployeeController> logger) : BaseController
@@ -59,4 +60,29 @@ public class EmployeeController(IMediator mediator, ILogger<EmployeeController> 
                 return StatusCode(StatusCodes.Status500InternalServerError, error);
             });
     }
+
+    /// <summary>
+    /// Erstellt einen neuen Employee.
+    /// </summary>
+    /// <param name="command">Die Daten des neuen Employees.</param>
+    /// <returns>Die ID des erstellten Employees oder ein Fehler.</returns>
+    [HttpPost]
+    public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeCommand command)
+    {
+        _logger.LogInformation("Neuen Employee erstellen.");
+        var result = await _mediator.Send(command);
+        return result.Match(
+            success =>
+            {
+                _logger.LogInformation("Employee erfolgreich erstellt mit ID {Id}.", success);
+                return Ok(new { message = "Employee erfolgreich hinzugefügt." });
+            },
+            error =>
+            {
+                _logger.LogError("Fehler beim Erstellen des Employees: {Error}", error);
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            });
+    }
+
+    
 }

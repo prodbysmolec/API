@@ -1,5 +1,7 @@
 using System;
 using API.Shared.Validation;
+using Artikelsystem.Shared.Helfer;
+using Artikelsystem.Shared.Validation;
 using Domain.Options;
 using FluentValidation;
 using Infrastructure.Extension;
@@ -39,8 +41,10 @@ public static class WebApplicationBuilderExtension
         builder.Services.AddValidatorsFromAssemblyContaining<Program>();
         builder.Services.AddControllers(options => 
         {
-            options.Filters.Add<FluentValidationFilter>();
+            options.Filters.Add<GlobalRequestValidation>();
         });
+        builder.Services.AddScoped<GlobalRequestValidation>();
+        builder.Services.AddScoped<IFormatValidation, FormatValidation>();
         //builder.Services.AddScoped<CreateInventurRequestValidator>();
         //builder.Services.AddScoped<UpdateInventurPositionRequestValidator>();
     }
