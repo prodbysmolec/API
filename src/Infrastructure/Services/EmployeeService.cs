@@ -1,4 +1,5 @@
 using System;
+using API.Features.Employees.Models.DTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Artikelsystem.Shared.DTOs;
@@ -12,6 +13,13 @@ namespace Infrastructure.Services;
 public class EmployeeService(AppDbContext context) : IEmployeeService
 {
     private readonly AppDbContext _context = context;
+
+    public async Task<Employee> AddEmployeeAsync(Employee employee)
+    {
+        _context.Employees.Add(employee);
+        await _context.SaveChangesAsync();
+        return await Task.FromResult(employee);
+    }
 
     public async Task<PagedResultDTO<Employee>> GetAllEmployeesAsync(int page, int recordsPerPage, string? firstNameContains = null, string? lastNameContains = null)
     {

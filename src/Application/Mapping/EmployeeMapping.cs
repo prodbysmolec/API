@@ -34,7 +34,6 @@ public class EmployeeMapping : Profile
             .ForMember(dest => dest.ZipCode, opt => opt.MapFrom(src => src.ZipCode))
             .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
-        
 
         //GetEmployeeResponse -> Employee
         CreateMap<GetEmployeeResponse, Employee>()
@@ -47,6 +46,20 @@ public class EmployeeMapping : Profile
             .ForMember(dest => dest.ZipCode, opt => opt.MapFrom(src => src.ZipCode))
             .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
+
+        CreateMap<CreateEmployeeCommand, Employee>()
+            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+            .ForMember(dest => dest.Address1, opt => opt.MapFrom(src => src.Address1))
+            .ForMember(dest => dest.Address2, opt => opt.MapFrom(src => src.Address2))
+            .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
+            .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.State))
+            .ForMember(dest => dest.ZipCode, opt => opt.MapFrom(src => src.ZipCode))
+            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+            .ForMember(dest => dest.Benefits, opt => opt.Ignore());
+
+        CreateMap<Employee, EmployeeDetailDto>();
 
     }
 }

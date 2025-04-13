@@ -1,4 +1,5 @@
 using System;
+using API.Features.Employees.Models.DTOs;
 using Artikelsystem.Shared.DTOs;
 using Domain.Common.ResultPattern;
 using Domain.Entities.Employees;
@@ -12,4 +13,5 @@ public interface IEmployeeService
         int recordsPerPage,
         string? firstNameContains = null,
         string? lastNameContains = null);
+    Task<Employee> AddEmployeeAsync(Employee employee);
 }

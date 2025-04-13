@@ -48,6 +48,5 @@ public class GetEmployeesQueryHandler(IEmployeeService service, IMapper mapper) 
             // 5. Fehler zurückgeben
             return await Task.FromResult(Result<EmployeeListContainerDto>.Failure(EmployeeErrors.EmployeesNotFound()));
         }
-
     }
 }
