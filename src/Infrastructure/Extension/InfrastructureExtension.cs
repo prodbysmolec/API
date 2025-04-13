@@ -1,8 +1,10 @@
 using System;
 using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
 using Infrastructure.Common.UnitOfWork;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Internal;
@@ -18,6 +20,7 @@ public static class InfrastructureExtension
         services.AddSingleton<ISystemClock, SystemClock>();
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IEmployeeService, EmployeeService>();
         return services;
     }
 }

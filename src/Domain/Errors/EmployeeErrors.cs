@@ -28,4 +28,12 @@ public static class EmployeeErrors
             $"Die E-Mail-Adresse {email} existiert bereits."
         );
     }
+
+    public static BaseError IdIstNullOderNegativ(int id)
+    {
+        return BaseError.Validation(
+            "Employee.IdIstNullOderNegativ",
+            $"Die ID {id} darf nicht 0 oder negativ sein."
+        );
+    }
 }

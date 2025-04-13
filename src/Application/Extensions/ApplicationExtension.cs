@@ -17,7 +17,7 @@ public static class ApplicationExtension
 
         // FluentValidation
         services.AddValidatorsFromAssembly(applicationAssembly, includeInternalTypes: true);
-        
+
         // MediatR
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(applicationAssembly));
 
