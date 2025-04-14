@@ -1,4 +1,5 @@
 using System;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
@@ -23,6 +24,8 @@ public static class InfrastructureExtension
         services.AddScoped<IEmployeeService, EmployeeService>();
         services.AddScoped<IArtikelService, ArtikelService>();
         services.AddScoped<IArtikelGruppeService, ArtikelGruppeService>();
+        services.AddScoped<IWarenausgangService, WarenausgangService>();
+
 
         services.AddScoped<IWareneingangService, WareneingangService>();
 

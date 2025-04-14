@@ -22,6 +22,17 @@ public static class PagingService
 
         int totalRecords = await query.CountAsync();
 
+        if(totalRecords == 0)
+        {
+            return new PagedResultDTO<T>
+            {
+                Items = new List<T>(),
+                Page = page,
+                RecordsPerPage = recordsPerPage,
+                TotalRecords = 0
+            };
+        }
+
         if(page > (int)Math.Ceiling((double)totalRecords / recordsPerPage))
         {
             throw new ArgumentException("Die eingegebenen Seitenanzahl ist größer als die Gesamtseitenanzahl.");

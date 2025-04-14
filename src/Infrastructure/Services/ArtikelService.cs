@@ -33,8 +33,7 @@ public class ArtikelService(AppDbContext context, IMapper mapper) : IArtikelServ
     {
         IQueryable<Artikel> artikel = _context.Artikel
             .Include(a => a.ArtikelStatistik)
-            //.Include(a => a.Artikelgruppe)
-            ;
+            .Include(a => a.Artikelgruppe);
 
         // Filterung anwenden
         if (!string.IsNullOrEmpty(request.NameContains))

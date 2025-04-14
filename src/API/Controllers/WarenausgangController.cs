@@ -1,57 +1,64 @@
-// using System.Security.Claims;
-// using Application.Interfaces;
-// using API.Common.Controllers;
-// using Artikelsystem.Shared;
-// using Artikelsystem.Shared.DTOs;
-// using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Filter;
-// using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Request;
-// using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Responses;
-// using Microsoft.AspNetCore.Authorization;
-// using Microsoft.AspNetCore.Http;
-// using Microsoft.AspNetCore.Http.HttpResults;
-// using Microsoft.AspNetCore.Mvc;
-// using FluentValidation.AspNetCore;
+using API.Common.Controllers;
+using Artikelsystem.Shared.DTOs;
+using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Filter;
+using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Responses;
+using Microsoft.AspNetCore.Mvc;
+using MediatR;
+using Application.Queries.Warenausgaenge;
+using Domain.Common.ResultPattern;
 
-// namespace API.Features.Warenausgang.Controllers;
-// public class WarenausgangController : BaseController
-// {
-//     private readonly ILogger<WarenausgangController> _logger;
-//     private readonly IWarenausgangService _service;
 
-//     public WarenausgangController(ILogger<WarenausgangController> logger, IWarenausgangService service)
-//     {
-//         _logger = logger;
-//         _service = service;
-//     }
+namespace API.Features.Warenausgang.Controllers;
+public class WarenausgangController(IMediator mediator, ILogger<WarenausgangController> logger) : BaseController
+{
+    private readonly IMediator _mediator = mediator;
+    private readonly ILogger<WarenausgangController> _logger = logger;
 
-//     [HttpGet]
-//     [ProducesResponseType(typeof(PagedResultDTO<WarenausgangDto>), StatusCodes.Status200OK)]
-//     [ProducesResponseType(StatusCodes.Status204NoContent)]
-//     public async Task<ActionResult<PagedResultDTO<WarenausgangDto>>> GetWarenausgaengeAsync([FromQuery] WarenausgangFilterDto filter, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
-//     {
-//         _logger.LogInformation($"GetWarenausgaengeAsync wurde Aufgerufen mit dem Filter: {@filter}, pageNumber: {pageNumber}, pageSize: {pageSize}", filter, pageNumber, pageSize);
-//         var result = await _service.GetWarenausgaengeAsync(filter, pageNumber, pageSize);
-//         if(result.Items == null || !result.Items.Any())
-//         {
-//             return NoContent();
-//         }
-//         return Ok(result);
-//     }
+    
+    [HttpGet]
+    [ProducesResponseType(typeof(PagedResultDTO<WarenausgangDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> GetWarenausgaengeAsync([FromQuery] WarenausgangFilterDto filter, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
+    {
+        _logger.LogInformation("GetWarenausgaengeAsync wurde aufgerufen mit dem Filter: {@Filter}, PageNumber: {PageNumber}, PageSize: {PageSize}", filter, pageNumber, pageSize);
 
-//     [HttpGet("{id:int}", Name = "GetWarenausgangById")] // Add a route name
-//     [ProducesResponseType(typeof(WarenausgangDto), StatusCodes.Status200OK)]
-//     [ProducesResponseType(StatusCodes.Status404NotFound)]
-//     public async Task<ActionResult<WarenausgangDto>> GetWarenausgangByIdAsync(int id)
-//     {
-//         _logger.LogInformation($"GetWarenausgangByIdAsync wurde Aufgerufen mit der ID: {id}", id);
-//         var result = await _service.GetWarenausgangByIdAsync(id);
-//         if (result == null)
-//         {
-//             return NotFound();
-//         }
+        var query = new GetWarenausgangQuery
+        {
+            Filter = filter,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
+
+        var result = await _mediator.Send(query);
+
+        return result.Match(
+            success =>
+            {
+                _logger.LogInformation("Warenausgänge erfolgreich abgerufen.");
+                return Ok(success);
+            },
+            error =>
+            {
+                _logger.LogError("Fehler beim Abrufen der Warenausgänge: {Error}", error);
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            });
+    }
+}
+
+    // [HttpGet("{id:int}", Name = "GetWarenausgangById")] // Add a route name
+    // [ProducesResponseType(typeof(WarenausgangDto), StatusCodes.Status200OK)]
+    // [ProducesResponseType(StatusCodes.Status404NotFound)]
+    // public async Task<ActionResult<WarenausgangDto>> GetWarenausgangByIdAsync(int id)
+    // {
+    //     _logger.LogInformation($"GetWarenausgangByIdAsync wurde Aufgerufen mit der ID: {id}", id);
+    //     var result = await _service.GetWarenausgangByIdAsync(id);
+    //     if (result == null)
+    //     {
+    //         return NotFound();
+    //     }
         
-//         return Ok(result);
-//     }
+    //     return Ok(result);
+    // }
 
 //     [HttpPost]
 //     [ProducesResponseType(typeof(WarenausgangDto), StatusCodes.Status201Created)]
