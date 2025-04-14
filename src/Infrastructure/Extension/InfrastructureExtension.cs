@@ -21,6 +21,11 @@ public static class InfrastructureExtension
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IEmployeeService, EmployeeService>();
+        services.AddScoped<IArtikelService, ArtikelService>();
+        services.AddScoped<IArtikelGruppeService, ArtikelGruppeService>();
+
+        services.AddScoped<IWareneingangService, WareneingangService>();
+
         return services;
     }
 }

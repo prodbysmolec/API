@@ -15,7 +15,6 @@ public class ArtikelStatistik : AuditableEntity
     public int VerkaufsMenge { get; set; }
 
     // Berechnete Eigenschaften
-
     // Lagerwert = GesamtMenge * DurchschnittlicherEinzelpreis
     private decimal _Lagerwert;
     public decimal Lagerwert
@@ -31,7 +30,6 @@ public class ArtikelStatistik : AuditableEntity
         get { return _GesamtVerkaufswert; }
         set { _GesamtVerkaufswert = value; }
     }
-
 
     // Navigation property
     public virtual Artikel? Artikel { get; set; }

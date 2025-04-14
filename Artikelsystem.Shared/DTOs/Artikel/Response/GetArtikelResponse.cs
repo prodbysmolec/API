@@ -32,7 +32,7 @@ public class GetArtikelResponse
     public bool IstUeberMaximalbestand => Menge > Maximalbestand;
 
     // Optional: Statistik-Informationen
-    public ArtikelStatistikDto? Statistik { get; set; }
+    public virtual ArtikelStatistikDto? Statistik { get; set; }
 
     public List<WarenausgangArtikelPositionenDto>? WarenausgangArtikelPosition { get; set; }
     public List<WareneingangArtikelPositionenDto>? WareneingangArtikelPosition { get; set; }

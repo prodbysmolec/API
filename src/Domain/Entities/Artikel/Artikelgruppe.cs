@@ -2,12 +2,13 @@ using System;
 
 namespace Domain.Entities.Artikel;
 
-
 public class Artikelgruppe
 {
+
     public int Id { get; set; }
     public required string Name { get; set; }
     public int ProduktkategorieId { get; set; }
     public virtual Produktkategorie? Produktkategorie { get; set; }
+    public virtual ICollection<Artikel> Artikel { get; set; } = new HashSet<Artikel>();
     public virtual ICollection<ArtikelgruppeZusatzfelder> ArtikelgruppeZusatzfelder { get; set; } = new HashSet<ArtikelgruppeZusatzfelder>();
 }

@@ -1,6 +1,7 @@
 using System;
 using Artikelsystem.Shared.DTOs.Artikel.Enums;
 using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 
 namespace Artikelsystem.Shared.DTOs.Artikel.Request;
@@ -14,6 +15,7 @@ public class CreateArtikelRequest
     public int Menge { get; set; } = 0;
     public ArtikelStatus Status { get; set; } = ArtikelStatus.Verfügbar;
     public IFormFile? Bild { get; set;}
+    public required int ArtikelGruppeId { get; set; } 
 }
 
 

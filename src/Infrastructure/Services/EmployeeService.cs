@@ -53,5 +53,9 @@ public class EmployeeService(AppDbContext context) : IEmployeeService
         
         return employee;
     }
-    
+
+    public Task<Employee?> UpdateEmployeeAsync(int id, UpdateEmployeeRequest employeeRequest)
+    {
+        throw new NotImplementedException();
+    }
 }

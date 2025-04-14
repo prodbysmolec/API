@@ -92,7 +92,7 @@
 //                 nameof(GetAllLieferantenForArtikel),
 //                 new { artikelId },
 //                 artikelLieferant
-//             );
+//             );   
 //         }
 //         catch (KeyNotFoundException ex)
 //         {
@@ -177,7 +177,6 @@
 //                 return StatusCode(500, "Ein Fehler ist aufgetreten");
 //             }
 //         }
-
 
 
 //         /// <summary>

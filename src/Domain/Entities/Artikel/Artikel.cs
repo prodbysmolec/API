@@ -19,9 +19,15 @@ public class Artikel : AuditableEntity
     public bool HistorischGesetzt { get; set; } = false;
     public virtual ICollection<WareneingangArtikelPositionen> Wareneingaenge { get; set; } = new List<WareneingangArtikelPositionen>();
     public virtual ICollection<WarenausgangArtikelPositionen> Warenausgaenge { get; set; } = new List<WarenausgangArtikelPositionen>();
-    public virtual ArtikelStatistik? ArtikelStatistik { get; set; }
+    public virtual ArtikelStatistik? ArtikelStatistik { get; set; } = new ArtikelStatistik();
+    public int ArtikelGruppeId { get; set; }
+    
+
     // Ergänzung für die Artikel-Klasse:
     public virtual ICollection<ArtikelZusatzWert> ArtikelZusatzWerte { get; set; } = new HashSet<ArtikelZusatzWert>();
     public virtual ICollection<ArtikelInventurHistorie> InventurHistorie { get; set; } = new HashSet<ArtikelInventurHistorie>();
     public virtual ICollection<ArtikelLieferant> ArtikelLieferanten { get; set; } = new List<ArtikelLieferant>();
+    public virtual Artikelgruppe? Artikelgruppe { get; set; }
+
+
 }

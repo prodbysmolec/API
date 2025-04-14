@@ -7,35 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Artikel",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Preis = table.Column<decimal>(type: "numeric", nullable: false),
-                    Maximalbestand = table.Column<int>(type: "integer", nullable: false),
-                    Mindestbestand = table.Column<int>(type: "integer", nullable: false),
-                    Menge = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    Bild = table.Column<byte[]>(type: "bytea", nullable: false),
-                    HistorischGesetzt = table.Column<bool>(type: "boolean", nullable: false),
-                    ErstelltVon = table.Column<string>(type: "text", nullable: true),
-                    ErstelltAm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    BearbeitetVon = table.Column<string>(type: "text", nullable: true),
-                    BearbeitetAm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Artikel", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Benefits",
                 columns: table => new
@@ -217,35 +193,6 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ArtikelStatistiken",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ArtikelId = table.Column<int>(type: "integer", nullable: false),
-                    Gesamtmenge = table.Column<decimal>(type: "numeric", nullable: false),
-                    DurchschnittlicherEinzelpreis = table.Column<decimal>(type: "numeric", nullable: false),
-                    DurchschnittlicherVerkaufspreis = table.Column<decimal>(type: "numeric", nullable: false),
-                    VerkaufsMenge = table.Column<int>(type: "integer", nullable: false),
-                    Lagerwert = table.Column<decimal>(type: "numeric", nullable: false, computedColumnSql: "\"Gesamtmenge\" * \"DurchschnittlicherEinzelpreis\"", stored: true),
-                    GesamtVerkaufswert = table.Column<decimal>(type: "numeric", nullable: false, computedColumnSql: "\"VerkaufsMenge\" * \"DurchschnittlicherVerkaufspreis\"", stored: true),
-                    ErstelltVon = table.Column<string>(type: "text", nullable: true),
-                    ErstelltAm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    BearbeitetVon = table.Column<string>(type: "text", nullable: true),
-                    BearbeitetAm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ArtikelStatistiken", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ArtikelStatistiken_Artikel_ArtikelId",
-                        column: x => x.ArtikelId,
-                        principalTable: "Artikel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "EmployeeBenefits",
                 columns: table => new
                 {
@@ -268,37 +215,6 @@ namespace Infrastructure.Migrations
                         name: "FK_EmployeeBenefits_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ArtikelInventurHistorie",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ArtikelId = table.Column<int>(type: "integer", nullable: false),
-                    InventurId = table.Column<int>(type: "integer", nullable: false),
-                    AlteBestandsmenge = table.Column<int>(type: "integer", nullable: false),
-                    NeueBestandsmenge = table.Column<int>(type: "integer", nullable: false),
-                    Differenz = table.Column<int>(type: "integer", nullable: false),
-                    DifferenzWert = table.Column<decimal>(type: "numeric", nullable: false),
-                    Datum = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ArtikelInventurHistorie", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ArtikelInventurHistorie_Artikel_ArtikelId",
-                        column: x => x.ArtikelId,
-                        principalTable: "Artikel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ArtikelInventurHistorie_Inventuren_InventurId",
-                        column: x => x.InventurId,
-                        principalTable: "Inventuren",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -332,18 +248,85 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InventurPositionen",
+                name: "Artikelgruppe",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    InventurId = table.Column<int>(type: "integer", nullable: false),
-                    ArtikelId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    ProduktkategorieId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Artikelgruppe", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Artikelgruppe_Produktkategorie_ProduktkategorieId",
+                        column: x => x.ProduktkategorieId,
+                        principalTable: "Produktkategorie",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserGruppenUsers",
+                columns: table => new
+                {
+                    UserID = table.Column<int>(type: "integer", nullable: false),
+                    UserGruppenID = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserGruppenUsers", x => new { x.UserID, x.UserGruppenID });
+                    table.ForeignKey(
+                        name: "FK_UserGruppenUsers_UserGruppen_UserGruppenID",
+                        column: x => x.UserGruppenID,
+                        principalTable: "UserGruppen",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserGruppenUsers_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Zusatzwert",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Wert = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    ZusatzFeldID = table.Column<int>(type: "integer", nullable: false),
+                    IsChecked = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Zusatzwert", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Zusatzwert_Zusatzfeld_ZusatzFeldID",
+                        column: x => x.ZusatzFeldID,
+                        principalTable: "Zusatzfeld",
+                        principalColumn: "ZusatzfeldID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Artikel",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Preis = table.Column<decimal>(type: "numeric", nullable: false),
+                    Maximalbestand = table.Column<int>(type: "integer", nullable: false),
+                    Mindestbestand = table.Column<int>(type: "integer", nullable: false),
                     Menge = table.Column<int>(type: "integer", nullable: false),
-                    GezaehlteMenge = table.Column<int>(type: "integer", nullable: true),
-                    IstGeprueft = table.Column<bool>(type: "boolean", nullable: false),
-                    DifferenzWert = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: true),
-                    Bemerkung = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Bild = table.Column<byte[]>(type: "bytea", nullable: false),
+                    HistorischGesetzt = table.Column<bool>(type: "boolean", nullable: false),
+                    ArtikelGruppeId = table.Column<int>(type: "integer", nullable: false),
                     ErstelltVon = table.Column<string>(type: "text", nullable: true),
                     ErstelltAm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     BearbeitetVon = table.Column<string>(type: "text", nullable: true),
@@ -351,15 +334,64 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InventurPositionen", x => x.Id);
+                    table.PrimaryKey("PK_Artikel", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_InventurPositionen_Artikel_ArtikelId",
+                        name: "FK_Artikel_Artikelgruppe_ArtikelGruppeId",
+                        column: x => x.ArtikelGruppeId,
+                        principalTable: "Artikelgruppe",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ArtikelgruppeZusatzfelder",
+                columns: table => new
+                {
+                    ArtikelgruppeID = table.Column<int>(type: "integer", nullable: false),
+                    ZusatzfelderID = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArtikelgruppeZusatzfelder", x => new { x.ArtikelgruppeID, x.ZusatzfelderID });
+                    table.ForeignKey(
+                        name: "FK_ArtikelgruppeZusatzfelder_Artikelgruppe_ArtikelgruppeID",
+                        column: x => x.ArtikelgruppeID,
+                        principalTable: "Artikelgruppe",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ArtikelgruppeZusatzfelder_Zusatzfeld_ZusatzfelderID",
+                        column: x => x.ZusatzfelderID,
+                        principalTable: "Zusatzfeld",
+                        principalColumn: "ZusatzfeldID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ArtikelInventurHistorie",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ArtikelId = table.Column<int>(type: "integer", nullable: false),
+                    InventurId = table.Column<int>(type: "integer", nullable: false),
+                    AlteBestandsmenge = table.Column<int>(type: "integer", nullable: false),
+                    NeueBestandsmenge = table.Column<int>(type: "integer", nullable: false),
+                    Differenz = table.Column<int>(type: "integer", nullable: false),
+                    DifferenzWert = table.Column<decimal>(type: "numeric", nullable: false),
+                    Datum = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArtikelInventurHistorie", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ArtikelInventurHistorie_Artikel_ArtikelId",
                         column: x => x.ArtikelId,
                         principalTable: "Artikel",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_InventurPositionen_Inventuren_InventurId",
+                        name: "FK_ArtikelInventurHistorie_Inventuren_InventurId",
                         column: x => x.InventurId,
                         principalTable: "Inventuren",
                         principalColumn: "Id",
@@ -405,45 +437,89 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Artikelgruppe",
+                name: "ArtikelStatistiken",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ProduktkategorieId = table.Column<int>(type: "integer", nullable: false)
+                    ArtikelId = table.Column<int>(type: "integer", nullable: false),
+                    Gesamtmenge = table.Column<decimal>(type: "numeric", nullable: false),
+                    DurchschnittlicherEinzelpreis = table.Column<decimal>(type: "numeric", nullable: false),
+                    DurchschnittlicherVerkaufspreis = table.Column<decimal>(type: "numeric", nullable: false),
+                    VerkaufsMenge = table.Column<int>(type: "integer", nullable: false),
+                    Lagerwert = table.Column<decimal>(type: "numeric", nullable: false, computedColumnSql: "\"Gesamtmenge\" * \"DurchschnittlicherEinzelpreis\"", stored: true),
+                    GesamtVerkaufswert = table.Column<decimal>(type: "numeric", nullable: false, computedColumnSql: "\"VerkaufsMenge\" * \"DurchschnittlicherVerkaufspreis\"", stored: true),
+                    ErstelltVon = table.Column<string>(type: "text", nullable: true),
+                    ErstelltAm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    BearbeitetVon = table.Column<string>(type: "text", nullable: true),
+                    BearbeitetAm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Artikelgruppe", x => x.Id);
+                    table.PrimaryKey("PK_ArtikelStatistiken", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Artikelgruppe_Produktkategorie_ProduktkategorieId",
-                        column: x => x.ProduktkategorieId,
-                        principalTable: "Produktkategorie",
+                        name: "FK_ArtikelStatistiken_Artikel_ArtikelId",
+                        column: x => x.ArtikelId,
+                        principalTable: "Artikel",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserGruppenUsers",
+                name: "ArtikelZusatzWert",
                 columns: table => new
                 {
-                    UserID = table.Column<int>(type: "integer", nullable: false),
-                    UserGruppenID = table.Column<int>(type: "integer", nullable: false)
+                    ArtikelId = table.Column<int>(type: "integer", nullable: false),
+                    ZusatzwertId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserGruppenUsers", x => new { x.UserID, x.UserGruppenID });
+                    table.PrimaryKey("PK_ArtikelZusatzWert", x => new { x.ArtikelId, x.ZusatzwertId });
                     table.ForeignKey(
-                        name: "FK_UserGruppenUsers_UserGruppen_UserGruppenID",
-                        column: x => x.UserGruppenID,
-                        principalTable: "UserGruppen",
+                        name: "FK_ArtikelZusatzWert_Artikel_ArtikelId",
+                        column: x => x.ArtikelId,
+                        principalTable: "Artikel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserGruppenUsers_Users_UserID",
-                        column: x => x.UserID,
-                        principalTable: "Users",
+                        name: "FK_ArtikelZusatzWert_Zusatzwert_ZusatzwertId",
+                        column: x => x.ZusatzwertId,
+                        principalTable: "Zusatzwert",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InventurPositionen",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    InventurId = table.Column<int>(type: "integer", nullable: false),
+                    ArtikelId = table.Column<int>(type: "integer", nullable: false),
+                    Menge = table.Column<int>(type: "integer", nullable: false),
+                    GezaehlteMenge = table.Column<int>(type: "integer", nullable: true),
+                    IstGeprueft = table.Column<bool>(type: "boolean", nullable: false),
+                    DifferenzWert = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: true),
+                    Bemerkung = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    ErstelltVon = table.Column<string>(type: "text", nullable: true),
+                    ErstelltAm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    BearbeitetVon = table.Column<string>(type: "text", nullable: true),
+                    BearbeitetAm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventurPositionen", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InventurPositionen_Artikel_ArtikelId",
+                        column: x => x.ArtikelId,
+                        principalTable: "Artikel",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_InventurPositionen_Inventuren_InventurId",
+                        column: x => x.InventurId,
+                        principalTable: "Inventuren",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -508,74 +584,10 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Zusatzwert",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Wert = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ZusatzFeldID = table.Column<int>(type: "integer", nullable: false),
-                    IsChecked = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Zusatzwert", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Zusatzwert_Zusatzfeld_ZusatzFeldID",
-                        column: x => x.ZusatzFeldID,
-                        principalTable: "Zusatzfeld",
-                        principalColumn: "ZusatzfeldID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ArtikelgruppeZusatzfelder",
-                columns: table => new
-                {
-                    ArtikelgruppeID = table.Column<int>(type: "integer", nullable: false),
-                    ZusatzfelderID = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ArtikelgruppeZusatzfelder", x => new { x.ArtikelgruppeID, x.ZusatzfelderID });
-                    table.ForeignKey(
-                        name: "FK_ArtikelgruppeZusatzfelder_Artikelgruppe_ArtikelgruppeID",
-                        column: x => x.ArtikelgruppeID,
-                        principalTable: "Artikelgruppe",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ArtikelgruppeZusatzfelder_Zusatzfeld_ZusatzfelderID",
-                        column: x => x.ZusatzfelderID,
-                        principalTable: "Zusatzfeld",
-                        principalColumn: "ZusatzfeldID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ArtikelZusatzWert",
-                columns: table => new
-                {
-                    ArtikelId = table.Column<int>(type: "integer", nullable: false),
-                    ZusatzwertId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ArtikelZusatzWert", x => new { x.ArtikelId, x.ZusatzwertId });
-                    table.ForeignKey(
-                        name: "FK_ArtikelZusatzWert_Artikel_ArtikelId",
-                        column: x => x.ArtikelId,
-                        principalTable: "Artikel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ArtikelZusatzWert_Zusatzwert_ZusatzwertId",
-                        column: x => x.ZusatzwertId,
-                        principalTable: "Zusatzwert",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_Artikel_ArtikelGruppeId",
+                table: "Artikel",
+                column: "ArtikelGruppeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Artikelgruppe_ProduktkategorieId",
@@ -713,9 +725,6 @@ namespace Infrastructure.Migrations
                 name: "WareneingangArtikelPositionen");
 
             migrationBuilder.DropTable(
-                name: "Artikelgruppe");
-
-            migrationBuilder.DropTable(
                 name: "Lieferanten");
 
             migrationBuilder.DropTable(
@@ -746,10 +755,13 @@ namespace Infrastructure.Migrations
                 name: "Wareneingaenge");
 
             migrationBuilder.DropTable(
-                name: "Produktkategorie");
+                name: "Zusatzfeld");
 
             migrationBuilder.DropTable(
-                name: "Zusatzfeld");
+                name: "Artikelgruppe");
+
+            migrationBuilder.DropTable(
+                name: "Produktkategorie");
         }
     }
 }

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250413162215_Initial")]
-    partial class Initial
+    [Migration("20250414115711_test")]
+    partial class test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ArtikelGruppeId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("BearbeitetAm")
                         .HasColumnType("timestamp with time zone");
@@ -72,6 +75,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ArtikelGruppeId");
 
                     b.ToTable("Artikel");
                 });
@@ -866,6 +871,17 @@ namespace Infrastructure.Migrations
                     b.ToTable("WareneingangArtikelPositionen", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.Artikel.Artikel", b =>
+                {
+                    b.HasOne("Domain.Entities.Artikel.Artikelgruppe", "Artikelgruppe")
+                        .WithMany("Artikel")
+                        .HasForeignKey("ArtikelGruppeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artikelgruppe");
+                });
+
             modelBuilder.Entity("Domain.Entities.Artikel.ArtikelInventurHistorie", b =>
                 {
                     b.HasOne("Domain.Entities.Artikel.Artikel", "Artikel")
@@ -1094,6 +1110,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Artikel.Artikelgruppe", b =>
                 {
+                    b.Navigation("Artikel");
+
                     b.Navigation("ArtikelgruppeZusatzfelder");
                 });
 

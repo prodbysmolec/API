@@ -20,5 +20,12 @@ public class ArtikelConfiguration : IEntityTypeConfiguration<Domain.Entities.Art
             .HasMany(a => a.ArtikelZusatzWerte)
             .WithOne(azw => azw.Artikel)
             .HasForeignKey(az => az.ArtikelId);
+
+
+        builder
+            .HasOne(a => a.Artikelgruppe)
+            .WithMany(g => g.Artikel)
+            .HasForeignKey(a => a.ArtikelGruppeId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

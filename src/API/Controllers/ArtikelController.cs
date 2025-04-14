@@ -1,111 +1,126 @@
-// using System.Runtime.CompilerServices;
-// using API.Infrastructure.Persistence.Context;
-// using API.Common.Controllers;
-// using Artikelsystem.Shared.DTOs.Artikel.Request;
-// using Artikelsystem.Shared.DTOs.Artikel.Response;
-// using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Responses;
-// using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Response;
-// using Microsoft.AspNetCore.Mvc;
-// using Microsoft.EntityFrameworkCore;
-// using Domain.Entities.Artikel;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Application.Queries.Employee;
+using Domain.Common.ResultPattern;
+using Application.Queries;
+using Application.Commands;
+using API.Features.Employees.Models.DTOs;
+using Artikelsystem.Shared.DTOs.Artikel.Request;
+using Microsoft.AspNetCore.Http.HttpResults;
+using API.Common.Controllers;
+using Application.Queries.Artikel;
+using Application.Commands.Artikel;
+using Application.Queries.Wareneingaenge;
+using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Response;
+using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Request;
 
-// namespace API.Controller;
-// public class ArtikelController : BaseController
-// {
-//     private readonly ILogger<ArtikelController> _logger;
-//     private readonly AppDbContext _dbContext;
 
-//     public ArtikelController(
-//         ILogger<ArtikelController> logger,
-//         AppDbContext dbContext
-//     )
-//     {
-//         _logger = logger;
-//         _dbContext = dbContext;
-//     }
+namespace API.Controller;
+public class ArtikelController(IMediator mediator, ILogger<ArtikelController> logger) : BaseController
+{
+    IMediator _mediator = mediator;
+    ILogger<ArtikelController> _logger = logger;
 
-//     /// <summary>
-//     /// Gets all articles in the system with filtering options.
-//     /// </summary>
-//     /// <param name="request">Filter and pagination parameters</param>
-//     /// <returns>Returns the filtered articles in a JSON array.</returns>
-//     [HttpGet]
-//     [ProducesResponseType(typeof(IEnumerable<GetArtikelResponse>), StatusCodes.Status200OK)]
-//     [ProducesResponseType(typeof(IEnumerable<GetArtikelResponse>), StatusCodes.Status500InternalServerError)]
-//     public async Task<IActionResult> GetAllArtikel([FromQuery] GetAllArtikelRequest? request)
-//     {
-//         int page = request?.Page ?? 1;
-//         int recordsPerPage = request?.RecordsPerPage ?? 100;
+    /// <summary>
+    /// Gets all articles in the system with filtering options.
+    /// </summary>
+    /// <param name="request">Filter and pagination parameters</param>
+    /// <returns>Returns the filtered articles in a JSON array.</returns>
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<GetArtikelResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<GetArtikelResponse>), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetAllArtikel([FromQuery] GetAllArtikelRequest request)
+    {
+        _logger.LogInformation("Hole alle Artikel.");
+        var result = await _mediator.Send(new GetArtikelQuery(request));
+        return result.Match(
+            success =>
+            {
+                _logger.LogInformation("Alle Artikel erfolgreich abgerufen.");
+                return Ok(success);
+            },
+            error =>
+            {
+                _logger.LogError("Fehler beim Abrufen der Artikel: {Error}", error);
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            });
+    }
 
-//         // Start with base query including related data
-//         IQueryable<Domain.Entities.Artikel.Artikel> query = _dbContext.Artikel
-//             .Include(a => a.ArtikelStatistik);
+    [HttpPost]
+    public async Task<IActionResult> CreateArtikel([FromQuery] CreateArtikelCommand request)
+    {
+        _logger.LogInformation("Erstelle neuen Artikel.");
+        var result = await _mediator.Send(request);
+        return result.Match(
+            success =>
+            {
+                _logger.LogInformation("Artikel erfolgreich erstellt.");
+                return Ok(new {message="Artikel hinzugefügt."});
+                //return CreatedAtAction(nameof(GetArtikelById), new { id = success.Id }, success);
+            },
+            error =>
+            {
+                _logger.LogError("Fehler beim Erstellen des Artikels: {Error}", error);
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            });
+    }
 
-//         // Apply filters if request is not null
-//         if (request != null)
-//         {
-//             ApplyFilters(ref query, request);
-//             ApplySorting(ref query, request);
-//         }
-//         else
-//         {
-//             // Default sorting by ID
-//             query = query.OrderBy(a => a.Id);
-//         }
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(GetArtikelResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetArtikelById(int id)
+    {
+        _logger.LogInformation("Hole Artikel mit ID: {ArtikelId}", id);
+        //request ??= new GetArtikelByIdRequest();
 
-//         // Apply pagination after all filters
-//         query = query.Skip((page - 1) * recordsPerPage).Take(recordsPerPage);
+        var result = await _mediator.Send(new GetArtikelByIdQuery(id));
+        return result.Match(
+            success =>
+            {
+                _logger.LogInformation("Artikel erfolgreich abgerufen.");
+                return Ok(success);
+            },
+            error =>
+            {
+                _logger.LogError("Fehler beim Abrufen des Artikels: {Error}", error);
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            });
+    }
 
-//         var artikel = await query.ToArrayAsync();
+    [HttpGet("{artikelId:int}/wareneingaenge")]
+    [ProducesResponseType(typeof(IEnumerable<GetWareneingaengeForArtikelResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetWareneingaengeForArtikel(int artikelId)
+    {
+        _logger.LogInformation("Hole Wareneingänge für Artikel mit ID: {ArtikelId}", artikelId);
+        var result = await _mediator.Send(new GetWareneingaengeForArtikelQuery(artikelId));
+        return result.Match(
+            success =>
+            {
+                _logger.LogInformation("Wareneingänge erfolgreich abgerufen.");
+                return Ok(success);
+            },
+            error =>
+            {
+                _logger.LogError("Fehler beim Abrufen der Wareneingänge: {Error}", error);
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            });
+    }
+}
 
-//         return Ok(artikel.Select(ArtikelToGetArtikelResponse));
-//     }
 
-//     /// <summary>
-//     /// Gets an article by its ID with options to include related data.
-//     /// </summary>
-//     /// <param name="id">The ID of the article</param>
-//     /// <param name="request">Options for including related data</param>
-//     /// <returns>The article with requested related data</returns>
-//     [HttpGet("{id:int}")]
-//     [ProducesResponseType(typeof(GetArtikelResponse), StatusCodes.Status200OK)]
-//     [ProducesResponseType(StatusCodes.Status404NotFound)]
-//     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-//     public async Task<IActionResult> GetArtikelById(int id, [FromQuery] GetArtikelByIdRequest? request = null)
-//     {
-//         _logger.LogInformation("Getting article with ID: {ArtikelId}", id);
-//         request ??= new GetArtikelByIdRequest();
-
-//         // Start with base query
-//         IQueryable<Domain.Entities.Artikel.Artikel> query = _dbContext.Artikel;
-
-//         // Include related data based on request
-//         IncludeRelatedData(ref query, request);
-
-//         var artikel = await query.SingleOrDefaultAsync(a => a.Id == id);
-
-//         if (artikel == null)
-//         {
-//             _logger.LogWarning("Article with ID {ArtikelId} not found", id);
-//             return NotFound();
-//         }
-
-//         var artikelResponse = ArtikelToGetArtikelResponse(artikel);
-//         _logger.LogDebug("Successfully retrieved article with ID: {ArtikelId}", id);
-
-//         return Ok(artikelResponse);
-//     }
-
-//     /// <summary>
-//     /// Gets warehouse receipts for a specific article.
-//     /// </summary>
-//     /// <param name="artikelId">The ID of the article</param>
-//     /// <returns>List of warehouse receipts for the article</returns>
-//     [HttpGet("{artikelId:int}/wareneingaenge")]
-//     [ProducesResponseType(typeof(IEnumerable<WareneingangArtikelPositionenDto>), StatusCodes.Status200OK)]
-//     [ProducesResponseType(StatusCodes.Status404NotFound)]
-//     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-//     public async Task<IActionResult> GetWareneingaengeForArtikel(int artikelId)
+    // /// <summary>
+    // /// Gets warehouse receipts for a specific article.
+    // /// </summary>
+    // /// <param name="artikelId">The ID of the article</param>
+    // /// <returns>List of warehouse receipts for the article</returns>
+    // [HttpGet("{artikelId:int}/wareneingaenge")]
+    // [ProducesResponseType(typeof(IEnumerable<WareneingangArtikelPositionenDto>), StatusCodes.Status200OK)]
+    // [ProducesResponseType(StatusCodes.Status404NotFound)]
+    // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    // public async Task<IActionResult> GetWareneingaengeForArtikel(int artikelId)
 //     {
 //         var artikel = await _dbContext.Artikel
 //             .Include(a => a.Wareneingaenge)
@@ -248,7 +263,7 @@
 
 //         if (request.MaxMenge.HasValue)
 //         {
-//             query = query.Where(a => a.Menge <= request.MaxMenge.Value);
+//               query = query.Where(a => a.Menge <= request.MaxMenge.Value);
 //         }
 
 //         // Filter by status
