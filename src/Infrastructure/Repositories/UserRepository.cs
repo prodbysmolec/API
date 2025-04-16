@@ -68,8 +68,8 @@ public class UserRepository(AppDbContext context) : GenericRepository<User>(cont
             .ThenInclude(ug => ug.UserGruppen)
             .ThenInclude(gp => gp.GroupPermissions)
             .ThenInclude(gp => gp.Permission)
+            .AsTracking()
             .FirstOrDefaultAsync(u => u.UserName == username);
-
 
         if(user == null)
         {
