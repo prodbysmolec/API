@@ -5,10 +5,10 @@ using Artikelsystem.Shared.DTOs.Artikel.Request;
 using Artikelsystem.Shared.DTOs.ArtikelGruppe.Request;
 using Domain.Entities.Artikel;
 
-namespace Application.Interfaces.Services;
+namespace Application.Interfaces.Repositories;
 
 public interface IArtikelGruppeRepository : IGenericRepository<Artikelgruppe>
 {
     Task<bool> ExistsAsync(int id);
-    Task<PagedResultDTO<GetAllArtikelGruppeResponse>> GetAllArtikelGruppen(int recordsPerPage, string? nameContains = null, int page = 1);
+    Task<IEnumerable<Artikelgruppe>> GetAllArtikelGruppen(string? nameContains = null);
 }

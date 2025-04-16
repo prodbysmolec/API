@@ -20,10 +20,10 @@ public class GetWarenausgangQuery : IRequest<Result<PagedResultDTO<WarenausgangD
 
 public class GetWarenausgangQueryHandler : IRequestHandler<GetWarenausgangQuery, Result<PagedResultDTO<WarenausgangDto>>>
 {
-    private readonly IWarenausgangService _service;
+    private readonly IWarenausgangRepository _service;
     private readonly ILogger<GetWarenausgangQueryHandler> _logger;
 
-    public GetWarenausgangQueryHandler(IWarenausgangService service, ILogger<GetWarenausgangQueryHandler> logger)
+    public GetWarenausgangQueryHandler(IWarenausgangRepository service, ILogger<GetWarenausgangQueryHandler> logger)
     {
         _service = service;
         _logger = logger;

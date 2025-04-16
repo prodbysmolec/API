@@ -1,6 +1,5 @@
 using System;
 using Application.DTOs.Employee;
-using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
 using AutoMapper;
 using Domain.Common.BaseErrors;
@@ -10,11 +9,12 @@ using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Artikelsystem.Shared.DTOs.Employee.Response;
 using API.Features.Employees.Models.DTOs;
+using Application.Interfaces.Repositories;
 namespace Application.Queries.Employee;
 
-public class GetEmployeeQueryHandler(IEmployeeService service, IMapper mapper) : IRequestHandler<GetEmployeeQuery, Result<GetEmployeeResponse>>
+public class GetEmployeeQueryHandler(IEmployeeRepository service, IMapper mapper) : IRequestHandler<GetEmployeeQuery, Result<GetEmployeeResponse>>
 {
-    private readonly IEmployeeService _service = service;
+    private readonly IEmployeeRepository _service = service;
     private readonly IMapper _mapper = mapper;
     public async Task<Result<GetEmployeeResponse>> Handle(GetEmployeeQuery request, CancellationToken cancellationToken)
     {

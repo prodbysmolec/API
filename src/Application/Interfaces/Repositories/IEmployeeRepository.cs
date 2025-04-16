@@ -1,12 +1,20 @@
 using System;
-using Application.DTOs.Employee;
+using API.Features.Employees.Models.DTOs;
+using Artikelsystem.Shared.DTOs;
 using Domain.Common.ResultPattern;
 using Domain.Entities.Employees;
 
 namespace Application.Interfaces.Repositories;
 
-public interface IEmployeeRepository : IGenericRepository<Employee>
+public interface IEmployeeRepository
 {
-    public Task<Result<IEnumerable<Employee>>> GetEmployeeByIdAsync(int id); 
+    Task<Employee> GetEmployeeByIdAsync(int id);
+    Task<PagedResultDTO<Employee>> GetAllEmployeesAsync(int page,
+        int recordsPerPage,
+        string? firstNameContains = null,
+        string? lastNameContains = null);
+    Task<Employee> AddEmployeeAsync(Employee employee);
+
+    Task<Employee?> UpdateEmployeeAsync(int id, UpdateEmployeeRequest employeeRequest);
     public Task<Result<bool>> EmailExistsAsync(string email);
 }

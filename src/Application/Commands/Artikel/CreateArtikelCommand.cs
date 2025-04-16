@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 using System.Security.Cryptography.X509Certificates;
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Artikelsystem.Shared.DTOs.Artikel.Enums;
 using Artikelsystem.Shared.DTOs.Artikel.Request;
 using Domain.Common.ResultPattern;
@@ -11,16 +11,16 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Commands.Artikel;
 
-public class CreateArtikelCommand : CreateArtikelRequest, IRequest<Result<int>>
+public class CreateArtikelCommand : CreateArtikelRequest, IRequest<Result<bool>>
 {
 }
 
 public class CreateArtikelCommandValidator : AbstractValidator<CreateArtikelCommand>
 {
-    private readonly IArtikelGruppeService _artikelGruppeService;
-    public CreateArtikelCommandValidator(IArtikelGruppeService artikelGruppeService)
+    private readonly IArtikelGruppeRepository _artikelGruppeRepository;
+    public CreateArtikelCommandValidator(IArtikelGruppeRepository artikelGruppeRepository)
     {
-        _artikelGruppeService = artikelGruppeService;
+        _artikelGruppeRepository = artikelGruppeRepository;
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage("Name ist erforderlich.")
@@ -63,7 +63,7 @@ public class CreateArtikelCommandValidator : AbstractValidator<CreateArtikelComm
             .GreaterThan(0)
             .WithMessage("ArtikelGruppeId muss größer als 0 sein.")
             // Prüfe ob es in der DB existiert
-            .MustAsync(async (id, cancellation) => await _artikelGruppeService.ExistsAsync(id))
+            .MustAsync(async (id, cancellation) => await _artikelGruppeRepository.ExistsAsync(id))
             .WithMessage("ArtikelGruppe existiert nicht");
     }
 }

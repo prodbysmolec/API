@@ -1,6 +1,6 @@
 using System;
 using Application.Authentication;
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Artikelsystem.Shared.DTOs.User.Request;
 using Domain.Common.BaseErrors;
 using Domain.Common.ResultPattern;
@@ -20,10 +20,10 @@ public class RegisterCommand : UserDto, IRequest<Result<User>>
 
 public class RegisterCommandValidation : AbstractValidator<RegisterCommand>
 {
-    private readonly IUserService _userService;
-    public RegisterCommandValidation(IUserService userService)
+    private readonly IUserRepository _userRepository;
+    public RegisterCommandValidation(IUserRepository UserRepository)
     {
-        _userService = userService;
+        _userRepository = UserRepository;
         RuleFor(x => x.Username)
             .NotEmpty()
             .WithMessage("Benutzername ist erforderlich.")
@@ -58,7 +58,7 @@ public class RegisterCommandValidation : AbstractValidator<RegisterCommand>
         RuleFor(x => x.Username)
             .MustAsync(async (username, cancellation) =>
             {
-                var existsResult = await _userService.ExistsByUsernameAsync(username);
+                var existsResult = await _userRepository.ExistsByUsernameAsync(username);
                 return !existsResult.IsSuccess || !existsResult.Value;
             })
             .WithMessage("Benutzername ist bereits vergeben.");
@@ -66,7 +66,7 @@ public class RegisterCommandValidation : AbstractValidator<RegisterCommand>
         RuleFor(x => x.Email)
             .MustAsync(async (email, cancellation) =>
             {
-                var existsResult = await _userService.ExistsByEmailAsync(email!);
+                var existsResult = await _userRepository.ExistsByEmailAsync(email!);
                 return !existsResult.IsSuccess || !existsResult.Value;
             })
             .WithMessage("E-Mail Adresse ist bereits vergeben.");   
@@ -74,13 +74,13 @@ public class RegisterCommandValidation : AbstractValidator<RegisterCommand>
 } 
 
 public class RegisterCommandHandler(
-    IUserService userService,
+    IUserRepository UserRepository,
     ILogger<RegisterCommandHandler> logger,
     IPasswordService passwordService
 ) : IRequestHandler<RegisterCommand, Result<User>>
 {
     private readonly ILogger<RegisterCommandHandler> _logger = logger;
-    private readonly IUserService _userService = userService;
+    private readonly IUserRepository _UserRepository = UserRepository;
     private readonly IPasswordService _passwordService = passwordService;
 
     public async Task<Result<User>> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -90,7 +90,7 @@ public class RegisterCommandHandler(
         _logger.LogInformation("User Registrierungs Prozess wird gestartet für E-Mail: {Email}", request.Email);
         
         // Prüfe, ob der Benutzername bereits existiert
-        var existsResult = _userService.ExistsByUsernameAsync(request.Username).Result;
+        var existsResult = _UserRepository.ExistsByUsernameAsync(request.Username).Result;
         if (existsResult.IsSuccess && existsResult.Value)
             {
                 _logger.LogWarning("Benutzername {Username} existiert bereits", request.Username);
@@ -111,7 +111,7 @@ public class RegisterCommandHandler(
         };
         
         // Füge den Benutzer zur Datenbank hinzu und speichere die Änderungen
-        var createdUser = await _userService.CreateAsync(user);
+        var createdUser = await _UserRepository.CreateAsync(user);
                 
         if (!createdUser!.IsSuccess)
         {

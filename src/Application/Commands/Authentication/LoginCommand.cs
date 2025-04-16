@@ -1,7 +1,7 @@
 using System;
 using Application.Authentication;
 using Application.Interfaces;
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Artikelsystem.Shared.DTOs.User.Request;
 using Domain.Common.BaseErrors;
 using Domain.Common.ResultPattern;
@@ -21,10 +21,10 @@ public class LoginCommand : UserLoginDto, IRequest<Result<TokenResponseDto>>
 
 public class LoginCommandValidation : AbstractValidator<LoginCommand>
 {
-    private readonly IUserService _userService;
-    public LoginCommandValidation(IUserService userService)
+    private readonly IUserRepository _UserRepository;
+    public LoginCommandValidation(IUserRepository UserRepository)
     {
-        _userService = userService;
+        _UserRepository = UserRepository;
         RuleFor(x => x.Username)
             .NotEmpty()
             .WithMessage("Benutzername ist erforderlich.")
@@ -41,19 +41,19 @@ public class LoginCommandValidation : AbstractValidator<LoginCommand>
 
 public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<TokenResponseDto>>
 {
-    private readonly IUserService _userService;
+    private readonly IUserRepository _UserRepository;
     private readonly IPasswordService _passwordService;
     private readonly IJwtTokenGenerator _tokenGenerator;
     private readonly ILogger<LoginCommandHandler> _logger;
     public LoginCommandHandler(
         IAuthenticationService authenticationService,
-        IUserService userService,
+        IUserRepository UserRepository,
         IPasswordService passwordService,
         IJwtTokenGenerator tokenGenerator,
         ILogger<LoginCommandHandler> logger
         )
     {
-        _userService = userService;
+        _UserRepository = UserRepository;
         _passwordService = passwordService;
         _logger = logger;
         _tokenGenerator = tokenGenerator;
@@ -64,7 +64,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<TokenRes
         _logger.LogInformation("Login für Benutzer {Username} gestartet", request.Username);
         try 
         {
-            var user = await _userService.GetByUserNameAsync(request.Username);
+            var user = await _UserRepository.GetByUserNameAsync(request.Username);
             if(user is null || user.Value is null)
             {
                 _logger.LogInformation("Login fehlgeschlagen: Benutzername {Username} existiert nicht", request.Username);

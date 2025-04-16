@@ -1,6 +1,6 @@
 using System;
 using Application.DTOs.Employee;
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.UnitOfWork;
 using AutoMapper;
 using Domain.Common.ResultPattern;
@@ -9,9 +9,9 @@ using MediatR;
 
 namespace Application.Queries.Employee;
 
-public class GetEmployeesQueryHandler(IEmployeeService service, IMapper mapper) : IRequestHandler<GetEmployeesQuery, Result<EmployeeListContainerDto>>
+public class GetEmployeesQueryHandler(IEmployeeRepository service, IMapper mapper) : IRequestHandler<GetEmployeesQuery, Result<EmployeeListContainerDto>>
 {
-    private readonly IEmployeeService _service = service;
+    private readonly IEmployeeRepository _service = service;
     private readonly IMapper _mapper = mapper;
     public async Task<Result<EmployeeListContainerDto>> Handle(GetEmployeesQuery request, CancellationToken cancellationToken)
     {

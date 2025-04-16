@@ -15,7 +15,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
-try 
+try
 {
     Log.Information("Anwendung wird gestartet.");
 
@@ -35,12 +35,13 @@ try
 
     app.Run();
 }
-catch (Exception ex) 
+
+catch (Exception ex)
 {
     Log.Fatal(ex, "Die Anwendung konnte nicht gestartet werden.");
     throw;
 }
-finally 
+finally
 {
     Log.CloseAndFlush();
 }
@@ -50,7 +51,7 @@ finally
 // builder.Services.AddScoped<IArtikelLieferantService, ArtikelLieferantService>();
 // builder.Services.AddScoped<ILieferantService, LieferantService>();
 // builder.Services.AddScoped<IAuthService, AuthService>();
-// builder.Services.AddScoped<IWarenausgangService, WarenausgangService>();
+// builder.Services.AddScoped<IWarenausgangRepository, WarenausgangRepository>();
 #endregion
 
 

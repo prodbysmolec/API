@@ -1,6 +1,5 @@
 using System;
 using Application.Interfaces.Repositories;
-using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
 using AutoMapper;
 using Domain.Common.ResultPattern;
@@ -10,9 +9,9 @@ using MediatR;
 
 namespace Application.Commands.Employee;
 
-public class CreateEmployeeCommandHandler(IEmployeeService service, IMapper mapper) : IRequestHandler<CreateEmployeeCommand, Result<int>>
+public class CreateEmployeeCommandHandler(IEmployeeRepository service, IMapper mapper) : IRequestHandler<CreateEmployeeCommand, Result<int>>
 {
-    private readonly IEmployeeService _service = service;
+    private readonly IEmployeeRepository _service = service;
     private readonly IMapper _mapper = mapper;
     public async Task<Result<int>> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {

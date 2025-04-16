@@ -5,7 +5,7 @@ using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Responses;
 
 namespace Application.Interfaces;
 
-public interface IWarenausgangService
+public interface IWarenausgangRepository
 {
     Task<PagedResultDTO<WarenausgangDto>> GetWarenausgaengeAsync(WarenausgangFilterDto filter, int pageNumber, int pageSize);
     Task<WarenausgangDto?> GetWarenausgangByIdAsync(int id);

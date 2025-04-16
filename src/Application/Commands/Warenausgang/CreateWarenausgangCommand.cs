@@ -21,10 +21,10 @@ public class CreateWarenausgangCommand : IRequest<Result<WarenausgangDto>>
 
 public class CreateWarenausgangCommandHandler : IRequestHandler<CreateWarenausgangCommand, Result<WarenausgangDto>>
 {
-    private readonly IWarenausgangService _service;
+    private readonly IWarenausgangRepository _service;
     private readonly ILogger<CreateWarenausgangCommandHandler> _logger;
 
-    public CreateWarenausgangCommandHandler(IWarenausgangService service, ILogger<CreateWarenausgangCommandHandler> logger)
+    public CreateWarenausgangCommandHandler(IWarenausgangRepository service, ILogger<CreateWarenausgangCommandHandler> logger)
     {
         _service = service;
         _logger = logger;

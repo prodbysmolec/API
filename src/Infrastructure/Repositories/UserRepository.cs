@@ -1,4 +1,4 @@
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Domain.Common.BaseErrors;
 using Domain.Common.ResultPattern;
 using Domain.Entities.Authentication;
@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Services;
 
-public class UserService(AppDbContext context, ILogger<UserService> logger) : GenericRepository<User>(context), IUserService
+public class UserRepository(AppDbContext context) : GenericRepository<User>(context), IUserRepository
 {
     private readonly AppDbContext _context = context;
 

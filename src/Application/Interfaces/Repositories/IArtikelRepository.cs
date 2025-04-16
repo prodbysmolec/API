@@ -1,4 +1,5 @@
 using System;
+using Application.Interfaces.Repositories;
 using Application.Queries.Artikel;
 using Artikelsystem.Shared.DTOs;
 using Artikelsystem.Shared.DTOs.Artikel.Request;
@@ -8,13 +9,13 @@ using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Response;
 using Domain.Entities.Artikel;
 using Domain.Entities.Employees;
 
-namespace Application.Interfaces.Services;
+namespace Application.Interfaces.Repositories;
 
-public interface IArtikelService
+public interface IArtikelRepository : IGenericRepository<Artikel>
 {
 
     Task<PagedResultDTO<Artikel>> GetAllArtikelAsync(GetAllArtikelRequest request);
-    Task<int> AddArtikelAsync(Artikel artikel);
+    Task<bool> AddArtikelAsync(Artikel artikel);
     Task<Artikel> GetArtikelByIdAsync(int id);
 
     // Task<GetArtikelResponse?> GetByIdAsync(int id, GetArtikelByIdRequest request);

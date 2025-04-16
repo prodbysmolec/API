@@ -1,11 +1,11 @@
 using System;
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services;
 
-public class UserGruppenService(AppDbContext context) : IUserGruppenService
+public class UserGruppenRepository(AppDbContext context) : IUserGruppenRepository
 {
     private readonly AppDbContext _context = context;
     public async Task<IEnumerable<object>> GetUserGroupNamesAsync(int Id)

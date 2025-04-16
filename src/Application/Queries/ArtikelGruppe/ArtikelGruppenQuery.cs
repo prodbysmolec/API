@@ -1,5 +1,5 @@
 using System;
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Artikelsystem.Shared.DTOs;
 using Artikelsystem.Shared.DTOs.ArtikelGruppe.Request;
 using Artikelsystem.Shared.Helfer;
@@ -28,22 +28,41 @@ public class ArtikelGruppenQuery : IRequest<Result<PagedResultDTO<GetAllArtikelG
     public string? NameContains { get; set; }
 }
 
-public class ArtikelGruppenQueryHandler(IArtikelGruppeService artikelGruppeService, IMapper mapper) : IRequestHandler<ArtikelGruppenQuery, Result<PagedResultDTO<GetAllArtikelGruppeResponse>>>
+public class ArtikelGruppenQueryHandler(IArtikelGruppeRepository ArtikelGruppeRepository, IMapper mapper) : IRequestHandler<ArtikelGruppenQuery, Result<PagedResultDTO<GetAllArtikelGruppeResponse>>>
 {
-    private readonly IArtikelGruppeService _artikelGruppeService = artikelGruppeService;
+    private readonly IArtikelGruppeRepository _ArtikelGruppeRepository = ArtikelGruppeRepository;
     private readonly IMapper _mapper = mapper;
     public async Task<Result<PagedResultDTO<GetAllArtikelGruppeResponse>>> Handle(ArtikelGruppenQuery request, CancellationToken cancellationToken)
     {
         try
         {
-            var result = await _artikelGruppeService.GetAllArtikelGruppen(request.RecordsPerPage, request.NameContains, request.Page);
-            
-            if (result == null || !result.Items.Any())
+            var artikelgruppen = await _ArtikelGruppeRepository.GetAllArtikelGruppen(request.NameContains);
+
+            if (artikelgruppen == null || !artikelgruppen.Any())
             {
                 return await Task.FromResult(Result<PagedResultDTO<GetAllArtikelGruppeResponse>>.Failure(BaseError.NotFound("Artikelgruppen nicht gefunden", "Keine Artikelgruppen gefunden.")));
             }
 
-            return await Task.FromResult(Result<PagedResultDTO<GetAllArtikelGruppeResponse>>.Success(result));
+            int page = request.Page;
+            int recordsPerPage = request.RecordsPerPage;
+            var pagedArtikelGruppen = artikelgruppen
+                .Skip((page - 1) * recordsPerPage)
+                .Take(recordsPerPage)
+                .ToList();
+
+            // Mapping der Entitäten zu DTOs durchführen
+            var mappedItems = _mapper.Map<List<GetAllArtikelGruppeResponse>>(pagedArtikelGruppen);
+
+            // PagedResultDTO erstellen
+            var pagedResult = new PagedResultDTO<GetAllArtikelGruppeResponse>
+            {
+                Items = mappedItems,
+                Page = page,
+                RecordsPerPage = recordsPerPage,
+                TotalRecords = artikelgruppen.Count()
+            };
+            
+            return await Task.FromResult(Result<PagedResultDTO<GetAllArtikelGruppeResponse>>.Success(pagedResult));
         }
         catch (Exception ex)
         {

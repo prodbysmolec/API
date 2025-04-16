@@ -2,9 +2,9 @@ using System;
 using Application.Interfaces.Repositories;
 using Domain.Entities.Authentication;
 
-namespace Application.Interfaces.Services;
+namespace Application.Interfaces.Repositories;
 
-public interface IPermissionService : IGenericRepository<Permission>
+public interface IPermissionRepository : IGenericRepository<Permission>
 {
     Task<List<string>> GetUserPermissionCodesAsync(int userId);
 }

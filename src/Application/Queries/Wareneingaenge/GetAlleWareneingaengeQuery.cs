@@ -1,5 +1,5 @@
 using System;
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Artikelsystem.Shared.DTOs;
 using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Response;
 using Domain.Common.BaseErrors;
@@ -22,18 +22,18 @@ public class GetAlleWareneingaengeQuery: IRequest<Result<PagedResultDTO<GetAlleW
 
 public class GetAlleWareneingaengeHandler : IRequestHandler<GetAlleWareneingaengeQuery, Result<PagedResultDTO<GetAlleWareneingaengeResponse>>>
 {
-    private readonly IWareneingangService _wareneingangService;
+    private readonly IWareneingangRepository _WareneingangRepository;
 
-    public GetAlleWareneingaengeHandler(IWareneingangService wareneingangService)
+    public GetAlleWareneingaengeHandler(IWareneingangRepository WareneingangRepository)
     {
-        _wareneingangService = wareneingangService;
+        _WareneingangRepository = WareneingangRepository;
     }
 
     public async Task<Result<PagedResultDTO<GetAlleWareneingaengeResponse>>> Handle(GetAlleWareneingaengeQuery query, CancellationToken cancellationToken)
     {
         try
         {
-            var result = await _wareneingangService.GetAlleWareneingaengeAsync(query.Page, query.RecordsPerPage);
+            var result = await _WareneingangRepository.GetAlleWareneingaengeAsync(query.Page, query.RecordsPerPage);
             if(result == null || result.Items.Count == 0)
             {
                 return Result<PagedResultDTO<GetAlleWareneingaengeResponse>>.Failure(BaseError.NotFound("Wareneingänge nicht gefunden", "Keine Wareneingänge gefunden."));

@@ -1,13 +1,11 @@
-using System;
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Domain.Entities.Authentication;
 using Infrastructure.Context;
-using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Services;
+namespace Infrastructure.Repositories;
 
-public class PermissionService(AppDbContext context) : GenericRepository<Permission>(context), IPermissionService
+public class PermissionRepository(AppDbContext context) : GenericRepository<Permission>(context), IPermissionRepository
 {
     private readonly AppDbContext _context = context;
     public async Task<List<string>> GetUserPermissionCodesAsync(int userId)

@@ -2,7 +2,7 @@ using System;
 
 namespace Domain.Common;
 
-public abstract class AuditableEntity
+public abstract class AuditableEntity : IAuditable
 {
     public string? ErstelltVon { get; set; }
     public DateTime ErstelltAm { get; set; }

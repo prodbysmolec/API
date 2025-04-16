@@ -1,32 +1,23 @@
-using System;
-using Application.Interfaces.Services;
 using Artikelsystem.Shared.DTOs.Artikel.Request;
-using Artikelsystem.Shared.DTOs.Artikel.Response;
-using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Responses;
-using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Response;
 using Artikelsystem.Shared.DTOs.Artikel.Enums;
-
 using Domain.Entities.Artikel;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Artikelsystem.Shared.DTOs;
-using Domain.Entities.Employees;
 using Infrastructure.Common;
 using AutoMapper;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Linq.Expressions;
+using Application.Interfaces.Repositories;
 
-namespace Infrastructure.Services;
+namespace Infrastructure.Repositories;
 
-public class ArtikelService(AppDbContext context, IMapper mapper) : IArtikelService
+public class ArtikelRepository(AppDbContext context) : GenericRepository<Artikel>(context), IArtikelRepository
 {
     private readonly AppDbContext _context = context;
-    private readonly IMapper _mapper = mapper;
 
-    public async Task<int> AddArtikelAsync(Artikel artikel)
+    public async Task<bool> AddArtikelAsync(Artikel artikel)
     {
         _context.Artikel.Add(artikel);
-        return await _context.SaveChangesAsync();
+        return await Task.FromResult(true);
     }
 
     public async Task<PagedResultDTO<Artikel>> GetAllArtikelAsync(GetAllArtikelRequest request)

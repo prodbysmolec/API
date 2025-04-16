@@ -33,8 +33,6 @@ public static class SeedData
             DateTimeKind.Utc
         );
 
-        var currentUser = "prodbysmolec";
-
         // SeedEmployees(context);
         // SeedBenefits(context);
         // SeedProduktkategorien(context);

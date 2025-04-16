@@ -1,5 +1,5 @@
 using System;
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Request;
 using Domain.Common.BaseErrors;
 using Domain.Common.ResultPattern;
@@ -19,18 +19,18 @@ public class AddWareneingangsPositionCommand : IRequest<Result<int>>
 
 public class AddWareneingangsPositionHandler : IRequestHandler<AddWareneingangsPositionCommand, Result<int>>
 {
-    private readonly IWareneingangService _wareneingangService;
+    private readonly IWareneingangRepository _wareneingangRepository;
 
-    public AddWareneingangsPositionHandler(IWareneingangService wareneingangService)
+    public AddWareneingangsPositionHandler(IWareneingangRepository WareneingangRepository)
     {
-        _wareneingangService = wareneingangService;
+        _wareneingangRepository = WareneingangRepository;
     }
 
     public async Task<Result<int>> Handle(AddWareneingangsPositionCommand command, CancellationToken cancellationToken)
     {
         try
         {
-            var result = await _wareneingangService.AddWareneingangsPositionAsync(command.Request);
+            var result = await _wareneingangRepository.AddWareneingangsPositionAsync(command.Request);
             return Result<int>.Success(result);
         }
         catch (Exception ex)

@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Artikelsystem.Shared.DTOs;
 using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Filter;
@@ -12,12 +10,12 @@ using API.Features.Inventur.Models.Enums;
 using Infrastructure.Context;
 using Application.Interfaces;
 
-namespace Infrastructure.Services;
+namespace Infrastructure.Repositories;
 
-public class WarenausgangService : IWarenausgangService
+public class WarenausgangRepository : IWarenausgangRepository
 {
     private readonly AppDbContext _context;
-    public WarenausgangService(AppDbContext context)
+    public WarenausgangRepository(AppDbContext context)
     {
         _context = context;
     }

@@ -1,5 +1,4 @@
-using System;
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Artikelsystem.Shared.DTOs;
 using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Request;
 using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Response;
@@ -8,12 +7,11 @@ using Domain.Entities.Wareneingang;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Services;
+namespace Infrastructure.Repositories;
 
-public class WareneingangService(AppDbContext context, IMapper mapper) : IWareneingangService
+public class WareneingangRepository(AppDbContext context) : GenericRepository<Wareneingaenge>(context), IWareneingangRepository
 {
     private readonly AppDbContext _context = context;
-    private readonly IMapper _mapper = mapper;
 
     public async Task<int> AddWareneingangsPositionAsync(AddWareneingangsPositionRequest request)
     {
@@ -96,14 +94,14 @@ public class WareneingangService(AppDbContext context, IMapper mapper) : IWarene
         };
     }
 
-    public async Task<List<GetWareneingaengeForArtikelResponse>> GetWareneingaengeForArtikelAsync(int artikelId)
-    {
-        var wareneingaenge = await _context.Wareneingaenge
-            .Include(w => w.WareneingangsPositionen)
-            .ThenInclude(p => p.Artikel)
-            .Where(w => w.WareneingangsPositionen.Any(p => p.ArtikelId == artikelId))
-            .ToListAsync();
+    // public async Task<List<GetWareneingaengeForArtikelResponse>> GetWareneingaengeForArtikelAsync(int artikelId)
+    // {
+    //     var wareneingaenge = await _context.Wareneingaenge
+    //         .Include(w => w.WareneingangsPositionen)
+    //         .ThenInclude(p => p.Artikel)
+    //         .Where(w => w.WareneingangsPositionen.Any(p => p.ArtikelId == artikelId))
+    //         .ToListAsync();
 
-        return _mapper.Map<List<GetWareneingaengeForArtikelResponse>>(wareneingaenge);
-    }
+    //     return _mapper.Map<List<GetWareneingaengeForArtikelResponse>>(wareneingaenge);
+    // }
 }

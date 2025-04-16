@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Application.Interfaces;
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Domain.Entities.Authentication;
 using Infrastructure.Context;
 using Microsoft.CodeAnalysis.CSharp;
@@ -16,15 +16,15 @@ namespace Infrastructure.Authentication;
 
 public class JwtTokenGenerator(
     IConfiguration configuration,
-    IUserService userService,
-    IUserGruppenService userGruppenService,
-    IPermissionService permissionService
+    IUserRepository UserRepository,
+    IUserGruppenRepository UserGruppenRepository,
+    IPermissionRepository PermissionRepository
 ) : IJwtTokenGenerator
 {
-    private readonly IUserService _userService = userService;
-    private readonly IUserGruppenService _userGruppenervice = userGruppenService;
+    private readonly IUserRepository _UserRepository = UserRepository;
+    private readonly IUserGruppenRepository _userGruppenervice = UserGruppenRepository;
     private readonly IConfiguration _configuration = configuration;
-    private readonly IPermissionService _permissionService = permissionService;
+    private readonly IPermissionRepository _PermissionRepository = PermissionRepository;
 
     public async Task<string> CreateAccessTokenAsync(User user)
     {
@@ -49,7 +49,7 @@ public class JwtTokenGenerator(
         }
 
         // Die Permissions des Users abrufen
-        var permissionCodes = await _permissionService.GetUserPermissionCodesAsync(user.Id);
+        var permissionCodes = await _PermissionRepository.GetUserPermissionCodesAsync(user.Id);
 
         // Permission-Codes als Claims hinzufügen
         foreach(var permissionCode in permissionCodes)
@@ -77,7 +77,7 @@ public class JwtTokenGenerator(
         var refreshToken = await GenerateRefreshToken();
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
-        await _userService.UpdateAsync(user);
+        await _UserRepository.UpdateAsync(user);
         return refreshToken;   
     }
 

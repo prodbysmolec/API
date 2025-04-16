@@ -1,5 +1,5 @@
 using System;
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Artikelsystem.Shared.DTOs.Artikel.Request;
 using Artikelsystem.Shared.Helfer;
 using AutoMapper;
@@ -10,9 +10,9 @@ using MediatR;
 
 namespace Application.Queries.Artikel;
 
-public class ArtikelQueryHandler(IArtikelService service, IMapper mapper) : IRequestHandler<GetArtikelQuery, Result<ListContainerDto<GetArtikelResponse>>>
+public class ArtikelQueryHandler(IArtikelRepository service, IMapper mapper) : IRequestHandler<GetArtikelQuery, Result<ListContainerDto<GetArtikelResponse>>>
 {
-    private readonly IArtikelService _service = service;
+    private readonly IArtikelRepository _service = service;
     private readonly IMapper _mapper = mapper;
 
     public async Task<Result<ListContainerDto<GetArtikelResponse>>> Handle(GetArtikelQuery request, CancellationToken cancellationToken)

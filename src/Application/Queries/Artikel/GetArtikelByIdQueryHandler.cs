@@ -1,4 +1,4 @@
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Artikelsystem.Shared.DTOs.Artikel.Request;
 using AutoMapper;
 using Domain.Common.BaseErrors;
@@ -7,9 +7,9 @@ using MediatR;
 
 namespace Application.Queries.Artikel;
 
-public class GetArtikelByIdQueryHandler(IArtikelService service, IMapper mapper) : IRequestHandler<GetArtikelByIdQuery, Result<GetArtikelResponse>>
+public class GetArtikelByIdQueryHandler(IArtikelRepository service, IMapper mapper) : IRequestHandler<GetArtikelByIdQuery, Result<GetArtikelResponse>>
 {
-    private readonly IArtikelService _service = service;
+    private readonly IArtikelRepository _service = service;
     private readonly IMapper _mapper = mapper;
 
     public async Task<Result<GetArtikelResponse>> Handle(GetArtikelByIdQuery request, CancellationToken cancellationToken)

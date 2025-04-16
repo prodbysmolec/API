@@ -1,6 +1,6 @@
 using System;
 using API.Features.Employees.Models.DTOs;
-using Application.Interfaces.Services;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.UnitOfWork;
 using AutoMapper;
 using Domain.Common.ResultPattern;
@@ -9,9 +9,9 @@ using MediatR;
 
 namespace Application.Commands.Employee;
 
-public class UpdateEmployeeCommandHandler(IEmployeeService service, IMapper mapper) : IRequestHandler<UpdateEmployeeCommand, Result<bool>>
+public class UpdateEmployeeCommandHandler(IEmployeeRepository service, IMapper mapper) : IRequestHandler<UpdateEmployeeCommand, Result<bool>>
 {
-    private readonly IEmployeeService _service = service;
+    private readonly IEmployeeRepository _service = service;
     private readonly IMapper _mapper = mapper;
     public async Task<Result<bool>> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
     {
