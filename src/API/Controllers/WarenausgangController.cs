@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Application.Queries.Warenausgaenge;
 using Domain.Common.ResultPattern;
+using Domain.Common.BaseErrors;
+using Artikelsystem.Shared.DTOs.Warenausgang.Dtos.Request;
+using Application.Commands.Warenausgang;
 
 
 namespace API.Features.Warenausgang.Controllers;
@@ -43,66 +46,126 @@ public class WarenausgangController(IMediator mediator, ILogger<WarenausgangCont
                 return StatusCode(StatusCodes.Status500InternalServerError, error);
             });
     }
+
+    [HttpGet("{id:int}", Name = "GetWarenausgangById")] // Add a route name
+    [ProducesResponseType(typeof(WarenausgangDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetWarenausgangByIdAsync(int id)
+    {
+        _logger.LogInformation("GetWarenausgangByIdAsync wurde aufgerufen mit der ID: {Id}", id);
+
+        var query = new GetWarenausgangByIdQuery(id);
+
+        var result = await _mediator.Send(query);
+
+        return result.Match(
+            success =>
+            {
+                _logger.LogInformation("Warenausgang erfolgreich abgerufen.");
+                return Ok(success);
+            },
+            error =>
+            {
+                if (error.Status == Domain.Enums.StatusCode.NotFound)
+                {
+                    _logger.LogInformation("Warenausgang nicht gefunden.");
+                    return NotFound("Warenausgang nicht gefunden.");
+                }
+
+                _logger.LogError("Fehler beim Abrufen des Warenausgangs: {Error}", error);
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            });
+    }
+
+
+    [HttpPost]
+    [ProducesResponseType(typeof(WarenausgangDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateWarenausgangAsync([FromBody] WarenausgangRequestDto dto)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var command = new CreateWarenausgangCommand(dto);
+
+            var result = await _mediator.Send(command);
+            return result.Match(
+            success =>
+            {
+                _logger.LogInformation("Warenausgang erfolgreich abgerufen.");
+                return CreatedAtRoute(
+                    "GetWarenausgangById", // Reference the named route
+                    new { id = success.Id }, // Ensure the parameter matches the route definition
+                    success // Return the created entity
+                );
+            },
+            error =>
+            {
+                if (error.Status == Domain.Enums.StatusCode.NotFound)
+                {
+                    _logger.LogError("Fehler bei der Erstellung des Warenausgangs: {Error}", error);
+                    return BadRequest(error);
+                }
+
+                _logger.LogError("Fehler beim Abrufen des Warenausgangs: {Error}", error);
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Unbekannter Fehler bei der Erstellung des Warenausgangs: {Message}", ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, "Ein unbekannter Fehler ist aufgetreten.");
+        }
+    }
 }
 
-    // [HttpGet("{id:int}", Name = "GetWarenausgangById")] // Add a route name
-    // [ProducesResponseType(typeof(WarenausgangDto), StatusCodes.Status200OK)]
-    // [ProducesResponseType(StatusCodes.Status404NotFound)]
-    // public async Task<ActionResult<WarenausgangDto>> GetWarenausgangByIdAsync(int id)
+    // [HttpPost]
+    // [ProducesResponseType(typeof(WarenausgangDto), StatusCodes.Status201Created)]
+    // [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    // public async Task<ActionResult<WarenausgangDto>> CreateWarenausgangAsync([FromBody] WarenausgangRequestDto dto)
     // {
-    //     _logger.LogInformation($"GetWarenausgangByIdAsync wurde Aufgerufen mit der ID: {id}", id);
-    //     var result = await _service.GetWarenausgangByIdAsync(id);
-    //     if (result == null)
+    //     try 
     //     {
-    //         return NotFound();
+
+
+    //     if (!ModelState.IsValid)
+    //     {
+    //         return BadRequest(ModelState);
     //     }
-        
-    //     return Ok(result);
+
+    //     var warenausgang = await _service.CreateWarenausgangAsync(dto);
+    //     if (warenausgang == null)
+    //     {
+    //         return BadRequest("Erstellung des Warenausgangs fehlgeschlagen.");
+    //     }
+
+    //     // Use CreatedAtRoute instead of CreatedAtAction
+    //     return CreatedAtRoute(
+    //         "GetWarenausgangById",          // Reference the named route
+    //         new { id = warenausgang.Id },  // Ensure the parameter matches the route definition
+    //         warenausgang                   // Return the created entity
+    //     );
+    //     }
+    //     catch (ArgumentException ex)
+    //     {
+    //         _logger.LogError(ex, "Fehler bei der Erstellung des Warenausgangs: {Message}", ex.Message);
+    //         return BadRequest(ex.Message);
+    //     }
+    //     catch (InvalidOperationException ex)
+    //     {
+    //         _logger.LogError(ex, "Fehler bei der Erstellung des Warenausgangs: {Message}", ex.Message);
+    //         return BadRequest(ex.Message);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         _logger.LogError(ex, "Unbekannter Fehler bei der Erstellung des Warenausgangs: {Message}", ex.Message);
+    //         return StatusCode(StatusCodes.Status500InternalServerError, "Ein unbekannter Fehler ist aufgetreten.");
+    //     }
     // }
-
-//     [HttpPost]
-//     [ProducesResponseType(typeof(WarenausgangDto), StatusCodes.Status201Created)]
-//     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-//     public async Task<ActionResult<WarenausgangDto>> CreateWarenausgangAsync([FromBody] WarenausgangRequestDto dto)
-//     {
-//         try 
-//         {
-
-
-//         if (!ModelState.IsValid)
-//         {
-//             return BadRequest(ModelState);
-//         }
-
-//         var warenausgang = await _service.CreateWarenausgangAsync(dto);
-//         if (warenausgang == null)
-//         {
-//             return BadRequest("Erstellung des Warenausgangs fehlgeschlagen.");
-//         }
-
-//         // Use CreatedAtRoute instead of CreatedAtAction
-//         return CreatedAtRoute(
-//             "GetWarenausgangById",          // Reference the named route
-//             new { id = warenausgang.Id },  // Ensure the parameter matches the route definition
-//             warenausgang                   // Return the created entity
-//         );
-//         }
-//         catch (ArgumentException ex)
-//         {
-//             _logger.LogError(ex, "Fehler bei der Erstellung des Warenausgangs: {Message}", ex.Message);
-//             return BadRequest(ex.Message);
-//         }
-//         catch (InvalidOperationException ex)
-//         {
-//             _logger.LogError(ex, "Fehler bei der Erstellung des Warenausgangs: {Message}", ex.Message);
-//             return BadRequest(ex.Message);
-//         }
-//         catch (Exception ex)
-//         {
-//             _logger.LogError(ex, "Unbekannter Fehler bei der Erstellung des Warenausgangs: {Message}", ex.Message);
-//             return StatusCode(StatusCodes.Status500InternalServerError, "Ein unbekannter Fehler ist aufgetreten.");
-//         }
-//     }
 
 //     [HttpDelete("{id:int}")]
 //     public async Task<IActionResult> DeleteWarenausgangAsync(int id)
