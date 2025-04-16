@@ -26,7 +26,7 @@ try
     builder.AddValidation();
     builder.Services.AddApplication();
     builder.Services.AddDependencyInjection();
-    builder.Services.AddDatabase(builder.Configuration);
+    await builder.Services.AddDatabase(builder.Configuration);
     builder.Services.AddJwtAuthentication(builder.Configuration);
     builder.Services.AddInfrastructure(builder.Configuration);
     var app = builder.Build()

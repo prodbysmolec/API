@@ -1,4 +1,6 @@
 using System;
+using System.Threading.Tasks;
+using API.Infrastructure.Persistence.Seeding;
 using Infrastructure.Context;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +11,7 @@ namespace Infrastructure.Extension;
 
 public static class DatabaseExtension
 {
-    public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
+    public static async Task<IServiceCollection> AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<AppDbContext>(options =>
         {
@@ -20,6 +22,9 @@ public static class DatabaseExtension
             });
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
+
+        var serviceProvider = services.BuildServiceProvider();
+        await SeedData.MigrateAndSeed(serviceProvider);
 
         services.AddHostedService<DatabaseInitalizer>();
         return services;

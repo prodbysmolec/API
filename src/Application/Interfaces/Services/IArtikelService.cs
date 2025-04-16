@@ -13,9 +13,7 @@ namespace Application.Interfaces.Services;
 public interface IArtikelService
 {
 
-    Task<PagedResultDTO<Artikel>> GetAllArtikelAsync(
-        GetAllArtikelRequest request
-    );
+    Task<PagedResultDTO<Artikel>> GetAllArtikelAsync(GetAllArtikelRequest request);
     Task<int> AddArtikelAsync(Artikel artikel);
     Task<Artikel> GetArtikelByIdAsync(int id);
 

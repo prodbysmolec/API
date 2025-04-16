@@ -22,5 +22,13 @@ public class UserDtoValidator : AbstractValidator<UserDto>
             RuleFor(u => u.Password)
                 .NotEmpty()
                 .WithMessage("Das Passwort darf nicht leer sein.");
+            RuleFor(u => u.Name)
+                .NotEmpty()
+                .WithMessage("Der Vorname darf nicht leer sein.");
+            RuleFor(u => u.Email)
+                .NotEmpty()
+                .WithMessage("Die E-Mail-Adresse darf nicht leer sein.")
+                .EmailAddress()
+                .WithMessage("Die E-Mail-Adresse ist ungültig.");
         } 
 }

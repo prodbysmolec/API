@@ -54,13 +54,13 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<UserGruppen> UserGruppen { get; set; }
     public DbSet<UserGruppenUser> UserGruppenUsers { get; set; }
-
+    public DbSet<GroupPermission> GroupPermissions { get; set; }
+    public DbSet<Permission> Permissions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new EmployeeBenefitConfiguration());
 
-        // Wareneingang - Lieferant (N:1)
         modelBuilder.ApplyConfiguration(new WareneingaengeConfiguration());
         modelBuilder.ApplyConfiguration(new WareneingangArtikelPositionenConfiguration());
 
@@ -79,9 +79,14 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ZusatzwertConfiguration());
         modelBuilder.ApplyConfiguration(new InventurConfiguration());
         modelBuilder.ApplyConfiguration(new InventurPositionConfiguration());
+
+        #region  Authentication System
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new UserGruppenConfiguration());
         modelBuilder.ApplyConfiguration(new UserGruppenUserConfiguration());
+        modelBuilder.ApplyConfiguration(new GroupPermissionConfiguration());
+        modelBuilder.ApplyConfiguration(new PermissionConfiguration());
+        #endregion
     }
 
     public override int SaveChanges()

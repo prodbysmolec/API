@@ -1,12 +1,7 @@
-using System;
-using Artikelsystem.Shared.DTOs.User.Request;
-using FluentValidation;
-using FluentValidation.Results;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Domain.Common.ResultPattern;
 namespace API.Common.Controllers;
+
+
 
 [ApiController]
 [Route("/[controller]")]

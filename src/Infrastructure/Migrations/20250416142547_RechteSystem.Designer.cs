@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250414115711_test")]
-    partial class Test
+    [Migration("20250416142547_RechteSystem")]
+    partial class RechteSystem
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -289,6 +289,48 @@ namespace Infrastructure.Migrations
                     b.HasIndex("ZusatzFeldID");
 
                     b.ToTable("Zusatzwert");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Authentication.GroupPermission", b =>
+                {
+                    b.Property<int>("UserGruppenID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PermissionID")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserGruppenID", "PermissionID");
+
+                    b.HasIndex("PermissionID");
+
+                    b.ToTable("GroupPermissions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Authentication.Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Beschreibung")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Permissions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Authentication.User", b =>
@@ -968,6 +1010,25 @@ namespace Infrastructure.Migrations
                     b.Navigation("ZusatzFeld");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Authentication.GroupPermission", b =>
+                {
+                    b.HasOne("Domain.Entities.Authentication.Permission", "Permission")
+                        .WithMany("GroupPermissions")
+                        .HasForeignKey("PermissionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Authentication.UserGruppen", "UserGruppen")
+                        .WithMany("GroupPermissions")
+                        .HasForeignKey("UserGruppenID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("UserGruppen");
+                });
+
             modelBuilder.Entity("Domain.Entities.Authentication.UserGruppenUser", b =>
                 {
                     b.HasOne("Domain.Entities.Authentication.UserGruppen", "UserGruppen")
@@ -1132,6 +1193,11 @@ namespace Infrastructure.Migrations
                     b.Navigation("ArtikelZusatzwerte");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Authentication.Permission", b =>
+                {
+                    b.Navigation("GroupPermissions");
+                });
+
             modelBuilder.Entity("Domain.Entities.Authentication.User", b =>
                 {
                     b.Navigation("UserGruppenUsers");
@@ -1139,6 +1205,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Authentication.UserGruppen", b =>
                 {
+                    b.Navigation("GroupPermissions");
+
                     b.Navigation("UserGruppenUsers");
                 });
 

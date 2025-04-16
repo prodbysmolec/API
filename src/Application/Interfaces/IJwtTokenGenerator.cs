@@ -4,5 +4,6 @@ namespace Application.Interfaces;
 
 public interface IJwtTokenGenerator
 {
-    public Task<string> CreateTokenAsync(User user);
+    public Task<string> CreateAccessTokenAsync(User user);
+    Task<string> GenerateAndSaveRefreshTokenAsync(User user);
 }
