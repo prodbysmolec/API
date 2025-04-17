@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Constants/" />
     <Folder Include="DTOs/Employees/" />
     <Folder Include="DTOs/User/Responses/" />
     <Folder Include="Enums/" />

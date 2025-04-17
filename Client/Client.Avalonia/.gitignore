@@ -18,6 +18,7 @@
 /obj/*
 /bin
 /obj
+/Assets/Bilder
 
 *.dll
 # Rider / VS Code
