@@ -53,15 +53,21 @@ namespace Client.Core.Services.Auth
         {
             try
             {
-                var loginCommand = new UserLoginDto
+                var loginDto = new UserLoginDto
                 {
                     Username = username,
                     Password = password
                 };
+                string loginEndpoint = $"{_baseUrl.TrimEnd('/')}/{ApiRoutes.Authentication.Login.TrimStart('/')}";
+                
+                var response2 = await _httpClient.PostAsJsonAsync(
+                    loginEndpoint, 
+                    loginDto);
+
 
                 var response = await _httpClient.PostAsJsonAsync(
                     ApiRoutes.Authentication.Login, 
-                    loginCommand);
+                    loginDto);
                 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -81,8 +87,10 @@ namespace Client.Core.Services.Auth
                 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                var xyz = ex.Message;
+                throw new Exception("Login failed", ex);
                 return false;
             }
         }

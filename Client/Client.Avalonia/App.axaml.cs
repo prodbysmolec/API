@@ -58,11 +58,13 @@ public partial class App : Application
             {
                 loginViewModel.LoginSuccessful += (s, e) =>
                 {
-                    // Create and show main window
-                    desktop.MainWindow = new MainWindow
+                    var mainWindow = new MainWindow
                     {
                         DataContext = _serviceProvider.GetRequiredService<MainWindowViewModel>()
                     };
+                    desktop.MainWindow = mainWindow;
+                    mainWindow.Show();
+                    loginWindow.Close();
                 };
             }
 

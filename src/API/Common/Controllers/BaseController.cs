@@ -8,7 +8,6 @@ namespace API.Common.Controllers;
 [Produces("application/json")]
 public abstract class BaseController : Microsoft.AspNetCore.Mvc.Controller
 {
-
     // protected string GetCurrentUserId()
     // {
     //     return User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new UnauthorizedAccessException("User is not authenticated.");

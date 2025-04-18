@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
@@ -63,21 +64,18 @@ public class SecureStorageImplementation : ISecureStorage
     private async Task LoadDataAsync()
     {
         if (!File.Exists(_storageFilePath))
-        {
             return;
-        }
-        
+
         try
         {
             var encryptedData = await File.ReadAllBytesAsync(_storageFilePath);
             var decryptedData = DecryptData(encryptedData);
-            
-            using var memoryStream = new MemoryStream(decryptedData);
-            var serializer = new XmlSerializer(typeof(Dictionary<string, string>));
-            _secureData.Clear();
-            
-            if (serializer.Deserialize(memoryStream) is Dictionary<string, string> data)
+            var json = Encoding.UTF8.GetString(decryptedData);
+
+            var data = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+            if (data != null)
             {
+                _secureData.Clear();
                 foreach (var item in data)
                 {
                     _secureData[item.Key] = item.Value;
@@ -94,13 +92,10 @@ public class SecureStorageImplementation : ISecureStorage
     {
         try
         {
-            using var memoryStream = new MemoryStream();
-            var serializer = new XmlSerializer(typeof(Dictionary<string, string>));
-            serializer.Serialize(memoryStream, _secureData);
-            
-            var dataToEncrypt = memoryStream.ToArray();
+            var json = JsonSerializer.Serialize(_secureData);
+            var dataToEncrypt = Encoding.UTF8.GetBytes(json);
             var encryptedData = EncryptData(dataToEncrypt);
-            
+
             await File.WriteAllBytesAsync(_storageFilePath, encryptedData);
         }
         catch (Exception ex)
@@ -108,6 +103,7 @@ public class SecureStorageImplementation : ISecureStorage
             Console.WriteLine($"Error saving secure storage: {ex.Message}");
         }
     }
+
 
     private byte[] EncryptData(byte[] dataToEncrypt)
     {

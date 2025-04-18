@@ -15,6 +15,6 @@
         ExtendClientAreaTitleBarHeightHint="1">
     
     <!-- Hauptinhalt - Die LoginView-Komponente -->
-    <views:LoginView />
+    <views:LoginView x:Name="LoginViewControl" />
     
 </Window>

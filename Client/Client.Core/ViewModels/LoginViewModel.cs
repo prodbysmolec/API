@@ -2,53 +2,35 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Client.Core.Services.ApiClient;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Client.Core.ViewModels
 {
-    public class LoginViewModel : ReactiveObject
+    public partial class LoginViewModel : ObservableObject
     {
         private readonly AuthApiService _authService;
         
+        [ObservableProperty]
         private string _username = string.Empty;
+        
+        [ObservableProperty]
         private string _password = string.Empty;
+        
+        [ObservableProperty]
         private string _errorMessage = string.Empty;
+        
+        [ObservableProperty]
         private bool _isLoading;
-        
-        public string Username
-        {
-            get => _username;
-            set => this.RaiseAndSetIfChanged(ref _username, value);
-        }
-        
-        public string Password
-        {
-            get => _password;
-            set => this.RaiseAndSetIfChanged(ref _password, value);
-        }
-        
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
-        }
-        
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
-        }
-        
-        public ICommand LoginCommand { get; }
         
         public event EventHandler LoginSuccessful = delegate { };
         
         public LoginViewModel(AuthApiService authService)
         {
             _authService = authService ?? throw new ArgumentNullException(nameof(authService));
-            LoginCommand = ReactiveCommand.CreateFromTask(LoginAsync);
         }
         
+        [RelayCommand]
         private async Task LoginAsync()
         {
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
@@ -60,7 +42,7 @@ namespace Client.Core.ViewModels
             try
             {
                 IsLoading = true;
-                ErrorMessage = null;
+                ErrorMessage = string.Empty;
                 
                 var success = await _authService.LoginAsync(Username, Password);
                 
