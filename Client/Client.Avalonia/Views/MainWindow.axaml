@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Client.Core.ViewModels"
+        xmlns:views="using:Client.Avalonia.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
@@ -10,36 +11,11 @@
         xmlns:navigation="using:Client.Avalonia.Controls.Navigation"
         Icon="/Assets/Bilder/Logo.png"
         Title="Merchandise System">
-    
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-    
-    <Window.Styles>
-        <StyleInclude Source="/Styles/ButtonStyles.axaml"/>
-    </Window.Styles>
-
-    <Grid>
-        <!-- Sidebar Navigation -->
-        <navigation:NavigationBar NavigationItems="{Binding NavigationItems}"
-                                  UserProfile="{Binding UserProfile}"
-                                  Title="Merchandise System"
-                                  LogoSource="/Assets/Bilder/Logo.png" />
-
-        <!-- Main Content Area -->
-        <Grid Margin="240,0,0,0">
-            <!-- Header Area -->
-            <common:HeaderBar Title="{Binding CurrentPageTitle}"
-                              Path="{Binding CurrentPagePath}"
-                              HasNotifications="True"
-                              SearchCommand="{Binding SearchCommand}"
-                              NotificationsCommand="{Binding NotificationsCommand}"
-                              HelpCommand="{Binding HelpCommand}" />
-            
-            <!-- Main Content Container -->
-            <Border Margin="0,70,0,0" Background="{StaticResource BackgroundBrush}" CornerRadius="0">
-                <ContentControl Content="{Binding CurrentView}" Margin="25" />
-            </Border>
-        </Grid>
-    </Grid>
+        <ContentControl Content="{Binding CurrentMainView}">
+                <ContentControl.Transitions>
+                        <Transitions>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.5" />
+                        </Transitions>
+                </ContentControl.Transitions>
+        </ContentControl>
 </Window>

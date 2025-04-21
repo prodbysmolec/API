@@ -42,7 +42,7 @@ public sealed class UnitOfWork : IUnitOfWork, IDisposable
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _currentUserService = currentUserService ?? throw new ArgumentNullException(nameof(currentUserService));
-        
+
         // Verwende die injizierten Repositories
         EmployeeRepository = employeeRepository;
         ArtikelRepository = artikelRepository;

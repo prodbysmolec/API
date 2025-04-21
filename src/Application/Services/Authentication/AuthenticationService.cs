@@ -31,7 +31,7 @@ public class AuthenticationService(
     public async Task<Result<TokenResponseDto>?> LoginAsync(LoginCommand request)
     {
         _logger.LogInformation("Login für Benutzer {Username} gestartet", request.Username);
-        try 
+        try
         {
             var user = await _UserRepository.GetByUserNameAsync(request.Username);
 
@@ -51,7 +51,7 @@ public class AuthenticationService(
             _logger.LogInformation("Login erfolgreich für Benutzername {Username}", request.Username);
             return await CreateTokenResponse(user.Value);
         }
-        catch 
+        catch
         {
             _logger.LogError("Fehler beim Login für Benutzer {Username}", request.Username);
             return Result<TokenResponseDto>.Failure(BaseError.InternalServerError("LoginFehlgeschlagen", "Fehler beim Login."));
@@ -71,7 +71,7 @@ public class AuthenticationService(
     public async Task<TokenResponseDto?> RefreshTokensAsync(RefreshTokenRequestDto request)
     {
         var user = await _UserRepository.ValidateRefreshTokenAsync(request.UserID, request.RefreshToken);
-        if(user == null)
+        if (user == null)
         {
             return null;
         }
@@ -88,7 +88,7 @@ public class AuthenticationService(
         _logger.LogInformation("User Registrierungs Prozess wird gestartet für E-Mail: {Email}", request.Email);
 
         // Prüfe, ob der Benutzername bereits existiert
-        if((await _UserRepository.ExistsByUsernameAsync(request.Username)).Value)
+        if ((await _UserRepository.ExistsByUsernameAsync(request.Username)).Value)
         {
             _logger.LogWarning("Benutzername {Username} existiert bereits", request.Username);
             return Result.Failure<User>(BaseError.BadRequest("UsernameExistiertBereits", "Der Username existiert bereits."));
@@ -99,7 +99,7 @@ public class AuthenticationService(
         // Erstelle einen neuen Benutzer u Mappe ihn mit AutoMapper
         var user = _mapper.Map<User>(request);
 
-        if(user == null)
+        if (user == null)
         {
             return null!;
         }
@@ -109,8 +109,8 @@ public class AuthenticationService(
 
         // Füge den Benutzer zur Datenbank hinzu und speichere die Änderungen
         var createdUser = await _UserRepository.CreateAsync(user);
-        
-        if(createdUser!.IsSuccess)
+
+        if (createdUser!.IsSuccess)
         {
             return createdUser;
         }
@@ -118,6 +118,6 @@ public class AuthenticationService(
         {
             _logger.LogError("Fehler beim Erstellen des Benutzers: {Error}", createdUser.Error);
             return Result.Failure<User>(BaseError.InternalServerError("BenutzerErstellungFehlgeschlagen", "Fehler beim Erstellen des Benutzers."));
-        }        
+        }
     }
 }

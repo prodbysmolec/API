@@ -15,7 +15,7 @@ namespace Client.Core.Services.Auth
         private readonly HttpClient _httpClient;
         private readonly ISecureStorage _secureStorage;
         private readonly string _baseUrl;
-        
+
         private const string ACCESS_TOKEN_KEY = "access_token";
         private const string REFRESH_TOKEN_KEY = "refresh_token";
         private const string TOKEN_EXPIRY_KEY = "token_expiry";
@@ -34,7 +34,7 @@ namespace Client.Core.Services.Auth
         {
             var token = await _secureStorage.GetAsync(ACCESS_TOKEN_KEY);
             var expiryString = await _secureStorage.GetAsync(TOKEN_EXPIRY_KEY);
-            
+
             if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(expiryString))
             {
                 return string.Empty;
@@ -48,7 +48,7 @@ namespace Client.Core.Services.Auth
 
             return token;
         }
-        
+
         public async Task<bool> LoginAsync(string username, string password)
         {
             try
@@ -59,32 +59,29 @@ namespace Client.Core.Services.Auth
                     Password = password
                 };
                 string loginEndpoint = $"{_baseUrl.TrimEnd('/')}/{ApiRoutes.Authentication.Login.TrimStart('/')}";
-                
-                var response2 = await _httpClient.PostAsJsonAsync(
-                    loginEndpoint, 
-                    loginDto);
-
 
                 var response = await _httpClient.PostAsJsonAsync(
-                    ApiRoutes.Authentication.Login, 
+                    ApiRoutes.Authentication.Login,
                     loginDto);
-                
+
                 if (!response.IsSuccessStatusCode)
                 {
                     return false;
                 }
-                
+
                 var tokenResponse = await response.Content.ReadFromJsonAsync<TokenResponseDto>();
                 if (tokenResponse == null || string.IsNullOrEmpty(tokenResponse.AccessToken))
                 {
                     return false;
                 }
 
+                var responseString = await response.Content.ReadAsStringAsync();
+
                 await StoreTokensAsync(
                     tokenResponse.AccessToken,
                     tokenResponse.RefreshToken,
                     tokenResponse.ExpiresAt);
-                
+
                 return true;
             }
             catch (Exception ex)
@@ -107,9 +104,9 @@ namespace Client.Core.Services.Auth
                 };
 
                 var response = await _httpClient.PostAsJsonAsync(
-                    ApiRoutes.Authentication.Register, 
+                    ApiRoutes.Authentication.Register,
                     registerCommand);
-                
+
                 return response.IsSuccessStatusCode;
             }
             catch
@@ -138,16 +135,16 @@ namespace Client.Core.Services.Auth
             {
                 return false;
             }
-            
+
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var jwtToken = tokenHandler.ReadJwtToken(token);
-                
+
                 var roleClaims = jwtToken.Claims
                     .Where(c => c.Type == ClaimTypes.Role || c.Type == "role")
                     .Select(c => c.Value);
-                
+
                 return roleClaims.Any(r => r.Equals("Admin", StringComparison.OrdinalIgnoreCase));
             }
             catch
@@ -159,7 +156,7 @@ namespace Client.Core.Services.Auth
         private async Task<string> RefreshTokenAsync()
         {
             var refreshToken = await _secureStorage.GetAsync(REFRESH_TOKEN_KEY);
-            
+
             if (string.IsNullOrEmpty(refreshToken))
             {
                 return string.Empty;
@@ -173,7 +170,7 @@ namespace Client.Core.Services.Auth
                 };
 
                 var response = await _httpClient.PostAsJsonAsync(
-                    "/api/auth/refresh", // Adjust this endpoint as needed
+                    "/authentication/refresh-token", // Adjust this endpoint as needed
                     refreshRequest);
 
                 if (!response.IsSuccessStatusCode)
@@ -200,10 +197,10 @@ namespace Client.Core.Services.Auth
             {
                 await LogoutAsync();
                 return string.Empty;
-                
+
             }
         }
-        
+
         private async Task StoreTokensAsync(string accessToken, string refreshToken, DateTime expiresAt)
         {
             await _secureStorage.SetAsync(ACCESS_TOKEN_KEY, accessToken);
@@ -211,7 +208,7 @@ namespace Client.Core.Services.Auth
             await _secureStorage.SetAsync(TOKEN_EXPIRY_KEY, expiresAt.ToString("o"));
         }
     }
-    
+
     // Define the token response class if not already defined in your shared project
     public class TokenResponseDto
     {
@@ -219,7 +216,7 @@ namespace Client.Core.Services.Auth
         public required string RefreshToken { get; set; }
         public DateTime ExpiresAt { get; set; }
     }
-    
+
     // Define the register command if not already defined
     public class RegisterCommand
     {

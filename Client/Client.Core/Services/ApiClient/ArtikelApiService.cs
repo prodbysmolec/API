@@ -21,13 +21,13 @@ public class ArtikelApiService
         return await _httpClient.PostAsync<GetAllArtikelRequest, PagedResultDTO<ArtikelDto>>(
             ApiRoutes.Artikel.GetAllArtikel, request);
     }
-    
+
     public async Task<ArtikelDto> GetArtikelByIdAsync(int id)
     {
         var endpoint = ApiRoutes.Artikel.GetArtikelById.Replace("{id}", id.ToString());
         return await _httpClient.GetAsync<ArtikelDto>(endpoint);
     }
-    
+
     public async Task<ApiResponseDTO> CreateArtikelAsync(CreateArtikelRequest request)
     {
         return await _httpClient.PostAsync<CreateArtikelRequest, ApiResponseDTO>(

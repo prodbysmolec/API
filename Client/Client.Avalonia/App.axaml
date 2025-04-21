@@ -2,6 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Client.Avalonia.App"
              xmlns:local="using:Client.Avalonia"
+             xmlns:vm="using:Client.Core.ViewModels"
+             xmlns:views="using:Client.Avalonia.Views"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 

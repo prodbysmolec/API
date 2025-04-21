@@ -14,24 +14,24 @@ public class SecureStorageImplementation : ISecureStorage
     private readonly string _storageFilePath;
     private readonly Dictionary<string, string> _secureData = new();
     private readonly byte[] _encryptionKey;
-    
+
     public SecureStorageImplementation(string appName)
     {
         var dataFolder = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             appName);
-            
+
         if (!Directory.Exists(dataFolder))
         {
             Directory.CreateDirectory(dataFolder);
         }
-        
+
         _storageFilePath = Path.Combine(dataFolder, "securestorage.bin");
-        
+
         // In a real implementation, use a proper key management solution
         // This is just a simple example, not secure for production
-        _encryptionKey = Encoding.UTF8.GetBytes("YourSecretKey1234567890123456"); // 32 bytes for AES-256
-        
+        _encryptionKey = Encoding.UTF8.GetBytes("Your32ByteLongEncryptionKeyHere1"); // 32 bytes for AES-256
+
         LoadDataAsync().ConfigureAwait(false).GetAwaiter().GetResult();
     }
 
@@ -60,7 +60,7 @@ public class SecureStorageImplementation : ISecureStorage
     {
         return Task.FromResult(_secureData.ContainsKey(key));
     }
-    
+
     private async Task LoadDataAsync()
     {
         if (!File.Exists(_storageFilePath))
@@ -104,25 +104,30 @@ public class SecureStorageImplementation : ISecureStorage
         }
     }
 
-
     private byte[] EncryptData(byte[] dataToEncrypt)
     {
         using Aes aes = Aes.Create();
+
+        if (_encryptionKey.Length != 32)
+        {
+            throw new InvalidOperationException("Der Verschlüsselungsschlüssel muss genau 32 Zeichen lang sein.");
+        }
         aes.Key = _encryptionKey;
+        var length = _encryptionKey.Length;
         aes.GenerateIV();
-        
+
         using var memoryStream = new MemoryStream();
         memoryStream.Write(aes.IV, 0, aes.IV.Length);
-        
+
         using (var cryptoStream = new CryptoStream(
-            memoryStream, 
-            aes.CreateEncryptor(), 
+            memoryStream,
+            aes.CreateEncryptor(),
             CryptoStreamMode.Write))
         {
             cryptoStream.Write(dataToEncrypt, 0, dataToEncrypt.Length);
             cryptoStream.FlushFinalBlock();
         }
-        
+
         return memoryStream.ToArray();
     }
 
@@ -130,22 +135,22 @@ public class SecureStorageImplementation : ISecureStorage
     {
         using Aes aes = Aes.Create();
         aes.Key = _encryptionKey;
-        
+
         var iv = new byte[16]; // AES block size is 16 bytes
         Array.Copy(encryptedData, 0, iv, 0, iv.Length);
         aes.IV = iv;
-        
+
         using var memoryStream = new MemoryStream();
-        
+
         using (var cryptoStream = new CryptoStream(
-            memoryStream, 
-            aes.CreateDecryptor(), 
+            memoryStream,
+            aes.CreateDecryptor(),
             CryptoStreamMode.Write))
         {
             cryptoStream.Write(encryptedData, iv.Length, encryptedData.Length - iv.Length);
             cryptoStream.FlushFinalBlock();
         }
-        
+
         return memoryStream.ToArray();
     }
 }

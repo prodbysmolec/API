@@ -3,29 +3,34 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Client.Core.ViewModels.Navigation;
 
-public class UserProfileViewModel : ViewModelBase
+public partial class UserProfileViewModel : ViewModelBase
 {
+    [ObservableProperty]
     private string _displayName;
+    [ObservableProperty]
     private string _email;
+    [ObservableProperty]
     private string _initials;
-    
-    public string DisplayName
-    {
-        get => _displayName;
-        set => SetProperty(ref _displayName, value);
-    }
-    
-    public string Email
-    {
-        get => _email;
-        set => SetProperty(ref _email, value);
-    }
-    
-    public string Initials
-    {
-        get => _initials;
-        set => SetProperty(ref _initials, value);
-    }
+
+    [ObservableProperty]
+    private string _username;
+
+    [ObservableProperty]
+    private string _nachname;
+
+    [ObservableProperty]
+    private int _userId;
+
+    // Benutzerdefinierte Gruppen und Berechtigungen
+    [ObservableProperty]
+    private List<string> _userGruppen = new();
+
+    [ObservableProperty]
+    private List<string> _permissions = new();
+
+    // Hilfseigenschaften
+    [ObservableProperty]
+    private bool _isAdmin;
     
     public IRelayCommand OpenSettingsCommand { get; }
     
@@ -53,6 +58,38 @@ public class UserProfileViewModel : ViewModelBase
         }
         
         OpenSettingsCommand = new RelayCommand(OpenSettings);
+    }
+    
+    
+    public void UpdateProfile(string name, string nachname, string email, string username, 
+        int userId, List<string> gruppen, List<string> permissions)
+    {
+        DisplayName = name;
+        Nachname = nachname;
+        Email = email;
+        Username = username;
+        UserId = userId;
+        UserGruppen = gruppen;
+        Permissions = permissions;
+            
+        // Admin-Status basierend auf Berechtigungen setzen
+        IsAdmin = HasPermission("ADMIN") || UserGruppen.Contains("Administrator");
+    }
+    
+    public bool HasPermission(string permissionCode)
+    {
+        return Permissions.Contains(permissionCode);
+    }
+    
+    // Methode zum Prüfen der Gruppenmitgliedschaft
+    public bool IsInGroup(string groupName)
+    {
+        return UserGruppen.Contains(groupName);
+    }
+    public void UpdateProfile(string displayName, string email, string username, bool isAdmin, List<string> roles)
+    {
+        DisplayName = displayName;
+        Email = email;
     }
     
     private void OpenSettings()

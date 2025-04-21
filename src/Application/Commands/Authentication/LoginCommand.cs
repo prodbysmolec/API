@@ -62,16 +62,16 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<TokenRes
     public async Task<Result<TokenResponseDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Login für Benutzer {Username} gestartet", request.Username);
-        try 
+        try
         {
             var user = await _UserRepository.GetByUserNameAsync(request.Username);
-            if(user is null || user.Value is null)
+            if (user is null || user.Value is null)
             {
                 _logger.LogInformation("Login fehlgeschlagen: Benutzername {Username} existiert nicht", request.Username);
                 return Result<TokenResponseDto>.Failure(UserError.InvalideCredentials());
             }
 
-            if(!_passwordService.VerifyPassword(user.Value, request.Password))
+            if (!_passwordService.VerifyPassword(user.Value, request.Password))
             {
                 _logger.LogWarning("Login fehlgeschlagen: Falsches Passwort für Benutzername {Username}", request.Username);
                 return Result<TokenResponseDto>.Failure(UserError.InvalideCredentials());
@@ -80,13 +80,13 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<TokenRes
             // Token generieren
             var accessToken = await _tokenGenerator.CreateAccessTokenAsync(user.Value);
             var refreshToken = await _tokenGenerator.GenerateAndSaveRefreshTokenAsync(user.Value);
-
             _logger.LogInformation("Login erfolgreich für Benutzername {Username}", request.Username);
 
             return Result<TokenResponseDto>.Success(new TokenResponseDto
             {
                 AccessToken = accessToken,
-                RefreshToken = refreshToken
+                RefreshToken = refreshToken,
+                ExpiresAt = user.Value.RefreshTokenExpiryTime
             });
         }
         catch (Exception ex)

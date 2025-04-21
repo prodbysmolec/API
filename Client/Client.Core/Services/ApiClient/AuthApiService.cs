@@ -29,17 +29,17 @@ public class AuthApiService
     {
         await _tokenService.LogoutAsync();
     }
-    
+
     public async Task<bool> IsAuthenticatedAsync()
     {
         return await _tokenService.IsAuthenticatedAsync();
     }
-    
+
     public async Task<bool> IsAdminAsync()
     {
         return await _tokenService.IsAdminAsync();
     }
-    
+
     public async Task<string> CheckAdminEndpointAsync()
     {
         try
@@ -59,7 +59,7 @@ public class AuthApiService
             return $"Error: {ex.Message}";
         }
     }
-    
+
     public async Task<string> CheckAuthenticatedEndpointAsync()
     {
         try

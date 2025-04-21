@@ -7,29 +7,29 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Client.Core.ViewModels
 {
-    public partial class LoginViewModel : ObservableObject
+    public partial class LoginViewModel : ViewModelBase
     {
         private readonly AuthApiService _authService;
-        
+
         [ObservableProperty]
         private string _username = string.Empty;
-        
+
         [ObservableProperty]
         private string _password = string.Empty;
-        
+
         [ObservableProperty]
         private string _errorMessage = string.Empty;
-        
+
         [ObservableProperty]
         private bool _isLoading;
-        
+
         public event EventHandler LoginSuccessful = delegate { };
-        
+
         public LoginViewModel(AuthApiService authService)
         {
             _authService = authService ?? throw new ArgumentNullException(nameof(authService));
         }
-        
+
         [RelayCommand]
         private async Task LoginAsync()
         {
@@ -38,14 +38,14 @@ namespace Client.Core.ViewModels
                 ErrorMessage = "Please enter username and password";
                 return;
             }
-            
+
             try
             {
                 IsLoading = true;
                 ErrorMessage = string.Empty;
-                
+
                 var success = await _authService.LoginAsync(Username, Password);
-                
+
                 if (success)
                 {
                     LoginSuccessful?.Invoke(this, EventArgs.Empty);

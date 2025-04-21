@@ -16,7 +16,7 @@ public class AuthenticationController(
 {
     private readonly ILogger<AuthenticationController> _logger = logger;
     private readonly IMediator _mediator = mediator;
-    
+
 
     /// <summary>
     /// Registriert einen neuen Nutzer.
@@ -31,7 +31,7 @@ public class AuthenticationController(
 
         return result.Match(
             success =>
-            {  
+            {
                 _logger.LogInformation("User mit der Email {Email} wurde erfolgreich registriert.", command.Email);
                 return Ok(result.Value);
             },
@@ -48,7 +48,7 @@ public class AuthenticationController(
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost("Login")]
-    public async Task<IActionResult> Login([FromBody]LoginCommand request)
+    public async Task<IActionResult> Login([FromBody] LoginCommand request)
     {
         _logger.LogInformation("Versuche einen User mit dem Usernamen {Username} einzuloggen.", request.Username);
         var response = await _mediator.Send(request);
@@ -57,6 +57,25 @@ public class AuthenticationController(
             success =>
             {
                 _logger.LogInformation("User mit dem Usernamen {Username} wurde erfolgreich eingeloggt.", request.Username);
+                return Ok(response.Value);
+            },
+            error =>
+            {
+                _logger.LogError("Failed to retrieve messages: {Error}", error.Description);
+                return error.ToActionResult();
+            });
+    }
+
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshToken(RefreshTokenCommand request)
+    {
+        _logger.LogInformation("Versuche den Token für den User mit der ID {UserID} zu erneuern.", request.UserID);
+        var response = await _mediator.Send(request);
+
+        return response.Match(
+            success =>
+            {
+                _logger.LogInformation("Token für den User mit der ID {UserID} wurde erfolgreich erneuert.", request.UserID);
                 return Ok(response.Value);
             },
             error =>

@@ -16,6 +16,7 @@ using Artikelsystem.Shared.DTOs.Wareneingang.Dtos.Request;
 
 
 namespace API.Controller;
+
 public class ArtikelController(IMediator mediator, ILogger<ArtikelController> logger) : BaseController
 {
     IMediator _mediator = mediator;
@@ -55,7 +56,7 @@ public class ArtikelController(IMediator mediator, ILogger<ArtikelController> lo
             success =>
             {
                 _logger.LogInformation("Artikel erfolgreich erstellt.");
-                return Ok(new {message="Artikel hinzugefügt."});
+                return Ok(new { message = "Artikel hinzugefügt." });
                 //return CreatedAtAction(nameof(GetArtikelById), new { id = success.Id }, success);
             },
             error =>
@@ -111,16 +112,16 @@ public class ArtikelController(IMediator mediator, ILogger<ArtikelController> lo
 }
 
 
-    // /// <summary>
-    // /// Gets warehouse receipts for a specific article.
-    // /// </summary>
-    // /// <param name="artikelId">The ID of the article</param>
-    // /// <returns>List of warehouse receipts for the article</returns>
-    // [HttpGet("{artikelId:int}/wareneingaenge")]
-    // [ProducesResponseType(typeof(IEnumerable<WareneingangArtikelPositionenDto>), StatusCodes.Status200OK)]
-    // [ProducesResponseType(StatusCodes.Status404NotFound)]
-    // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    // public async Task<IActionResult> GetWareneingaengeForArtikel(int artikelId)
+// /// <summary>
+// /// Gets warehouse receipts for a specific article.
+// /// </summary>
+// /// <param name="artikelId">The ID of the article</param>
+// /// <returns>List of warehouse receipts for the article</returns>
+// [HttpGet("{artikelId:int}/wareneingaenge")]
+// [ProducesResponseType(typeof(IEnumerable<WareneingangArtikelPositionenDto>), StatusCodes.Status200OK)]
+// [ProducesResponseType(StatusCodes.Status404NotFound)]
+// [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+// public async Task<IActionResult> GetWareneingaengeForArtikel(int artikelId)
 //     {
 //         var artikel = await _dbContext.Artikel
 //             .Include(a => a.Wareneingaenge)

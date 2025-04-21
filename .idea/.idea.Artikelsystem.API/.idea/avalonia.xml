@@ -16,7 +16,9 @@
         <entry key="Client/Client.Avalonia/UserControls/Navigation/Navigation.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/Views/LoginView.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/Views/LoginWindow.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
+        <entry key="Client/Client.Avalonia/Views/MainView.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/Views/MainWindow.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
+        <entry key="Client/Client.Avalonia/Views/Views/MainView.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/Views/Window1.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
       </map>
     </option>
