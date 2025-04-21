@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="70"
+             x:Class="Client.Avalonia.Controls.Common.HeaderBar"
+             Name="HeaderControl">
+
+    <UserControl.Styles>
+        <StyleInclude Source="../../Styles/ButtonStyles.axaml"></StyleInclude>
+    </UserControl.Styles>
+
+    <Border Height="70" VerticalAlignment="Top" Background="White" 
+            BoxShadow="0 2 10 0 #10000000">
+        <Grid Margin="25,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Page Title -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Title, ElementName=HeaderControl}" FontSize="20" FontWeight="SemiBold" 
+                           Foreground="#363636"/>
+                <TextBlock Text="{Binding Path, ElementName=HeaderControl, StringFormat=' / {0}'}" FontSize="20" Foreground="#737373" 
+                           Opacity="0.7"/>
+            </StackPanel>
+            
+            <!-- Header Actions -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="15">
+                <!-- Search Button -->
+                <Button Classes="icon" ToolTip.Tip="Suchen"
+                        Command="{Binding SearchCommand, ElementName=HeaderControl}">
+                    <PathIcon Data="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" Width="20" Height="20"/>
+                </Button>
+                
+                <!-- Notifications Button -->
+                <Button Classes="icon" ToolTip.Tip="Benachrichtigungen"
+                        Command="{Binding NotificationsCommand, ElementName=HeaderControl}">
+                    <Grid>
+                        <PathIcon Data="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.37 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.64 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16ZM16 17H8V11C8 8.52 9.51 6.5 12 6.5C14.49 6.5 16 8.52 16 11V17Z" Width="20" Height="20"/>
+                        <Ellipse IsVisible="{Binding HasNotifications, ElementName=HeaderControl}" 
+                                Width="8" Height="8" Fill="#f29734" Stroke="White" StrokeThickness="1.5"
+                                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-2,-2,0"/>
+                    </Grid>
+                </Button>
+                
+                <!-- Help Button -->
+                <Button Classes="icon" ToolTip.Tip="Hilfe"
+                        Command="{Binding HelpCommand, ElementName=HeaderControl}">
+                    <PathIcon Data="M11 18H13V16H11V18ZM12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM12 6C9.79 6 8 7.79 8 10H10C10 8.9 10.9 8 12 8C13.1 8 14 8.9 14 10C14 12 11 11.75 11 15H13C13 12.75 16 12.5 16 10C16 7.79 14.21 6 12 6Z" Width="20" Height="20"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

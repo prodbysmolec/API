@@ -4,7 +4,13 @@
     <option name="projectPerEditor">
       <map>
         <entry key="Client/Client.Avalonia/App.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
+        <entry key="Client/Client.Avalonia/Controls/Common/HeaderBar.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
+        <entry key="Client/Client.Avalonia/Controls/Navigation/NavigationBar.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
+        <entry key="Client/Client.Avalonia/Controls/Navigation/NavigationButton.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
+        <entry key="Client/Client.Avalonia/Controls/Navigation/UserProfileControl.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
+        <entry key="Client/Client.Avalonia/Styles/ButtonStyle.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/Styles/ButtonStyles.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
+        <entry key="Client/Client.Avalonia/Styles/Colors.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/UserControls/Navigation/NavButton.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/UserControls/Navigation/NavbarButton.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/UserControls/Navigation/Navigation.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />

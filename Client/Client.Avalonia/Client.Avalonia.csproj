@@ -10,10 +10,8 @@
 
   <ItemGroup>
     <Folder Include="Assets\Bilder\" />
-    <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
-    <Folder Include="Styles\" />
-    <Folder Include="UserControls\Navigation\" />
+    <Folder Include="Controls\Dashboard\" />
   </ItemGroup>
 
   <ItemGroup>

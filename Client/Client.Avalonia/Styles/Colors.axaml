@@ -1,0 +1,27 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Brand Colors -->
+    <Color x:Key="PrimaryColor">#f29734</Color>
+    <Color x:Key="PrimaryHoverColor">#f7a34d</Color>
+    <Color x:Key="SecondaryColor">#005381</Color>
+    <Color x:Key="SecondaryHoverColor">#00679e</Color>
+    <Color x:Key="BackgroundColor">#F5F5F5</Color>
+    <Color x:Key="TextDarkColor">#363636</Color>
+    <Color x:Key="TextLightColor">#737373</Color>
+    
+    <!-- Sidebar Gradient -->
+    <LinearGradientBrush x:Key="SidebarGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+        <GradientStop Offset="0.0" Color="#005381" />
+        <GradientStop Offset="0.5" Color="#1C7CB8" />
+        <GradientStop Offset="1.0" Color="#739bb9" />
+    </LinearGradientBrush>
+    
+    <!-- Brush Resources -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+    <SolidColorBrush x:Key="PrimaryHoverBrush" Color="{StaticResource PrimaryHoverColor}"/>
+    <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}"/>
+    <SolidColorBrush x:Key="SecondaryHoverBrush" Color="{StaticResource SecondaryHoverColor}"/>
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}"/>
+    <SolidColorBrush x:Key="TextDarkBrush" Color="{StaticResource TextDarkColor}"/>
+    <SolidColorBrush x:Key="TextLightBrush" Color="{StaticResource TextLightColor}"/>
+</ResourceDictionary>

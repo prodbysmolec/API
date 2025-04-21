@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="220" d:DesignHeight="50"
+             x:Class="Client.Avalonia.Controls.Navigation.NavigationButton"
+             Name="NavButton">
+
+    <UserControl.Styles>
+        <StyleInclude Source="../../Styles/ButtonStyles.axaml"></StyleInclude>
+    </UserControl.Styles>
+    
+    <Button
+            Classes="nav"
+            Classes.active="{Binding IsActive, ElementName=NavButton}"
+            Command="{Binding NavigateCommand, ElementName=NavButton}">
+        <StackPanel Orientation="Horizontal" Spacing="12">
+            <PathIcon Data="{Binding IconData, ElementName=NavButton}" 
+                      Width="22" Height="22" Foreground="White"/>
+            <TextBlock Text="{Binding Title, ElementName=NavButton}" 
+                       VerticalAlignment="Center"/>
+        </StackPanel>
+    </Button>
+</UserControl>
