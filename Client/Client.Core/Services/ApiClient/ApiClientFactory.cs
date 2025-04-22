@@ -9,7 +9,7 @@ public static class ApiClientFactory
     public static IServiceCollection ConfigureApiClient(this IServiceCollection services, string baseUrl, string appName)
     {
         // Register secure storage
-        services.AddSingleton<ISecureStorage>(new SecureStorageImplementation(appName));
+        services.AddSingleton<ISecureStorage>(sp => new SecureStorageImplementation(appName));
 
         // Register token service
         services.AddSingleton<ITokenService>(provider =>

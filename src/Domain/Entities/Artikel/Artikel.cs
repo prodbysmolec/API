@@ -6,6 +6,7 @@ using Domain.Common;
 using Artikelsystem.Shared.DTOs.Artikel.Enums;
 using Domain.Entities.Artikel;
 namespace Domain.Entities.Artikel;
+
 public class Artikel : AuditableEntity
 {
     public int Id { get; set; }
@@ -21,7 +22,7 @@ public class Artikel : AuditableEntity
     public virtual ICollection<WarenausgangArtikelPositionen> Warenausgaenge { get; set; } = new List<WarenausgangArtikelPositionen>();
     public virtual ArtikelStatistik? ArtikelStatistik { get; set; } = new ArtikelStatistik();
     public int ArtikelGruppeId { get; set; }
-    
+
 
     // Ergänzung für die Artikel-Klasse:
     public virtual ICollection<ArtikelZusatzWert> ArtikelZusatzWerte { get; set; } = new HashSet<ArtikelZusatzWert>();

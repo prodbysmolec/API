@@ -23,7 +23,7 @@ public partial class App : Application
 
     // API configuration
     private const string ApiBaseUrl = "http://localhost:5058/";
-    private const string AppName = "Artikelsystem";
+    private const string AppName = "Merchandise System";
 
     public override void Initialize()
     {
