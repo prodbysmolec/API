@@ -43,10 +43,11 @@ public partial class App : Application
         services.AddTransient<MainViewModel>();        // MainViewModel kann transient bleiben
         services.AddTransient<LoginViewModel>();       // LoginViewModel kann transient bleiben
         services.AddSingleton<PermissionHelper>();     // PermissionHelper ist bereits Singleton
-
+        services.AddScoped<ArtikelViewModel>();   // ArtikelViewModel ist Scoped, da es von MainViewModel verwendet wird
+        services.AddTransient<ArtikelViewModel>(); // ArtikelDetailViewModel kann transient bleiben
         // Baue den ServiceProvider
         _serviceProvider = services.BuildServiceProvider();
-
+        
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             DisableAvaloniaDataAnnotationValidation();
@@ -56,7 +57,6 @@ public partial class App : Application
                 DataContext = _serviceProvider.GetRequiredService<MainWindowViewModel>()
             };
         }
-
         base.OnFrameworkInitializationCompleted();
     }
 

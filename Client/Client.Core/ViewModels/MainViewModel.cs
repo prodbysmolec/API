@@ -5,6 +5,7 @@ using Client.Core.Services.Auth;
 using Client.Core.ViewModels.Navigation;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Core.ViewModels;
 
@@ -31,9 +32,12 @@ public partial class MainViewModel : ViewModelBase
     public IRelayCommand NotificationsCommand { get; }
     public IRelayCommand HelpCommand { get; }
     public IRelayCommand RefreshUserProfileCommand { get; }
+    
+    private IServiceProvider _serviceProvider;
 
-    public MainViewModel(ITokenService tokenService)
+    public MainViewModel(ITokenService tokenService, IServiceProvider serviceProvider)
     {
+        _serviceProvider = serviceProvider;
         _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
 
         // Initialize user profile with default values
@@ -212,9 +216,10 @@ public partial class MainViewModel : ViewModelBase
         // Update page title
         CurrentPageTitle = pageTitle;
         CurrentPagePath = pagePath;
-
+        
         // Here you would update the current view
         // CurrentView = your view factory logic
+        CurrentView = _serviceProvider.GetRequiredService<ArtikelViewModel>(); // Example, replace with actual view model
     }
 
     // Einfache Methoden können das RelayCommand-Attribut weiterhin verwenden

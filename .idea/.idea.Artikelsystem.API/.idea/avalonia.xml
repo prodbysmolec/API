@@ -11,9 +11,12 @@
         <entry key="Client/Client.Avalonia/Styles/ButtonStyle.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/Styles/ButtonStyles.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/Styles/Colors.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
+        <entry key="Client/Client.Avalonia/Styles/Styles.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/UserControls/Navigation/NavButton.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/UserControls/Navigation/NavbarButton.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/UserControls/Navigation/Navigation.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
+        <entry key="Client/Client.Avalonia/Views/ArtikelPage.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
+        <entry key="Client/Client.Avalonia/Views/ArtikelView.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/Views/LoginView.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/Views/LoginWindow.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />
         <entry key="Client/Client.Avalonia/Views/MainView.axaml" value="Client/Client.Avalonia/Client.Avalonia.csproj" />

@@ -1,0 +1,402 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="using:Client.Core.ViewModels"
+             xmlns:converters="using:Client.Avalonia.Converters"
+
+             x:DataType="vm:ArtikelViewModel"
+             x:Class="Client.Avalonia.Views.ArtikelView">
+
+  <UserControl.Resources>
+    
+
+
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="../Styles/Colors.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+    <converters:ArtikelStatusToColorConverter x:Key="ArtikelStatusToColorConverter"/>
+    <converters:BestandVerfuegbarConverter x:Key="BestandVerfuegbarConverter"/>
+    <converters:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <converters:UnterMindestbestandConverter x:Key="UnterMindestbestandConverter"/>
+
+  </UserControl.Resources>
+  
+  <UserControl.Styles>
+    <StyleInclude Source="../Styles/Styles.axaml"/>
+  </UserControl.Styles>
+
+  <Grid>
+    <SplitView IsPaneOpen="True" 
+               DisplayMode="Inline"
+               OpenPaneLength="400"
+               PaneBackground="White"
+               CompactPaneLength="50">
+      
+      <!-- Linke Seitenleiste mit Artikelliste -->
+      <SplitView.Pane>
+        <Border Background="White" BoxShadow="0 0 10 0 #15000000">
+          <Grid RowDefinitions="Auto,*">
+            <!-- Suchleiste und Filter -->
+            <Border Grid.Row="0" Padding="16,12" BorderBrush="#EEEEEE" BorderThickness="0,0,0,1" Background="{DynamicResource BackgroundBrush}">
+              <StackPanel Spacing="12">
+                <Grid ColumnDefinitions="*,Auto">
+                  <TextBox Watermark="Artikel suchen..." Margin="0">
+                    <TextBox.InnerLeftContent>
+                      <PathIcon Data="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" Width="16" Height="16" Margin="8,0,0,0" Foreground="{DynamicResource TextLightBrush}"/>
+                    </TextBox.InnerLeftContent>
+                  </TextBox>
+                  <Button Grid.Column="1" Classes="primary" Content="+ Neuer Artikel" Margin="8,0,0,0" Padding="12,8"/>
+                </Grid>
+                
+                <Expander Header="Filter" Padding="0" IsExpanded="False">
+                  <StackPanel Spacing="10" Margin="0,8,0,0">
+                    <ComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
+                      <ComboBoxItem Content="Alle Artikelgruppen"/>
+                      <ComboBoxItem Content="Elektronik"/>
+                      <ComboBoxItem Content="Kleidung"/>
+                      <ComboBoxItem Content="Bürobedarf"/>
+                    </ComboBox>
+                    
+                    <TextBlock Text="Bestandsstatus" Margin="0,5,0,0"/>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                      <CheckBox Content="Verfügbar" IsChecked="True"/>
+                      <CheckBox Content="Knapp"/>
+                      <CheckBox Content="Nachzubestellen" IsChecked="True"/>
+                    </StackPanel>
+                    
+                    <TextBlock Text="Preisbereich" Margin="0,5,0,0"/>
+                    <Grid ColumnDefinitions="*,Auto,*">
+                      <TextBox Grid.Column="0" Watermark="Min €" Width="100"/>
+                      <TextBlock Grid.Column="1" Text="-" VerticalAlignment="Center" Margin="8,0"/>
+                      <TextBox Grid.Column="2" Watermark="Max €" Width="100"/>
+                    </Grid>
+                    
+                    <CheckBox Content="Historische Artikel anzeigen" Margin="0,5,0,0"/>
+                    <Button Content="Filter anwenden" Classes="primary" Margin="0,8,0,0"/>
+                  </StackPanel>
+                </Expander>
+              </StackPanel>
+            </Border>
+
+            <!-- Artikelliste -->
+            <Border Grid.Row="1" Padding="16,10,16,16">
+              <Grid RowDefinitions="Auto,*">
+                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+                  <TextBlock Text="65 Artikel" Foreground="{DynamicResource TextLightBrush}" VerticalAlignment="Center" FontSize="14"/>
+                  <ComboBox Grid.Column="1" SelectedIndex="0" Width="160">
+                    <ComboBoxItem Content="Name (A-Z)"/>
+                    <ComboBoxItem Content="Name (Z-A)"/>
+                    <ComboBoxItem Content="Preis (aufsteigend)"/>
+                    <ComboBoxItem Content="Preis (absteigend)"/>
+                    <ComboBoxItem Content="Bestand (niedrig)"/>
+                  </ComboBox>
+                </Grid>
+                <ListBox Grid.Row="1" 
+                   Background="Transparent" 
+                   BorderThickness="0" 
+                   ItemsSource="{Binding ArtikelDtos}"
+                    SelectedItem="{Binding SelectedArtikel}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <!-- Artikelbild -->
+                            <Border Grid.Column="0" Width="50" Height="50" Background="#F5F5F5" CornerRadius="6" Margin="0,0,16,0">
+                                <Image Source="{Binding Bild, Converter={StaticResource ByteArrayToImageConverter}}" 
+                                       Stretch="Uniform" Margin="6"/>
+                            </Border>
+                            
+                            <!-- Artikelinformationen -->
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                                <TextBlock Text="{Binding Name}" TextWrapping="Wrap" FontWeight="SemiBold" FontSize="15"/>
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <TextBlock Text="{Binding Id, StringFormat='#{0}'}" 
+                                               Foreground="{DynamicResource TextLightBrush}" FontSize="12"/>
+                                    <TextBlock Text="•" Foreground="{DynamicResource TextLightBrush}" FontSize="12"/>
+                                    <TextBlock Text="{Binding Status}" 
+                                               Foreground="{DynamicResource SecondaryBrush}" FontSize="12"/>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                            <!-- Preis und Bestandsanzeige -->
+                            <StackPanel Grid.Column="2" Spacing="6" VerticalAlignment="Center" HorizontalAlignment="Right" MinWidth="100">
+                                <TextBlock Text="{Binding Preis, StringFormat='{}{0:N2} €'}" 
+                                           VerticalAlignment="Center" FontWeight="SemiBold" TextAlignment="Right"/>
+                                <Border Classes="status-badge"
+                                        Classes.status-verfuegbar="{Binding Converter={StaticResource BestandVerfuegbarConverter}}"
+                                        Classes.status-knapp="{Binding Converter={StaticResource UnterMindestbestandConverter}}"
+                                        HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding Menge, StringFormat='{}{0} Stk.'}" 
+                                               Foreground="White" FontSize="12"/>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                </ListBox>
+              </Grid>
+            </Border>
+          </Grid>
+        </Border>
+      </SplitView.Pane>
+      
+      <!-- Rechter Bereich mit Detailansicht -->
+      <Border Background="{DynamicResource BackgroundBrush}" Padding="20">
+        <Grid RowDefinitions="Auto,*">
+          <!-- Pfad und Aktionen -->
+          <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+            <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+              <Button Content="Artikel" Classes="text" Padding="0" VerticalAlignment="Center"/>
+              <TextBlock Text="/" Foreground="{DynamicResource TextLightBrush}" VerticalAlignment="Center"/>
+              <TextBlock Text="Bluetooth Kopfhörer" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+              <Button Classes="icon" Padding="8">
+                <!-- ToDo: Icon ersetzen -->
+                <PathIcon Data="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" Width="16" Height="16"/>
+              </Button>
+            </StackPanel>
+          </Grid>
+          
+          <!-- Detailansicht mit ScrollViewer -->
+          <ScrollViewer Grid.Row="1">
+            <Grid RowDefinitions="Auto,*">
+              <!-- Header-Bereich mit responsivem Layout -->
+              <Border Grid.Row="0" Classes="card" Margin="0,0,0,20">
+                <Grid RowDefinitions="Auto,Auto,Auto">
+                  <!-- Erste Zeile: Bild und Basisinformationen -->
+                  <Grid Grid.Row="0" ColumnDefinitions="Auto,*">
+                    <!-- Artikelbild -->
+                    <Border Grid.Column="0" Width="120" Height="120" Background="#F5F5F5" CornerRadius="8" Margin="0,0,20,0">
+                      <Panel>
+                        <Image Stretch="Uniform" Margin="10"/>
+                        <Button Classes="icon" Content="+" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,5,5"/>
+                      </Panel>
+                    </Border>
+                    
+                    <!-- Zentrale Artikelinformationen -->
+                    <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
+                      <TextBlock Text="Bluetooth Kopfhörer" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextDarkBrush}"/>
+                      <WrapPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <Border Background="{DynamicResource PrimaryBrush}" CornerRadius="4" Padding="6,2" Margin="0,0,10,4">
+                          <TextBlock Text="Verfügbar" Foreground="White" FontSize="12"/>
+                        </Border>
+                        <TextBlock Text="ID: 12345" Foreground="{DynamicResource TextLightBrush}" Margin="0,0,10,4"/>
+                        <TextBlock Text="Artikelgruppe: Elektronik" Foreground="{DynamicResource TextLightBrush}" Margin="0,0,0,4"/>
+                      </WrapPanel>
+                      
+                      <!-- Bestandsanzeige -->
+                      <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,8,0,0">
+                        <TextBlock Grid.Column="0" Text="Bestand:" VerticalAlignment="Center"/>
+                        <Grid Grid.Column="1" RowDefinitions="Auto,Auto" Margin="10,0,10,0">
+                          <Border Grid.Row="0" Height="8" Background="#E0E0E0" CornerRadius="4">
+                            <Border HorizontalAlignment="Left" Width="60" Height="8" Background="{DynamicResource SecondaryBrush}" CornerRadius="4"/>
+                          </Border>
+    
+                          <!-- WrapPanel für responsive Anzeige -->
+                          <WrapPanel Grid.Row="1" Orientation="Horizontal" Margin="0,4,0,0">
+                            <!-- Min-Wert -->
+                            <Border Margin="0,0,8,4" Padding="0">
+                              <TextBlock Text="Min: 10" FontSize="11" Foreground="{DynamicResource TextLightBrush}"/>
+                            </Border>
+      
+                            <!-- Aktueller Wert -->
+                            <Border Margin="0,0,8,4" Padding="0">
+                              <TextBlock Text="Aktuell: 60" FontSize="11" FontWeight="SemiBold"/>
+                            </Border>
+      
+                            <!-- Max-Wert -->
+                            <Border Margin="0,0,0,4" Padding="0">
+                              <TextBlock Text="Max: 100" FontSize="11" Foreground="{DynamicResource TextLightBrush}"/>
+                            </Border>
+                          </WrapPanel>
+                        </Grid>
+                      </Grid>
+                    </StackPanel>
+                  </Grid>
+                  
+                  <!-- Zweite Zeile: Preis und Aktionen -->
+                  <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="0,16,0,0" MinWidth="0">
+                    <!-- Preisanzeige -->
+                    <Border Grid.Column="0" Background="#F5F5F5" CornerRadius="8" Padding="16,12" HorizontalAlignment="Left" MinWidth="120" MaxWidth="180">
+                      <StackPanel>
+                        <TextBlock Text="Preis" FontSize="12" Foreground="{DynamicResource TextLightBrush}"/>
+                        <TextBlock Text="29,99 €" FontSize="22" FontWeight="Bold" Foreground="{DynamicResource TextDarkBrush}"/>
+                      </StackPanel>
+                    </Border>
+                    
+                    <!-- Aktionen -->
+                    <ItemsControl Grid.Column="1" HorizontalAlignment="Center">
+                      <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                          <WrapPanel Orientation="Vertical" HorizontalAlignment="Center"/>
+                        </ItemsPanelTemplate>
+                      </ItemsControl.ItemsPanel>
+                      <Button Content="Wareneingang" Classes="secondary" Padding="12,8" Margin="0,0,0,8">
+                        <Button.Flyout>
+                          <Flyout Placement="Bottom">
+                            <StackPanel Width="250">
+                              <TextBlock Text="Wareneingang erfassen" FontWeight="Bold" Margin="0,0,0,8"/>
+                              <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" Margin="0,4">
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Menge:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <NumericUpDown Grid.Row="0" Grid.Column="1" Value="1" Minimum="1" FormatString="0"/>
+                              </Grid>
+                              <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" Margin="0,4">
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Einzelpreis:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBox Grid.Row="0" Grid.Column="1" Text="29,99 €"/>
+                              </Grid>
+                              <Button Content="Bestätigen" Classes="primary" Margin="0,8,0,0"/>
+                            </StackPanel>
+                          </Flyout>
+                        </Button.Flyout>
+                      </Button>
+                      <Button Content="Warenausgang" Classes="primary" Padding="12,8" Margin="0,0,0,8">
+                        <Button.Flyout>
+                          <Flyout Placement="Bottom">
+                            <StackPanel Width="250">
+                              <TextBlock Text="Warenausgang erfassen" FontWeight="Bold" Margin="0,0,0,8"/>
+                              <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" Margin="0,4">
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Zweck:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <ComboBox Grid.Row="0" Grid.Column="1" SelectedIndex="0" HorizontalAlignment="Stretch">
+                                  <ComboBoxItem Content="Verkauf"/>
+                                  <ComboBoxItem Content="Intern"/>
+                                  <ComboBoxItem Content="Defekt"/>
+                                </ComboBox>
+                                
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Menge:" VerticalAlignment="Center" Margin="0,8,8,0"/>
+                                <NumericUpDown Grid.Row="1" Grid.Column="1" Value="1" Minimum="1" FormatString="0" Margin="0,8,0,0"/>
+                                
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Preis:" VerticalAlignment="Center" Margin="0,8,8,0"/>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="29,99 €" Margin="0,8,0,0"/>
+                              </Grid>
+                              <Button Content="Bestätigen" Classes="primary" Margin="0,8,0,0"/>
+                            </StackPanel>
+                          </Flyout>
+                        </Button.Flyout>
+                      </Button>
+                    </ItemsControl>
+                  </Grid>
+                  
+                  <!-- Dritte Zeile: Statusleiste (optional) -->
+                  <WrapPanel Grid.Row="2" Margin="0,16,0,0" Orientation="Horizontal">
+                    <!-- Aktualisierungsstatus -->
+                    <Border Margin="0,0,16,8" Padding="0">
+                      <StackPanel Orientation="Horizontal" Spacing="4">
+                        <PathIcon Data="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z" 
+                                  Width="14" Height="14" Foreground="{DynamicResource TextLightBrush}"/>
+                        <TextBlock Text="Letzte Aktualisierung: 2025-04-22 05:08:14" FontSize="12" 
+                                   Foreground="{DynamicResource TextLightBrush}"/>
+                      </StackPanel>
+                    </Border>
+  
+                    <!-- Bearbeiter-Status -->
+                    <Border Margin="0,0,0,8" Padding="0">
+                      <StackPanel Orientation="Horizontal" Spacing="4">
+                        <PathIcon Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" 
+                                  Width="14" Height="14" Foreground="{DynamicResource TextLightBrush}"/>
+                        <TextBlock Text="Bearbeitet von: prodbysmolec" FontSize="12" 
+                                   Foreground="{DynamicResource TextLightBrush}"/>
+                      </StackPanel>
+                    </Border>
+                  </WrapPanel>
+                </Grid>
+              </Border>
+              <!-- Tab-System für Details -->
+              <TabControl Grid.Row="1" Padding="0">
+                <!-- Übersicht Tab -->
+                <TabItem Header="Übersicht">
+                  <StackPanel Spacing="20" Margin="0,0,10,0">
+                    <!-- Detailierte Basisinformationen -->
+                    <Border Classes="card">
+                      <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" VerticalAlignment="Top">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Artikeldetails" FontWeight="Bold" 
+                                  Foreground="{DynamicResource TextDarkBrush}" Margin="0,0,0,12"/>
+                        
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Name:" Margin="0,4" Foreground="{DynamicResource TextLightBrush}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Text="Bluetooth Kopfhörer" Margin="0,4" Foreground="{DynamicResource TextDarkBrush}"/>
+                        
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Preis:" Margin="0,4" Foreground="{DynamicResource TextLightBrush}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="29,99 €" Margin="0,4" Foreground="{DynamicResource TextDarkBrush}"/>
+                        
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Status:" Margin="0,4" Foreground="{DynamicResource TextLightBrush}"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="Verfügbar" Margin="0,4" Foreground="{DynamicResource TextDarkBrush}"/>
+                        
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Historisch gesetzt:" Margin="0,4" Foreground="{DynamicResource TextLightBrush}"/>
+                        <TextBlock Grid.Row="4" Grid.Column="1" Text="Nein" Margin="0,4" Foreground="{DynamicResource TextDarkBrush}"/>
+                      </Grid>
+                    </Border>
+                    
+                    <!-- Bestandsentwicklung -->
+                    <Border Classes="card">
+                      <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                          <TextBlock Text="Bestandsentwicklung" FontWeight="Bold" Foreground="{DynamicResource TextDarkBrush}"/>
+                          <ComboBox Grid.Column="1" SelectedIndex="0">
+                            <ComboBoxItem Content="30 Tage"/>
+                            <ComboBoxItem Content="90 Tage"/>
+                            <ComboBoxItem Content="1 Jahr"/>
+                          </ComboBox>
+                        </Grid>
+                        
+                        <!-- Platzhalter für Chart -->
+                        <Border Height="200" Background="#F5F5F5" Margin="0,16,0,0" CornerRadius="4">
+                          <TextBlock Text="Bestandsverlauf-Chart" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                    Foreground="{DynamicResource TextLightBrush}"/>
+                        </Border>
+                      </StackPanel>
+                    </Border>
+                    
+                    <!-- Zusatzwerte -->
+                    <Border Classes="card">
+                      <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                          <TextBlock Text="Artikelzusatzwerte" FontWeight="Bold" Foreground="{DynamicResource TextDarkBrush}"/>
+                          <Button Grid.Column="1" Content="+ Hinzufügen" Padding="10,5" Classes="primary"/>
+                        </Grid>
+                        
+                        <Border Margin="0,16,0,0" BorderBrush="#EEEEEE" BorderThickness="1" CornerRadius="4">
+                          <ListBox Background="Transparent">
+                            <ListBoxItem>
+                              <Grid ColumnDefinitions="*,*">
+                                <TextBlock Text="Farbe" VerticalAlignment="Center" Foreground="{DynamicResource TextLightBrush}"/>
+                                <TextBlock Grid.Column="1" Text="Schwarz" VerticalAlignment="Center" Foreground="{DynamicResource TextDarkBrush}"/>
+                              </Grid>
+                            </ListBoxItem>
+                            <ListBoxItem>
+                              <Grid ColumnDefinitions="*,*">
+                                <TextBlock Text="Bluetooth Version" VerticalAlignment="Center" Foreground="{DynamicResource TextLightBrush}"/>
+                                <TextBlock Grid.Column="1" Text="5.0" VerticalAlignment="Center" Foreground="{DynamicResource TextDarkBrush}"/>
+                              </Grid>
+                            </ListBoxItem>
+                            <ListBoxItem>
+                              <Grid ColumnDefinitions="*,*">
+                                <TextBlock Text="Akkulaufzeit" VerticalAlignment="Center" Foreground="{DynamicResource TextLightBrush}"/>
+                                <TextBlock Grid.Column="1" Text="20 Stunden" VerticalAlignment="Center" Foreground="{DynamicResource TextDarkBrush}"/>
+                              </Grid>
+                            </ListBoxItem>
+                          </ListBox>
+                        </Border>
+                      </StackPanel>
+                    </Border>
+                  </StackPanel>
+                </TabItem>
+                
+                <!-- Weitere Tabs aus der DetailView -->
+                <TabItem Header="Statistik &amp; Details"/>
+                <TabItem Header="Wareneingänge"/>
+                <TabItem Header="Warenausgänge"/>
+                <TabItem Header="Lieferanten"/>
+                <TabItem Header="Inventurhistorie"/>
+              </TabControl>
+            </Grid>
+          </ScrollViewer>
+        </Grid>
+      </Border>
+    </SplitView>
+  </Grid>
+</UserControl>

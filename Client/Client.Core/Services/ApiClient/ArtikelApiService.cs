@@ -18,8 +18,10 @@ public class ArtikelApiService
 
     public async Task<PagedResultDTO<ArtikelDto>> GetAllArtikelAsync(GetAllArtikelRequest request)
     {
-        return await _httpClient.PostAsync<GetAllArtikelRequest, PagedResultDTO<ArtikelDto>>(
-            ApiRoutes.Artikel.GetAllArtikel, request);
+        var query = $"?PageNumber={request.Page}&PageSize={request.RecordsPerPage}";
+        var url = $"{ApiRoutes.Artikel.GetAllArtikel}{query}";
+
+        return await _httpClient.GetAsync<PagedResultDTO<ArtikelDto>>(url);
     }
 
     public async Task<ArtikelDto> GetArtikelByIdAsync(int id)

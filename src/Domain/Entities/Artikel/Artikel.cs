@@ -29,6 +29,4 @@ public class Artikel : AuditableEntity
     public virtual ICollection<ArtikelInventurHistorie> InventurHistorie { get; set; } = new HashSet<ArtikelInventurHistorie>();
     public virtual ICollection<ArtikelLieferant> ArtikelLieferanten { get; set; } = new List<ArtikelLieferant>();
     public virtual Artikelgruppe? Artikelgruppe { get; set; }
-
-
 }

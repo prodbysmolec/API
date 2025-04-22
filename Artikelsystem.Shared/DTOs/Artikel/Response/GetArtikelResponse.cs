@@ -36,5 +36,4 @@ public class GetArtikelResponse
 
     public List<WarenausgangArtikelPositionenDto>? WarenausgangArtikelPosition { get; set; }
     public List<WareneingangArtikelPositionenDto>? WareneingangArtikelPosition { get; set; }
-
 }
