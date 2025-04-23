@@ -11,11 +11,17 @@
         xmlns:navigation="using:Client.Avalonia.Controls.Navigation"
         Icon="/Assets/Bilder/Logo.png"
         Title="Merchandise System">
-        <ContentControl Content="{Binding CurrentMainView}">
-                <ContentControl.Transitions>
-                        <Transitions>
-                                <DoubleTransition Property="Opacity" Duration="0:0:0.5" />
-                        </Transitions>
-                </ContentControl.Transitions>
-        </ContentControl>
+        <TransitioningContentControl Content="{Binding CurrentMainView}">
+            <TransitioningContentControl.PageTransition>
+                <CrossFade Duration="0:0:0.5" />
+                <!--
+                         Alternative Transitionen:
+        <PageSlide Duration="0:0:0.3" Orientation="Horizontal" />
+        <CompositePageTransition>
+            <CrossFade Duration="0:0:0.2" />
+            <PageSlide Duration="0:0:0.3" Orientation="Horizontal" />
+        </CompositePageTransition>
+        -->
+            </TransitioningContentControl.PageTransition>
+        </TransitioningContentControl>
 </Window>

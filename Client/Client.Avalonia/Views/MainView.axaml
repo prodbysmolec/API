@@ -33,7 +33,7 @@
             
             <!-- Main Content Container -->
             <Border Margin="0,70,0,0" Background="{StaticResource BackgroundBrush}" CornerRadius="0">
-                <ContentControl Content="{Binding CurrentView}" Margin="25" />
+                <ContentControl Background="Transparent" Content="{Binding CurrentView}" />
             </Border>
         </Grid>
     </Grid>

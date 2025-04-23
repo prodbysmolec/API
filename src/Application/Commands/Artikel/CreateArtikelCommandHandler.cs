@@ -1,5 +1,6 @@
 using System;
 using Application.Interfaces.Repositories;
+using Application.Interfaces.UnitOfWork;
 using AutoMapper;
 using Domain.Common.BaseErrors;
 using Domain.Common.ResultPattern;
@@ -9,9 +10,9 @@ using MediatR;
 
 namespace Application.Commands.Artikel;
 
-public class CreateArtikelCommandHandler(IArtikelRepository service, IMapper mapper) : IRequestHandler<CreateArtikelCommand, Result<bool>>
+public class CreateArtikelCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<CreateArtikelCommand, Result<bool>>
 {
-    private readonly IArtikelRepository _service = service;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
     public async Task<Result<bool>> Handle(CreateArtikelCommand request, CancellationToken cancellationToken)
     {
@@ -20,8 +21,8 @@ public class CreateArtikelCommandHandler(IArtikelRepository service, IMapper map
             // 1. DTO -> Entity
             var artikel = _mapper.Map<Domain.Entities.Artikel.Artikel>(request);
 
-            var response = await _service.AddArtikelAsync(artikel);
-
+            var response = await _unitOfWork.ArtikelRepository.AddArtikelAsync(artikel);
+            await _unitOfWork.CommitAsync(cancellationToken);
             // 4. Id zurückgeben
             return Result<bool>.Success(response);
         }

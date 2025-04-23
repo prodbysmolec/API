@@ -19,7 +19,7 @@ public class ArtikelStatusToColorConverter : IValueConverter
                 _ => new SolidColorBrush(Color.Parse("#9E9E9E"))
             };
         }
-            
+
         return new SolidColorBrush(Color.Parse("#9E9E9E"));
     }
 
